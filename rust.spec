@@ -11,30 +11,32 @@
 %bcond_without	tests		# build without tests
 
 %if "%{channel}" == "stable"
-%define rustc_package rustc-%{version}
+%define rustc_package rustc-%{version}-src
 %else
-%define rustc_package rustc-%{channel}
+%define rustc_package rustc-%{channel}-src
 %endif
 
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define bootstrap_channel 1.11.0
-%define bootstrap_date 2016-08-16
-%define bootstrap_base https://static.rust-lang.org/dist/%{bootstrap_date}/rustc-%{bootstrap_channel}
+%define bootstrap_rust 1.17.0
+%global bootstrap_cargo 0.18.0
+%define bootstrap_date 2017-04-27
+%define bootstrap_base https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}
 
 Summary:	The Rust Programming Language
 Name:		rust
-Version:	1.12.0
+Version:	1.18.0
 Release:	0.1
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 # ^ written as: (rust itself) and (bundled libraries)
 Group:		Development/Languages
-Source0:	https://static.rust-lang.org/dist/%{rustc_package}-src.tar.gz
-%if %{with bootstrap}
+Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
+# Source0-md5:	c37c0cd9d500f6a9d1f2f44401351f88
 Source1:	%{bootstrap_base}-x86_64-unknown-linux-gnu.tar.gz
+# Source1-md5:	98e8f479515969123b4c203191104a54
 Source2:	%{bootstrap_base}-i686-unknown-linux-gnu.tar.gz
-%endif
+# Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
 URL:		https://www.rust-lang.org/
 BuildRequires:	cmake
 BuildRequires:	curl
@@ -44,8 +46,9 @@ BuildRequires:	llvm-devel
 BuildRequires:	python
 BuildRequires:	zlib-devel
 %if %{without bootstrap}
+BuildRequires:  cargo >= %{bootstrap_cargo}
 BuildRequires:	%{name} < %{version}-%{release}
-BuildRequires:	%{name} >= %{bootstrap_channel}
+BuildRequires:	%{name} >= %{bootstrap_rust}
 %endif
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
@@ -68,8 +71,8 @@ ExclusiveArch:	%{x8664} %{ix86} %{arm}
 %if %{without bootstrap}
 %define local_rust_root %{_prefix}
 %else
-%define bootstrap_root rustc-%{bootstrap_channel}-%{rust_triple}
-%define local_rust_root %{_builddir}/%{rustc_package}/%{bootstrap_root}/rustc
+%define bootstrap_root rust-%{bootstrap_rust}-%{rust_triple}
+%define local_rust_root %{_builddir}/%{rustc_package}/%{bootstrap_root}
 %endif
 
 # ALL Rust libraries are private, because they don't keep an ABI.
@@ -115,6 +118,12 @@ tar xf %{SOURCE1}
 %ifarch %{ix86}
 tar xf %{SOURCE2}
 %endif
+%{__mv} %{bootstrap_root} %{bootstrap_root}-root
+%{bootstrap_root}-root/install.sh \
+	--components=cargo,rustc,rust-std-%{rust_triple} \
+	--prefix=%{local_rust_root} \
+	--disable-ldconfig
+test -f %{local_rust_root}/bin/cargo
 test -f %{local_rust_root}/bin/rustc
 %endif
 
@@ -156,16 +165,10 @@ sed -i -e '/^HLIB_RELATIVE/s/lib$/$$(CFG_LIBDIR_RELATIVE)/' mk/main.mk
 	--disable-jemalloc \
 	--disable-rpath \
 	--enable-debuginfo \
+	--enable-vendor \
 	--release-channel=%{channel}
 
-%{__make} VERBOSE=1
-
-%if %{with tests}
-# Note, many of the tests execute in parallel threads,
-# so it's better not to use a parallel make here.
-%{__make} -j1 check-lite VERBOSE=1 -k
-%endif
-
+./x.py dist
 
 %install
 rm -rf $RPM_BUILD_ROOT
