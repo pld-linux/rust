@@ -28,8 +28,8 @@ Summary:	The Rust Programming Language
 Name:		rust
 Version:	1.18.0
 Release:	0.1
+# Licenses: (rust itself) and (bundled libraries)
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
-# ^ written as: (rust itself) and (bundled libraries)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
 # Source0-md5:	c37c0cd9d500f6a9d1f2f44401351f88
@@ -42,21 +42,18 @@ BuildRequires:	cmake
 BuildRequires:	curl
 BuildRequires:	gcc
 BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	llvm-devel
+BuildRequires:	ncurses-devel
 BuildRequires:	python
 BuildRequires:	zlib-devel
 %if %{without bootstrap}
-BuildRequires:  cargo >= %{bootstrap_cargo}
 BuildRequires:	%{name} < %{version}-%{release}
 BuildRequires:	%{name} >= %{bootstrap_rust}
+BuildRequires:	cargo >= %{bootstrap_cargo}
 %endif
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
-# TODO: work on unbundling these!
-Provides:	bundled(hoedown) = 3.0.5
-Provides:	bundled(jquery) = 2.1.4
-Provides:	bundled(libbacktrace) = 6.1.0
-Provides:	bundled(miniz) = 1.14
 # The C compiler is needed at runtime just for linking.  Someday rustc might
 # invoke the linker directly, and then we'll only need binutils.
 # https://github.com/rust-lang/rust/issues/11937
@@ -87,23 +84,42 @@ prevents segfaults, and guarantees thread safety.
 This package includes the Rust compiler, standard library, and
 documentation generator.
 
+%package debugger-common
+Summary:	Common debugger pretty printers for Rust
+Group:		Development/Debuggers
+BuildArch:	noarch
+
+%description debugger-common
+This package includes the common functionality for %{name}-gdb and
+%{name}-lldb.
+
 %package gdb
 Summary:	GDB pretty printers for Rust
+Group:		Development/Debuggers
+Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	gdb
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description gdb
 This package includes the rust-gdb script, which allows easier
 debugging of Rust programs.
 
+%package lldb
+Summary:	LLDB pretty printers for Rust
+Group:		Development/Debuggers
+Requires:	%{name}-debugger-common = %{version}-%{release}
+Requires:	lldb
+Requires:	python-lldb
+BuildArch:	noarch
+
+%description lldb
+This package includes the rust-lldb script, which allows easier
+debugging of Rust programs.
+
 %package doc
 Summary:	Documentation for Rust
-# NOT BuildArch:      noarch
-# Note, while docs are mostly noarch, some things do vary by target_arch.
-# Koji will fail the build in rpmdiff if two architectures build a noarch
-# subpackage differently, so instead we have to keep its arch.
+Group:		Documentation
+BuildArch:	noarch
 
 %description doc
 This package includes HTML documentation for the Rust programming
@@ -172,22 +188,21 @@ sed -i -e '/^HLIB_RELATIVE/s/lib$/$$(CFG_LIBDIR_RELATIVE)/' mk/main.mk
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install \
-	VERBOSE=1 \
-	DESTDIR=$RPM_BUILD_ROOT
+
+DESTDIR=$RPM_BUILD_ROOT ./x.py dist --install
+
+# The shared libraries should be executable for debuginfo extraction.
+find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
+
+# The libdir libraries are identical to those under rustlib/.  It's easier on
+# library loading if we keep them in libdir, but we do need them in rustlib/
+# to support dynamic linking for compiler plugins, so we'll symlink.
+(cd "$RPM_BUILD_ROOT%{_libdir}/rustlib/%{rust_triple}/lib" &&
+	find ../../../../%{_lib} -maxdepth 1 -name '*.so' \
+	-exec ln -v -f -s -t . '{}' '+')
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
 find $RPM_BUILD_ROOT%{_libdir}/rustlib/ -maxdepth 1 -type f -exec rm -v '{}' '+'
-
-# We don't want to ship the target shared libraries for lack of any Rust ABI.
-find $RPM_BUILD_ROOT%{_libdir}/rustlib/ -type f -name '*.so' -exec rm -v '{}' '+'
-
-# The remaining shared libraries should be executable for debuginfo extraction.
-find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
-
-# They also don't need the .rustc metadata anymore, so they won't support linking.
-# (but direct section removal breaks dynamic symbols -- leave it for now...)
-#find $RPM_BUILD_ROOT/%{_libdir}/ -type f -name '*.so' -exec objcopy -R .rustc '{}' ';'
 
 # FIXME: __os_install_post will strip the rlibs
 # -- should we find a way to preserve debuginfo?
@@ -226,18 +241,23 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/rustlib
 %{_libdir}/rustlib/%{rust_triple}
 
+%files debugger-common
+%defattr(644,root,root,755)
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/etc
+%{_datadir}/%{name}/etc/debugger_*.py*
+
+%files lldb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rust-lldb
+%{_datadir}/%{name}/etc/lldb_*.py*
+
 %files gdb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rust-gdb
-%{_datadir}/%{name}
+%{_datadir}/%{name}/etc/gdb_*.py*
 
 %files doc
 %defattr(644,root,root,755)
 %dir %{_docdir}/%{name}
-%doc %{_docdir}/%{name}/html/FiraSans-LICENSE.txt
-%doc %{_docdir}/%{name}/html/Heuristica-LICENSE.txt
-%doc %{_docdir}/%{name}/html/LICENSE-APACHE.txt
-%doc %{_docdir}/%{name}/html/LICENSE-MIT.txt
-%doc %{_docdir}/%{name}/html/SourceCodePro-LICENSE.txt
-%doc %{_docdir}/%{name}/html/SourceSerifPro-LICENSE.txt
-%doc %{_docdir}/%{name}/html/
+%doc %{_docdir}/%{name}/html
