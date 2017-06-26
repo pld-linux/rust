@@ -20,7 +20,7 @@
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
 %define bootstrap_rust 1.17.0
-%global bootstrap_cargo 0.18.0
+%define bootstrap_cargo 0.18.0
 %define bootstrap_date 2017-04-27
 %define bootstrap_base https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}
 
@@ -73,9 +73,8 @@ ExclusiveArch:	%{x8664} %{ix86} %{arm}
 %endif
 
 # ALL Rust libraries are private, because they don't keep an ABI.
-%global _privatelibs lib.*-[[:xdigit:]]{8}[.]so.*
-%global __provides_exclude ^(%{_privatelibs})$
-%global __requires_exclude ^(%{_privatelibs})$
+%define _noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
+%define _noautoprovfiles	lib.*-[[:xdigit:]]{8}[.]so.*
 
 %description
 Rust is a systems programming language that runs blazingly fast,
