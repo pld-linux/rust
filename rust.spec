@@ -25,7 +25,7 @@
 Summary:	The Rust Programming Language
 Name:		rust
 Version:	1.18.0
-Release:	0.2
+Release:	0.3
 # Licenses: (rust itself) and (bundled libraries)
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -70,6 +70,13 @@ ExclusiveArch:	%{x8664} %{ix86}
 %define		bootstrap_root	rust-%{bootstrap_rust}-%{rust_triple}
 %define		local_rust_root	%{_builddir}/%{rustc_package}/%{bootstrap_root}
 %endif
+
+# We're going to override --libdir when configuring to get rustlib into a
+# common path, but we'll fix the shared libraries during install.
+# Without this ugly hack, rust would not be able to buld itself
+# for non-bootstrap build, lib64 is just too complicated for it.
+%define		common_libdir	%{_prefix}/lib
+%define		rustlibdir	%{common_libdir}/rustlib
 
 # once_call/once_callable non-function libstdc++ symbols
 %define		skip_post_check_so	'librustc_llvm-.*\.so.*'
@@ -167,6 +174,7 @@ sed -i -e '1i // ignore-test jemalloc is disabled' \
 
 %build
 %configure \
+	--libdir=%{common_libdir} \
 	--disable-option-checking \
 	--build=%{rust_triple} --host=%{rust_triple} --target=%{rust_triple} \
 	--enable-local-rust --local-rust-root=%{local_rust_root} \
@@ -187,18 +195,25 @@ rm -rf $RPM_BUILD_ROOT
 
 DESTDIR=$RPM_BUILD_ROOT ./x.py dist --install
 
+# Make sure the shared libraries are in the proper libdir
+%if "%{_libdir}" != "%{common_libdir}"
+mkdir -p %{buildroot}%{_libdir}
+find $RPM_BUILD_ROOT%{common_libdir} -maxdepth 1 -type f -name '*.so' \
+	-exec mv -v -t $RPM_BUILD_ROOT%{_libdir} '{}' '+'
+%endif
+
 # The shared libraries should be executable for debuginfo extraction.
 find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
 
 # The libdir libraries are identical to those under rustlib/.  It's easier on
 # library loading if we keep them in libdir, but we do need them in rustlib/
 # to support dynamic linking for compiler plugins, so we'll symlink.
-(cd "$RPM_BUILD_ROOT%{_libdir}/rustlib/%{rust_triple}/lib" &&
+(cd "$RPM_BUILD_ROOT%{rustlibdir}/%{rust_triple}/lib" &&
 	find ../../../../%{_lib} -maxdepth 1 -name '*.so' \
 	-exec ln -v -f -s -t . '{}' '+')
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
-find $RPM_BUILD_ROOT%{_libdir}/rustlib/ -maxdepth 1 -type f -exec rm -v '{}' '+'
+find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
 
 # FIXME: __os_install_post will strip the rlibs
 # -- should we find a way to preserve debuginfo?
@@ -215,7 +230,7 @@ find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 
 # Move rust-gdb's python scripts so they're noarch
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
-mv -v $RPM_BUILD_ROOT%{_libdir}/rustlib%{_sysconfdir} $RPM_BUILD_ROOT%{_datadir}/%{name}/
+mv -v $RPM_BUILD_ROOT%{rustlibdir}/%{_sysconfdir} $RPM_BUILD_ROOT%{_datadir}/%{name}/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -231,11 +246,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
+%attr(755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
-%{_libdir}/lib*
-%dir %{_libdir}/rustlib
-%{_libdir}/rustlib/%{rust_triple}
+%dir %{rustlibdir}
+%dir %{rustlibdir}/%{rust_triple}
+%dir %{rustlibdir}/%{rust_triple}/lib
+%attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
+%{rustlibdir}/%{rust_triple}/lib/*.rlib
 
 %files debugger-common
 %defattr(644,root,root,755)
