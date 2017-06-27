@@ -4,7 +4,7 @@
 #
 # Conditional build:
 %bcond_with	bootstrap
-%bcond_without	tests		# build without tests
+%bcond_with	tests		# build without tests
 
 # The channel can be stable, beta, or nightly
 %define		channel		stable
@@ -25,7 +25,7 @@
 Summary:	The Rust Programming Language
 Name:		rust
 Version:	1.18.0
-Release:	0.1
+Release:	0.2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
