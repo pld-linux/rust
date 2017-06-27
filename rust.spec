@@ -167,11 +167,6 @@ sed -i -e '1i // ignore-test jemalloc is disabled' \
 sed -i -e '/target=mips/,+1s/^/# unsupported /' \
 	src/test/run-make/atomic-lock-free/Makefile
 
-%if %{without bootstrap}
-# The hardcoded stage0 "lib" is inappropriate when using Fedora's own rustc
-sed -i -e '/^HLIB_RELATIVE/s/lib$/$$(CFG_LIBDIR_RELATIVE)/' mk/main.mk
-%endif
-
 %build
 %configure \
 	--disable-option-checking \
