@@ -35,6 +35,7 @@ Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source1-md5:	98e8f479515969123b4c203191104a54
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
 # Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
+Patch0:		rust-1.16.0-configure-no-override.patch
 URL:		https://www.rust-lang.org/
 BuildRequires:	cmake
 BuildRequires:	curl
@@ -127,6 +128,8 @@ language and its standard library.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
+
 %if %{with bootstrap}
 %ifarch %{x8664}
 tar xf %{SOURCE1}
@@ -162,17 +165,13 @@ sed -i -e '1i // ignore-test jemalloc is disabled' \
 	src/test/compile-fail/allocator-rust-dylib-is-jemalloc.rs \
 	src/test/run-pass/allocator-default.rs
 
-# Fedora's LLVM doesn't support any mips targets -- see "llc -version".
-# Fixed properly by Rust PR36344, which should be released in 1.13.
-sed -i -e '/target=mips/,+1s/^/# unsupported /' \
-	src/test/run-make/atomic-lock-free/Makefile
-
 %build
 %configure \
 	--disable-option-checking \
 	--build=%{rust_triple} --host=%{rust_triple} --target=%{rust_triple} \
 	--enable-local-rust --local-rust-root=%{local_rust_root} \
 	--llvm-root=%{_prefix} --disable-codegen-tests \
+	--enable-llvm-link-shared \
 	--disable-jemalloc \
 	--disable-rpath \
 	--enable-debuginfo \
