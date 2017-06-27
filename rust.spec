@@ -59,7 +59,7 @@ Requires:	gcc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
-ExclusiveArch:	%{x8664} %{ix86} %{arm}
+ExclusiveArch:	%{x8664} %{ix86}
 
 %define		rust_triple	%{_target_cpu}-unknown-linux-gnu
 
