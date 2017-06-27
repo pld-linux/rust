@@ -1,28 +1,26 @@
 # TODO
 # - consider a rust-std package containing .../rustlib/$target
 #   This might allow multilib cross-compilation to work naturally.
-
-# The channel can be stable, beta, or nightly
-%define channel stable
-
 #
 # Conditional build:
-%bcond_with bootstrap
+%bcond_with	bootstrap
 %bcond_without	tests		# build without tests
 
+# The channel can be stable, beta, or nightly
+%define		channel		stable
+
 %if "%{channel}" == "stable"
-%define rustc_package rustc-%{version}-src
+%define		rustc_package	rustc-%{version}-src
 %else
-%define rustc_package rustc-%{channel}-src
+%define		rustc_package	rustc-%{channel}-src
 %endif
 
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define bootstrap_rust 1.17.0
-%define bootstrap_cargo 0.18.0
-%define bootstrap_date 2017-04-27
-%define bootstrap_base https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}
+%define		bootstrap_rust	1.17.0
+%define		bootstrap_cargo	0.18.0
+%define		bootstrap_date	2017-04-27
 
 Summary:	The Rust Programming Language
 Name:		rust
@@ -33,9 +31,9 @@ License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
 # Source0-md5:	c37c0cd9d500f6a9d1f2f44401351f88
-Source1:	%{bootstrap_base}-x86_64-unknown-linux-gnu.tar.gz
+Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
 # Source1-md5:	98e8f479515969123b4c203191104a54
-Source2:	%{bootstrap_base}-i686-unknown-linux-gnu.tar.gz
+Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
 # Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
 URL:		https://www.rust-lang.org/
 BuildRequires:	cmake
@@ -63,21 +61,21 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
 ExclusiveArch:	%{x8664} %{ix86} %{arm}
 
-%define rust_triple %{_target_cpu}-unknown-linux-gnu
+%define		rust_triple	%{_target_cpu}-unknown-linux-gnu
 
 %if %{without bootstrap}
-%define local_rust_root %{_prefix}
+%define		local_rust_root	%{_prefix}
 %else
-%define bootstrap_root rust-%{bootstrap_rust}-%{rust_triple}
-%define local_rust_root %{_builddir}/%{rustc_package}/%{bootstrap_root}
+%define		bootstrap_root	rust-%{bootstrap_rust}-%{rust_triple}
+%define		local_rust_root	%{_builddir}/%{rustc_package}/%{bootstrap_root}
 %endif
 
 # once_call/once_callable non-function libstdc++ symbols
-%define skip_post_check_so	'librustc_llvm-.*\.so.*'
+%define		skip_post_check_so	'librustc_llvm-.*\.so.*'
 
 # ALL Rust libraries are private, because they don't keep an ABI.
-%define _noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
-%define _noautoprovfiles	lib.*-[[:xdigit:]]{8}[.]so.*
+%define		_noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
+%define		_noautoprovfiles	lib.*-[[:xdigit:]]{8}[.]so.*
 
 %description
 Rust is a systems programming language that runs blazingly fast,
@@ -187,6 +185,8 @@ sed -i -e '/^HLIB_RELATIVE/s/lib$/$$(CFG_LIBDIR_RELATIVE)/' mk/main.mk
 	--release-channel=%{channel}
 
 ./x.py dist
+
+%{?with_tests:./x.py test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
