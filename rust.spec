@@ -25,7 +25,7 @@
 Summary:	The Rust Programming Language
 Name:		rust
 Version:	1.18.0
-Release:	0.3
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
