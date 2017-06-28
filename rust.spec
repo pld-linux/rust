@@ -25,7 +25,7 @@
 Summary:	The Rust Programming Language
 Name:		rust
 Version:	1.18.0
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -117,7 +117,6 @@ Summary:	LLDB pretty printers for Rust
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	lldb
-Requires:	python-lldb
 BuildArch:	noarch
 
 %description lldb
