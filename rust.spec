@@ -47,9 +47,9 @@ BuildRequires:	ncurses-devel
 BuildRequires:	python
 BuildRequires:	zlib-devel
 %if %{without bootstrap}
-BuildRequires:	%{name} < %{version}-%{release}
 BuildRequires:	%{name} >= %{bootstrap_rust}
 BuildRequires:	cargo >= %{bootstrap_cargo}
+BuildConflicts:	%{name} > %{version}
 %endif
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
