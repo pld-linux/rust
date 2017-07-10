@@ -95,9 +95,7 @@ documentation generator.
 %package debugger-common
 Summary:	Common debugger pretty printers for Rust
 Group:		Development/Debuggers
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description debugger-common
 This package includes the common functionality for %{name}-gdb and
@@ -108,9 +106,7 @@ Summary:	GDB pretty printers for Rust
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	gdb
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description gdb
 This package includes the rust-gdb script, which allows easier
@@ -121,9 +117,7 @@ Summary:	LLDB pretty printers for Rust
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	lldb
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description lldb
 This package includes the rust-lldb script, which allows easier
@@ -132,9 +126,7 @@ debugging of Rust programs.
 %package doc
 Summary:	Documentation for Rust
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description doc
 This package includes HTML documentation for the Rust programming
