@@ -3,7 +3,7 @@
 #   This might allow multilib cross-compilation to work naturally.
 #
 # Conditional build:
-%bcond_with	bootstrap
+%bcond_with	bootstrap	# bootstrap using precompiled binaries
 %bcond_with	tests		# build without tests
 
 # The channel can be stable, beta, or nightly
@@ -23,11 +23,12 @@
 %define		bootstrap_date	2017-04-27
 
 Summary:	The Rust Programming Language
+Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.18.0
 Release:	2
 # Licenses: (rust itself) and (bundled libraries)
-License:	(ASL 2.0 or MIT) and (BSD and ISC and MIT)
+License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
 # Source0-md5:	c37c0cd9d500f6a9d1f2f44401351f88
@@ -37,14 +38,13 @@ Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
 Patch0:		rust-1.16.0-configure-no-override.patch
 URL:		https://www.rust-lang.org/
-BuildRequires:	cmake
+# for src/compiler-rt
+BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
-BuildRequires:	gcc
-BuildRequires:	libstdc++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	llvm-devel
 BuildRequires:	ncurses-devel
-BuildRequires:	python
+BuildRequires:	python >= 1:2.7
 BuildRequires:	zlib-devel
 %if %{without bootstrap}
 BuildRequires:	%{name} >= %{bootstrap_rust}
@@ -92,17 +92,27 @@ prevents segfaults, and guarantees thread safety.
 This package includes the Rust compiler, standard library, and
 documentation generator.
 
+%description -l pl.UTF-8
+Rust to systemowy język programowania działający bardzo szybko,
+zapobiegający naruszeniom ochrony pamięci i gwarantujący
+bezpieczną wielowątkowość.
+
 %package debugger-common
 Summary:	Common debugger pretty printers for Rust
+Summary(pl.UTF-8):	Narzędzia wypisujące struktury Rusa wspólne dla różnych debuggerów
 Group:		Development/Debuggers
 BuildArch:	noarch
 
 %description debugger-common
-This package includes the common functionality for %{name}-gdb and
-%{name}-lldb.
+This package includes the common functionality for rust-gdb and
+rust-lldb.
+
+%description debugger-common -l pl.UTF-8
+Ten pakiet zawiera wspólny kod dla pakietów rust-gdb i rust-lldb.
 
 %package gdb
 Summary:	GDB pretty printers for Rust
+Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w GDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	gdb
@@ -112,8 +122,13 @@ BuildArch:	noarch
 This package includes the rust-gdb script, which allows easier
 debugging of Rust programs.
 
+%description gdb -l pl.UTF-8
+Ten pakiet zawiera skrypt rust-gdb, pozwalający na łatwiejsze
+odpluskwianie programów w języku Rust.
+
 %package lldb
 Summary:	LLDB pretty printers for Rust
+Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w LLDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	lldb
@@ -123,14 +138,23 @@ BuildArch:	noarch
 This package includes the rust-lldb script, which allows easier
 debugging of Rust programs.
 
+%description lldb -l pl.UTF-8
+Ten pakiet zawiera skrypt rust-lldb, pozwalający na łatwiejsze
+odpluskwianie programów w języku Rust.
+
 %package doc
 Summary:	Documentation for Rust
+Summary(pl.UTF-8):	Dokumentacja do Rusta
 Group:		Documentation
 BuildArch:	noarch
 
 %description doc
 This package includes HTML documentation for the Rust programming
 language and its standard library.
+
+%description doc -l pl.UTF-8
+Ten pakiet zawiera dokumentację w formacie HTML do języka
+programowania Rust i jego biblioteki standardowej.
 
 %prep
 %setup -q -n %{rustc_package}
@@ -153,8 +177,8 @@ test -f %{local_rust_root}/bin/rustc
 %endif
 
 # unbundle
-rm -r src/jemalloc/
-rm -r src/llvm/
+%{__rm} -r src/jemalloc/
+%{__rm} -r src/llvm/
 
 # extract bundled licenses for packaging
 cp -p src/rt/hoedown/LICENSE src/rt/hoedown/LICENSE-hoedown
@@ -173,16 +197,19 @@ sed -i -e '1i // ignore-test jemalloc is disabled' \
 
 %build
 %configure \
+	--build=%{rust_triple} \
+	--host=%{rust_triple} \
+	--target=%{rust_triple} \
 	--libdir=%{common_libdir} \
-	--disable-option-checking \
-	--build=%{rust_triple} --host=%{rust_triple} --target=%{rust_triple} \
-	--enable-local-rust --local-rust-root=%{local_rust_root} \
-	--llvm-root=%{_prefix} --disable-codegen-tests \
-	--enable-llvm-link-shared \
+	--disable-codegen-tests \
 	--disable-jemalloc \
+	--disable-option-checking \
 	--disable-rpath \
 	--enable-debuginfo \
+	--enable-llvm-link-shared \
+	--enable-local-rust --local-rust-root=%{local_rust_root} \
 	--enable-vendor \
+	--llvm-root=%{_prefix} \
 	--release-channel=%{channel}
 
 ./x.py dist
@@ -218,10 +245,10 @@ find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
 # -- should we find a way to preserve debuginfo?
 
 # Remove unwanted documentation files (we already package them)
-rm $RPM_BUILD_ROOT%{_docdir}/%{name}/README.md
-rm $RPM_BUILD_ROOT%{_docdir}/%{name}/COPYRIGHT
-rm $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-APACHE
-rm $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-MIT
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/README.md
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/COPYRIGHT
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-APACHE
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-MIT
 
 # Sanitize the HTML documentation
 find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -empty -delete
@@ -229,7 +256,7 @@ find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 
 # Move rust-gdb's python scripts so they're noarch
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
-mv -v $RPM_BUILD_ROOT%{rustlibdir}/%{_sysconfdir} $RPM_BUILD_ROOT%{_datadir}/%{name}/
+%{__mv} $RPM_BUILD_ROOT%{rustlibdir}/etc $RPM_BUILD_ROOT%{_datadir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -239,13 +266,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT
-%doc src/libbacktrace/LICENSE-libbacktrace
-%doc src/rt/hoedown/LICENSE-hoedown
-%doc README.md
+%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md src/libbacktrace/LICENSE-libbacktrace src/rt/hoedown/LICENSE-hoedown
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
-%attr(755,root,root) %{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/libarena-*.so
+%attr(755,root,root) %{_libdir}/libflate-*.so
+%attr(755,root,root) %{_libdir}/libfmt_macros-*.so
+%attr(755,root,root) %{_libdir}/libgetopts-*.so
+%attr(755,root,root) %{_libdir}/libgraphviz-*.so
+%attr(755,root,root) %{_libdir}/libproc_macro-*.so
+%attr(755,root,root) %{_libdir}/libproc_macro_plugin-*.so
+%attr(755,root,root) %{_libdir}/librustc*-*.so
+%attr(755,root,root) %{_libdir}/librustdoc-*.so
+%attr(755,root,root) %{_libdir}/libserialize-*.so
+%attr(755,root,root) %{_libdir}/libstd-*.so
+%attr(755,root,root) %{_libdir}/libsyntax-*.so
+%attr(755,root,root) %{_libdir}/libsyntax_ext-*.so
+%attr(755,root,root) %{_libdir}/libsyntax_pos-*.so
+%attr(755,root,root) %{_libdir}/libterm-*.so
+%attr(755,root,root) %{_libdir}/libtest-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
