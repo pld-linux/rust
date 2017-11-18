@@ -36,7 +36,6 @@ Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source1-md5:	98e8f479515969123b4c203191104a54
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
 # Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
-Patch0:		rust-1.16.0-configure-no-override.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -158,7 +157,6 @@ programowania Rust i jego biblioteki standardowej.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664}
