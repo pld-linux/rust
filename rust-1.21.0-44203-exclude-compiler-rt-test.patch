@@ -1,0 +1,28 @@
+From 35f8a2065b7d17d39481a75cefa739df7a061084 Mon Sep 17 00:00:00 2001
+From: Josh Stone <jistone@redhat.com>
+Date: Wed, 30 Aug 2017 18:20:59 -0700
+Subject: [PATCH] rustbuild: update the rust-src filter for compiler-rt
+
+We wanted `src/compiler-rt/test` filtered from the `rust-src` package,
+but that path is now `src/libcompiler_builtins/compiler-rt/test`.  This
+saves over half of the installed rust-src size. (50MB -> 22MB)
+---
+ src/bootstrap/dist.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/bootstrap/dist.rs b/src/bootstrap/dist.rs
+index 746f85a9d59d..05d59e7d5956 100644
+--- a/src/bootstrap/dist.rs
++++ b/src/bootstrap/dist.rs
+@@ -754,7 +754,7 @@ impl Step for Src {
+             "src/libprofiler_builtins",
+         ];
+         let std_src_dirs_exclude = [
+-            "src/compiler-rt/test",
++            "src/libcompiler_builtins/compiler-rt/test",
+             "src/jemalloc/test/unit",
+         ];
+ 
+-- 
+2.13.5
+

@@ -18,24 +18,25 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.17.0
-%define		bootstrap_cargo	0.18.0
-%define		bootstrap_date	2017-04-27
+%define		bootstrap_rust	1.20.0
+%define		bootstrap_cargo	0.21.0
+%define		bootstrap_date	2017-08-31
 
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.19.0
+Version:	1.21.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
-# Source0-md5:	75e779670ac79edf023497a9c37eb35d
+# Source0-md5:	bc494706b764276613064aad52922f53
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
-# Source1-md5:	98e8f479515969123b4c203191104a54
+# Source1-md5:	5b63778b4877bcfd431b56c485f4876b
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
-# Source2-md5:	2d5de850c32aa8d40c8c21abacf749f8
+# Source2-md5:	5e8c3a6a7b94e6a32f85230111a684a3
+Patch0:		rust-1.21.0-44203-exclude-compiler-rt-test.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -157,6 +158,7 @@ programowania Rust i jego biblioteki standardowej.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664}
@@ -187,11 +189,11 @@ sed -e '/*\//q' src/libbacktrace/backtrace.h \
 sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 	src/etc/rust-gdb
 
-# These tests assume that alloc_jemalloc is present
-sed -i -e '1i // ignore-test jemalloc is disabled' \
-	src/test/compile-fail/allocator-dylib-is-system.rs \
-	src/test/compile-fail/allocator-rust-dylib-is-jemalloc.rs \
-	src/test/run-pass/allocator-default.rs
+# The configure macro will modify some autoconf-related files, which upsets
+# cargo when it tries to verify checksums in those files.  If we just truncate
+# that file list, cargo won't have anything to complain about.
+find src/vendor -name .cargo-checksum.json \
+	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
 
 %build
 %configure \
@@ -203,6 +205,8 @@ sed -i -e '1i // ignore-test jemalloc is disabled' \
 	--disable-jemalloc \
 	--disable-option-checking \
 	--disable-rpath \
+	--disable-debuginfo-lines \
+	--disable-debuginfo-only-std \
 	--enable-debuginfo \
 	--enable-llvm-link-shared \
 	--enable-local-rust --local-rust-root=%{local_rust_root} \
