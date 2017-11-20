@@ -177,7 +177,8 @@ test -f %{local_rust_root}/bin/rustc
 %endif
 
 # unbundle
-%{__rm} -r src/jemalloc/
+# We're disabling jemalloc, but rust-src still wants it.
+#%{__rm} -r src/jemalloc/
 %{__rm} -r src/llvm/
 
 # extract bundled licenses for packaging
