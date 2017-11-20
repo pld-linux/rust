@@ -222,7 +222,8 @@ find src/vendor -name .cargo-checksum.json \
 %install
 rm -rf $RPM_BUILD_ROOT
 
-DESTDIR=$RPM_BUILD_ROOT ./x.py dist --install
+DESTDIR=$RPM_BUILD_ROOT ./x.py install
+DESTDIR=$RPM_BUILD_ROOT ./x.py install src
 
 # Make sure the shared libraries are in the proper libdir
 %if "%{_libdir}" != "%{common_libdir}"
@@ -261,6 +262,9 @@ find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 %{__mv} $RPM_BUILD_ROOT%{rustlibdir}/etc $RPM_BUILD_ROOT%{_datadir}/%{name}
 
+# We don't need stdlib source
+%{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -273,14 +277,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_libdir}/libarena-*.so
-%attr(755,root,root) %{_libdir}/libflate-*.so
 %attr(755,root,root) %{_libdir}/libfmt_macros-*.so
-%attr(755,root,root) %{_libdir}/libgetopts-*.so
 %attr(755,root,root) %{_libdir}/libgraphviz-*.so
 %attr(755,root,root) %{_libdir}/libproc_macro-*.so
-%attr(755,root,root) %{_libdir}/libproc_macro_plugin-*.so
 %attr(755,root,root) %{_libdir}/librustc*-*.so
-%attr(755,root,root) %{_libdir}/librustdoc-*.so
 %attr(755,root,root) %{_libdir}/libserialize-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
 %attr(755,root,root) %{_libdir}/libsyntax-*.so
