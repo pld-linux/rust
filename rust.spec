@@ -18,25 +18,24 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.20.0
-%define		bootstrap_cargo	0.21.0
-%define		bootstrap_date	2017-08-31
+%define		bootstrap_rust	1.24.0
+%define		bootstrap_cargo	0.25.0
+%define		bootstrap_date	2018-02-15
 
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.21.0
+Version:	1.25.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
-# Source0-md5:	bc494706b764276613064aad52922f53
+# Source0-md5:	d8d4d30c8d0b905f978bee3fdd618db5
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
-# Source1-md5:	5b63778b4877bcfd431b56c485f4876b
+# Source1-md5:	61be17f80e1811211450e5b733624232
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
-# Source2-md5:	5e8c3a6a7b94e6a32f85230111a684a3
-Patch0:		rust-1.21.0-44203-exclude-compiler-rt-test.patch
+# Source2-md5:	5568788cd5d96173a89bd0e82a2aa356
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -158,7 +157,6 @@ programowania Rust i jego biblioteki standardowej.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664}
@@ -292,6 +290,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
 %dir %{rustlibdir}/%{rust_triple}
+%dir %{rustlibdir}/%{rust_triple}/codegen-backends
+%attr(755,root,root) %{rustlibdir}/%{rust_triple}/codegen-backends/*.so
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
