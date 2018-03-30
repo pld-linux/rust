@@ -208,7 +208,7 @@ find src/vendor -name .cargo-checksum.json \
 	--disable-debuginfo-only-std \
 	--enable-debuginfo \
 	--enable-llvm-link-shared \
-	--enable-local-rust --local-rust-root=%{local_rust_root} \
+	--local-rust-root=%{local_rust_root} \
 	--enable-vendor \
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel}
