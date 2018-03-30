@@ -26,7 +26,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.25.0
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -78,7 +78,7 @@ ExclusiveArch:	%{x8664} %{ix86}
 %define		rustlibdir	%{common_libdir}/rustlib
 
 # once_call/once_callable non-function libstdc++ symbols
-%define		skip_post_check_so	'librustc_.*llvm-.*\.so.*'
+%define		skip_post_check_so	'librustc.*llvm.*\.so.*'
 
 # ALL Rust libraries are private, because they don't keep an ABI.
 %define		_noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
