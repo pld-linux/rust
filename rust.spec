@@ -4,6 +4,8 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap using precompiled binaries
+%bcond_without	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
+%bcond_without	system_llvm	# system LLVM
 %bcond_with	tests		# build without tests
 
 # The channel can be stable, beta, or nightly
@@ -41,7 +43,7 @@ URL:		https://www.rust-lang.org/
 BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
 BuildRequires:	libstdc++-devel
-BuildRequires:	llvm-devel
+%{?with_system_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	python >= 1:2.7
 BuildRequires:	zlib-devel
@@ -72,7 +74,7 @@ ExclusiveArch:	%{x8664} %{ix86}
 
 # We're going to override --libdir when configuring to get rustlib into a
 # common path, but we'll fix the shared libraries during install.
-# Without this ugly hack, rust would not be able to buld itself
+# Without this ugly hack, rust would not be able to build itself
 # for non-bootstrap build, lib64 is just too complicated for it.
 %define		common_libdir	%{_prefix}/lib
 %define		rustlibdir	%{common_libdir}/rustlib
@@ -176,8 +178,8 @@ test -f %{local_rust_root}/bin/rustc
 
 # unbundle
 # We're disabling jemalloc, but rust-src still wants it.
-#%{__rm} -r src/jemalloc/
-%{__rm} -r src/llvm/
+#%{__rm} -r src/jemalloc
+%{?with_system_llvm:%{__rm} -r src/llvm}
 
 # extract bundled licenses for packaging
 cp -p src/rt/hoedown/LICENSE src/rt/hoedown/LICENSE-hoedown
@@ -205,14 +207,20 @@ find src/vendor -name .cargo-checksum.json \
 	--disable-option-checking \
 	--disable-rpath \
 	--disable-debuginfo-lines \
+%if %{with full_debuginfo}
 	--disable-debuginfo-only-std \
 	--enable-debuginfo \
+%else
+	--enable-debuginfo-only-std \
+	--disable-debuginfo \
+%endif
 	--enable-llvm-link-shared \
 	--local-rust-root=%{local_rust_root} \
 	--enable-vendor \
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel}
 
+RUST_BACKTRACE=full \
 ./x.py dist
 
 %{?with_tests:./x.py test}
