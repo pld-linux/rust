@@ -38,6 +38,7 @@ Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source1-md5:	61be17f80e1811211450e5b733624232
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
 # Source2-md5:	5568788cd5d96173a89bd0e82a2aa356
+Patch0:		x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -61,9 +62,13 @@ Requires:	gcc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
-ExclusiveArch:	%{x8664} %{ix86}
+ExclusiveArch:	%{x8664} %{ix86} x32
 
+%ifarch x32
+%define		rust_triple	x86_64-unknown-linux-gnux32
+%else
 %define		rust_triple	%{_target_cpu}-unknown-linux-gnu
+%endif
 
 %if %{without bootstrap}
 %define		local_rust_root	%{_prefix}
@@ -159,6 +164,9 @@ programowania Rust i jego biblioteki standardowej.
 
 %prep
 %setup -q -n %{rustc_package}
+%ifarch x32
+%patch0 -p1
+%endif
 
 %if %{with bootstrap}
 %ifarch %{x8664}
