@@ -1,6 +1,7 @@
 # TODO
 # - consider a rust-std package containing .../rustlib/$target
 #   This might allow multilib cross-compilation to work naturally.
+# - package additional tools
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap using precompiled binaries
@@ -162,6 +163,46 @@ language and its standard library.
 Ten pakiet zawiera dokumentację w formacie HTML do języka
 programowania Rust i jego biblioteki standardowej.
 
+%package -n bash-completion-cargo
+Summary:	Bash completion for cargo command
+Summary(pl.UTF-8):	Bashowe dopełnianie parametrów polecenia cargo
+Group:		Applications/Shells
+Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion
+
+%description -n bash-completion-cargo
+Bash completion for cargo command.
+
+%description -n bash-completion-cargo -l pl.UTF-8
+Bashowe dopełnianie parametrów polecenia cargo.
+
+%package -n cargo
+Summary:	Rust's package manager and build tool
+Summary(pl.UTF-8):	Zarządca pakietów i narzędzie do budowania
+Group:		Development/Tools
+Requires:	%{name}
+
+%description -n cargo
+Cargo is a tool that allows Rust projects to declare their various
+dependencies and ensure that you'll always get a repeatable build.
+
+%description -n cargo -l pl.UTF-8
+Cargo to narzędzie pozwalające projektom w języku Rust deklarować ich
+zależności i zapewniające powtarzalność procesu budowania.
+
+%package -n zsh-completion-cargo
+Summary:	Zsh completion for cargo command
+Summary(pl.UTF-8):	Dopełnianie parametrów polecenia cargo w powłoce Zsh
+Group:		Applications/Shells
+Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion
+
+%description -n zsh-completion-cargo
+Zsh completion for cargo command.
+
+%description -n zsh-completion-cargo -l pl.UTF-8
+Dopełnianie parametrów polecenia cargo w powłoce Zsh.
+
 %prep
 %setup -q -n %{rustc_package}
 %ifarch x32
@@ -221,6 +262,7 @@ find src/vendor -name .cargo-checksum.json \
 	--enable-debuginfo-only-std \
 	--disable-debuginfo \
 %endif
+	--enable-extended \
 	--enable-llvm-link-shared \
 	--local-rust-root=%{local_rust_root} \
 	--enable-vendor \
@@ -331,3 +373,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %dir %{_docdir}/%{name}
 %doc %{_docdir}/%{name}/html
+
+%files -n cargo
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cargo
+%{_mandir}/man1/cargo*.1*
+%dir %{_datadir}/cargo
+%dir %{_datadir}/cargo/registry
+
+%files -n bash-completion-cargo
+%defattr(644,root,root,755)
+%{_sysconfdir}/bash_completion.d/cargo
+
+%files -n zsh-completion-cargo
+%defattr(644,root,root,755)
+%{zsh_compdir}/_cargo
