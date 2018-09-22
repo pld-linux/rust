@@ -320,6 +320,9 @@ install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 # We don't need stdlib source
 %{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src
 
+# Create the path for crate-devel packages
+install -d $RPM_BUILD_ROOT%{_datadir}/cargo/registry
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
