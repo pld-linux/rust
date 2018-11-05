@@ -5,7 +5,7 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap using precompiled binaries
-%bcond_without	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
+%bcond_with	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
 %bcond_without	system_llvm	# system LLVM
 %bcond_with	tests		# build without tests
 
