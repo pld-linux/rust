@@ -21,24 +21,24 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.29.2
-%define		bootstrap_cargo	0.29.0
-%define		bootstrap_date	2018-10-12
+%define		bootstrap_rust	1.30.0
+%define		bootstrap_cargo	0.31.0
+%define		bootstrap_date	2018-10-25
 
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.30.0
-Release:	2
+Version:	1.31.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
-# Source0-md5:	a4aec25d5a3987f62c3fb8c00178f3a2
+# Source0-md5:	f360954192dd6ce924a77e4f41abf05b
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
-# Source1-md5:	5b7d77ab62d750aab6e07cc74e5a54b8
+# Source1-md5:	e0781e80a5c015180e402cc32dbbcf36
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
-# Source2-md5:	e318e1844ef64195b6f4c4243b790e24
+# Source2-md5:	ace71a709ec5719bc4024da52edb6b46
 Patch0:		x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -60,10 +60,10 @@ BuildRequires:	procps
 # invoke the linker directly, and then we'll only need binutils.
 # https://github.com/rust-lang/rust/issues/11937
 Requires:	gcc
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
 ExclusiveArch:	%{x8664} %{ix86} x32
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
 %define		rust_triple	x86_64-unknown-linux-gnux32
@@ -163,19 +163,6 @@ language and its standard library.
 Ten pakiet zawiera dokumentację w formacie HTML do języka
 programowania Rust i jego biblioteki standardowej.
 
-%package -n bash-completion-cargo
-Summary:	Bash completion for cargo command
-Summary(pl.UTF-8):	Bashowe dopełnianie parametrów polecenia cargo
-Group:		Applications/Shells
-Requires:	%{name} = %{version}-%{release}
-Requires:	bash-completion
-
-%description -n bash-completion-cargo
-Bash completion for cargo command.
-
-%description -n bash-completion-cargo -l pl.UTF-8
-Bashowe dopełnianie parametrów polecenia cargo.
-
 %package -n cargo
 Summary:	Rust's package manager and build tool
 Summary(pl.UTF-8):	Zarządca pakietów i narzędzie do budowania
@@ -190,12 +177,25 @@ dependencies and ensure that you'll always get a repeatable build.
 Cargo to narzędzie pozwalające projektom w języku Rust deklarować ich
 zależności i zapewniające powtarzalność procesu budowania.
 
+%package -n bash-completion-cargo
+Summary:	Bash completion for cargo command
+Summary(pl.UTF-8):	Bashowe dopełnianie parametrów polecenia cargo
+Group:		Applications/Shells
+Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion
+
+%description -n bash-completion-cargo
+Bash completion for cargo command.
+
+%description -n bash-completion-cargo -l pl.UTF-8
+Bashowe dopełnianie parametrów polecenia cargo.
+
 %package -n zsh-completion-cargo
 Summary:	Zsh completion for cargo command
 Summary(pl.UTF-8):	Dopełnianie parametrów polecenia cargo w powłoce Zsh
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
-Requires:	bash-completion
+Requires:	zsh
 
 %description -n zsh-completion-cargo
 Zsh completion for cargo command.
@@ -251,9 +251,6 @@ find src/vendor -name .cargo-checksum.json \
 	--target=%{rust_triple} \
 	--libdir=%{common_libdir} \
 	--disable-codegen-tests \
-	--disable-jemalloc \
-	--disable-option-checking \
-	--disable-rpath \
 	--disable-debuginfo-lines \
 %if %{with full_debuginfo}
 	--disable-debuginfo-only-std \
@@ -262,15 +259,18 @@ find src/vendor -name .cargo-checksum.json \
 	--enable-debuginfo-only-std \
 	--disable-debuginfo \
 %endif
+	--disable-jemalloc \
+	--disable-option-checking \
+	--disable-rpath \
 	--enable-extended \
 	--enable-llvm-link-shared \
-	--local-rust-root=%{local_rust_root} \
 	--enable-vendor \
+	--local-rust-root=%{local_rust_root} \
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel}
 
 RUST_BACKTRACE=full \
-./x.py dist
+./x.py dist --verbose
 
 %{?with_tests:./x.py test}
 
@@ -332,8 +332,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md src/libbacktrace/LICENSE-libbacktrace
+%attr(755,root,root) %{_bindir}/rls
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
+%attr(755,root,root) %{_bindir}/rustfmt
 %attr(755,root,root) %{_libdir}/libarena-*.so
 %attr(755,root,root) %{_libdir}/libfmt_macros-*.so
 %attr(755,root,root) %{_libdir}/libgraphviz-*.so
@@ -350,6 +352,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
 %dir %{rustlibdir}/%{rust_triple}
+%{rustlibdir}/%{rust_triple}/analysis
 %dir %{rustlibdir}/%{rust_triple}/codegen-backends
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/codegen-backends/*.so
 %dir %{rustlibdir}/%{rust_triple}/lib
@@ -380,6 +383,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -n cargo
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cargo
+%attr(755,root,root) %{_bindir}/cargo-clippy
+%attr(755,root,root) %{_bindir}/cargo-fmt
+%attr(755,root,root) %{_bindir}/clippy-driver
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
 %dir %{_datadir}/cargo/registry
