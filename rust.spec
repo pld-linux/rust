@@ -62,7 +62,7 @@ BuildRequires:	procps
 Requires:	gcc
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
-ExclusiveArch:	%{x8664} %{ix86} x32
+ExclusiveArch:	%{x8664} %{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
