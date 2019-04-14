@@ -21,24 +21,24 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.30.0
-%define		bootstrap_cargo	0.31.0
-%define		bootstrap_date	2018-10-25
+%define		bootstrap_rust	1.33.0
+%define		bootstrap_cargo	0.34.0
+%define		bootstrap_date	2019-02-28
 
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.31.0
+Version:	1.34.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
-# Source0-md5:	f360954192dd6ce924a77e4f41abf05b
+# Source0-md5:	0a09731ce756c7996091517bec197dcc
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
-# Source1-md5:	e0781e80a5c015180e402cc32dbbcf36
+# Source1-md5:	e037dff9bd3dc5160ff5aa9049908f94
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
-# Source2-md5:	ace71a709ec5719bc4024da52edb6b46
+# Source2-md5:	9d3daf9e2e5e12b545b48a0037880519
 Patch0:		x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -228,11 +228,11 @@ test -f %{local_rust_root}/bin/rustc
 # unbundle
 # We're disabling jemalloc, but rust-src still wants it.
 #%{__rm} -r src/jemalloc
-%{?with_system_llvm:%{__rm} -r src/llvm}
+%{?with_system_llvm:%{__rm} -r src/llvm-project}
 
 # extract bundled licenses for packaging
-sed -e '/*\//q' src/libbacktrace/backtrace.h \
-	>src/libbacktrace/LICENSE-libbacktrace
+sed -e '/*\//q' vendor/backtrace-sys/src/libbacktrace/backtrace.h \
+	>vendor/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
 
 # rust-gdb has hardcoded SYSROOT/lib -- let's make it noarch
 sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
@@ -241,7 +241,7 @@ sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 # The configure macro will modify some autoconf-related files, which upsets
 # cargo when it tries to verify checksums in those files.  If we just truncate
 # that file list, cargo won't have anything to complain about.
-find src/vendor -name .cargo-checksum.json \
+find vendor -name .cargo-checksum.json \
 	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
 
 %build
@@ -331,7 +331,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md src/libbacktrace/LICENSE-libbacktrace
+%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md vendor/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
+%attr(755,root,root) %{_bindir}/miri
 %attr(755,root,root) %{_bindir}/rls
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
@@ -339,7 +340,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libarena-*.so
 %attr(755,root,root) %{_libdir}/libfmt_macros-*.so
 %attr(755,root,root) %{_libdir}/libgraphviz-*.so
-%attr(755,root,root) %{_libdir}/libproc_macro-*.so
 %attr(755,root,root) %{_libdir}/librustc*-*.so
 %attr(755,root,root) %{_libdir}/libserialize-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
@@ -373,6 +373,7 @@ rm -rf $RPM_BUILD_ROOT
 %files gdb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rust-gdb
+%attr(755,root,root) %{_bindir}/rust-gdbgui
 %{_datadir}/%{name}/etc/gdb_*.py*
 
 %files doc
@@ -385,6 +386,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cargo
 %attr(755,root,root) %{_bindir}/cargo-clippy
 %attr(755,root,root) %{_bindir}/cargo-fmt
+%attr(755,root,root) %{_bindir}/cargo-miri
 %attr(755,root,root) %{_bindir}/clippy-driver
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
