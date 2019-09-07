@@ -21,24 +21,24 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.33.0
-%define		bootstrap_cargo	0.34.0
-%define		bootstrap_date	2019-02-28
+%define		bootstrap_rust	1.36.0
+%define		bootstrap_cargo	0.37.0
+%define		bootstrap_date	2019-07-04
 
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.35.0
+Version:	1.37.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.gz
-# Source0-md5:	f43af67a139ce21ff5f530bbd2f486aa
+# Source0-md5:	e67432b37150f13e186ebfb67e5192fb
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.gz
-# Source1-md5:	e037dff9bd3dc5160ff5aa9049908f94
+# Source1-md5:	487d17bbb86891f58160ccf6f0347b49
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
-# Source2-md5:	9d3daf9e2e5e12b545b48a0037880519
+# Source2-md5:	5f969ed3c9ef2a7e2a8011be7eb796c3
 Patch0:		x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
