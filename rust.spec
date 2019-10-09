@@ -7,6 +7,8 @@
 %bcond_with	bootstrap	# bootstrap using precompiled binaries
 %bcond_with	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
 %bcond_without	system_llvm	# system LLVM
+%bcond_without	rustc		# rustc building
+%bcond_without	cargo		# cargo building
 %bcond_with	tests		# build without tests
 
 # The channel can be stable, beta, or nightly
@@ -25,6 +27,10 @@
 %define		bootstrap_cargo	0.37.0
 %define		bootstrap_date	2019-07-04
 
+%ifarch x32
+%undefine	with_cargo
+%undefine	with_rustc
+%endif
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
@@ -39,7 +45,6 @@ Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source1-md5:	487d17bbb86891f58160ccf6f0347b49
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.gz
 # Source2-md5:	5f969ed3c9ef2a7e2a8011be7eb796c3
-Patch0:		x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -61,20 +66,23 @@ BuildRequires:	procps
 # https://github.com/rust-lang/rust/issues/11937
 Requires:	gcc
 # Only x86_64 and i686 are Tier 1 platforms at this time.
+# x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
-ExclusiveArch:	%{x8664} %{ix86}
+ExclusiveArch:	%{x8664} %{ix86} x32
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
-%define		rust_triple	x86_64-unknown-linux-gnux32
+%define		rust_triple		x86_64-unknown-linux-gnux32
+%define		rust_bootstrap_triple	x86_64-unknown-linux-gnu
 %else
-%define		rust_triple	%{_target_cpu}-unknown-linux-gnu
+%define		rust_triple		%{_target_cpu}-unknown-linux-gnu
+%define		rust_bootstrap_triple	%{_target_cpu}-unknown-linux-gnu
 %endif
 
 %if %{without bootstrap}
 %define		local_rust_root	%{_prefix}
 %else
-%define		bootstrap_root	rust-%{bootstrap_rust}-%{rust_triple}
+%define		bootstrap_root	rust-%{bootstrap_rust}-%{rust_bootstrap_triple}
 %define		local_rust_root	%{_builddir}/%{rustc_package}/%{bootstrap_root}
 %endif
 
@@ -205,12 +213,9 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%ifarch x32
-%patch0 -p1
-%endif
 
 %if %{with bootstrap}
-%ifarch %{x8664}
+%ifarch %{x8664} x32
 tar xf %{SOURCE1}
 %endif
 %ifarch %{ix86}
@@ -218,7 +223,7 @@ tar xf %{SOURCE2}
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
-	--components=cargo,rustc,rust-std-%{rust_triple} \
+	--components=cargo,rustc,rust-std-%{rust_bootstrap_triple} \
 	--prefix=%{local_rust_root} \
 	--disable-ldconfig
 test -f %{local_rust_root}/bin/cargo
