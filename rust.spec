@@ -217,11 +217,18 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 %setup -q -n %{rustc_package}
 
 %if %{with bootstrap}
-%ifarch %{x8664} x32
+%ifarch %{x8664}
 tar xf %{SOURCE1}
 %endif
 %ifarch %{ix86}
 tar xf %{SOURCE2}
+%endif
+%ifarch x32
+tar xf %{SOURCE1}
+cd %{bootstrap_root}
+tar xf %{SOURCE3}
+%{__mv} rust-std-%{bootstrap_rust}-%{rust_triple} rust-std-%{rust_triple}
+cd ..
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
@@ -230,6 +237,12 @@ tar xf %{SOURCE2}
 	--disable-ldconfig
 test -f %{local_rust_root}/bin/cargo
 test -f %{local_rust_root}/bin/rustc
+%ifarch x32
+%{bootstrap_root}-root/rust-std-%{rust_triple}/install.sh \
+	--components=rust-std-%{rust_triple} \
+	--prefix=%{local_rust_root} \
+	--disable-ldconfig
+%endif
 %endif
 
 # unbundle
