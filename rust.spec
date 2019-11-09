@@ -23,9 +23,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.37.0
-%define		bootstrap_cargo	0.38.0
-%define		bootstrap_date	2019-08-15
+%define		bootstrap_rust	1.38.0
+%define		bootstrap_cargo	0.39.0
+%define		bootstrap_date	2019-09-26
 
 %ifarch x32
 %undefine	with_cargo
@@ -34,19 +34,19 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.38.0
+Version:	1.39.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	492d3fbedc865606119336d55b9c4f29
+# Source0-md5:	ee76b165cd95ef420765bfb568adb450
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	5d874193878390be4acec3f2f54fff9c
+# Source1-md5:	b019f0dc0e4c45198d781fa459179ccd
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	c543ba5b28cc1c90eaf509e9d89effe9
+# Source2-md5:	e3a0c200eb1c9eabae930c94296885ee
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstrap_rust}-x86_64-unknown-linux-gnux32.tar.xz
-# Source3-md5:	d3c7de339814808e79bd78f92e18f75b
+# Source3-md5:	067ea32f60e37821723be41a5ba829d9
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -357,16 +357,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
-%attr(755,root,root) %{_libdir}/libarena-*.so
-%attr(755,root,root) %{_libdir}/libfmt_macros-*.so
-%attr(755,root,root) %{_libdir}/libgraphviz-*.so
 %attr(755,root,root) %{_libdir}/librustc*-*.so
-%attr(755,root,root) %{_libdir}/libserialize-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
-%attr(755,root,root) %{_libdir}/libsyntax-*.so
-%attr(755,root,root) %{_libdir}/libsyntax_ext-*.so
-%attr(755,root,root) %{_libdir}/libsyntax_pos-*.so
-%attr(755,root,root) %{_libdir}/libterm-*.so
 %attr(755,root,root) %{_libdir}/libtest-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
