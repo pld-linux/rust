@@ -23,9 +23,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.38.0
-%define		bootstrap_cargo	0.39.0
-%define		bootstrap_date	2019-09-26
+%define		bootstrap_rust	1.40.0
+%define		bootstrap_cargo	1.40.0
+%define		bootstrap_date	2019-12-19
 
 %ifarch x32
 %undefine	with_cargo
@@ -34,26 +34,26 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.39.0
-Release:	2
+Version:	1.41.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	ee76b165cd95ef420765bfb568adb450
+# Source0-md5:	e8c9d1d39ceb0dd43ee0100d0f019da4
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	b019f0dc0e4c45198d781fa459179ccd
+# Source1-md5:	db6b86d8f11fcc95a204e0e8bac5f2a0
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	e3a0c200eb1c9eabae930c94296885ee
+# Source2-md5:	6adca51ae634e6bcd6b403fd554c4cb2
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstrap_rust}-x86_64-unknown-linux-gnux32.tar.xz
-# Source3-md5:	067ea32f60e37821723be41a5ba829d9
+# Source3-md5:	d0183d3eb143de574fa349d10e821730
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel}
-BuildRequires:	ncurses-devel
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
+BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	python >= 1:2.7
 BuildRequires:	zlib-devel
 %if %{without bootstrap}
@@ -365,8 +365,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}
 %dir %{rustlibdir}/%{rust_triple}
 %{rustlibdir}/%{rust_triple}/analysis
-%dir %{rustlibdir}/%{rust_triple}/codegen-backends
-%attr(755,root,root) %{rustlibdir}/%{rust_triple}/codegen-backends/*.so
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
