@@ -47,6 +47,8 @@ Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source2-md5:	be3f4d5143483c754a3c272eb213cd07
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstrap_rust}-x86_64-unknown-linux-gnux32.tar.xz
 # Source3-md5:	38da0bf057e0801669f18f74555830bf
+Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
+# Source4-md5:	3408e035e4257846e9417148e1f50412
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -70,7 +72,7 @@ Requires:	gcc
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
-ExclusiveArch:	%{x8664} %{ix86} x32
+ExclusiveArch:	%{x8664} %{ix86} x32 aarch64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
@@ -237,6 +239,9 @@ cd %{bootstrap_root}
 tar xf %{SOURCE3}
 %{__mv} rust-std-%{bootstrap_rust}-%{rust_triple} rust-std-%{rust_triple}
 cd ..
+%endif
+%ifarch aarch64
+tar xf %{SOURCE4}
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
