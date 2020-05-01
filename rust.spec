@@ -102,6 +102,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
 %define		_noautoprovfiles	lib.*-[[:xdigit:]]{8}[.]so.*
 
+%define		x_py { \
+	x_py() { \
+		local cmd="$1"; \
+		shift; \
+		%{?__jobs:CARGO_BUILD_JOBS=%__jobs }./x.py "$cmd" %{?__jobs:-j %__jobs} "$@"; \
+	}; x_py }
+
+
 %description
 Rust is a systems programming language that runs blazingly fast,
 prevents segfaults, and guarantees thread safety.
@@ -289,16 +297,17 @@ find vendor -name .cargo-checksum.json \
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel}
 
-RUST_BACKTRACE=full \
-./x.py dist --verbose
+export RUST_BACKTRACE=full
+%x_py dist --verbose
 
-%{?with_tests:./x.py test}
+%{?with_tests:%x_py test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-DESTDIR=$RPM_BUILD_ROOT ./x.py install
-DESTDIR=$RPM_BUILD_ROOT ./x.py install src
+export DESTDIR=$RPM_BUILD_ROOT
+%x_py install
+%x_py install src
 
 # Make sure the shared libraries are in the proper libdir
 %if "%{_libdir}" != "%{common_libdir}"
