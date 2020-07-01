@@ -23,9 +23,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.41.1
-%define		bootstrap_cargo	1.41.0
-%define		bootstrap_date	2020-02-27
+%define		bootstrap_rust	1.43.1
+%define		bootstrap_cargo	1.43.1
+%define		bootstrap_date	2020-05-07
 
 %ifarch x32
 %undefine	with_cargo
@@ -34,21 +34,21 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.42.0
-Release:	3
+Version:	1.44.1
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	03a6111956f8d3bfdfc21aedce7f06bc
+# Source0-md5:	0cc3b079ddb1eb9a17f9e7e52efcebc5
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	3336c39311a33005d51298c60b99f2c1
+# Source1-md5:	62b0974a4bad5aeabd50c7a7fa74518c
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	be3f4d5143483c754a3c272eb213cd07
+# Source2-md5:	758d55172c8dddb1ec71913b5f532bb2
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstrap_rust}-x86_64-unknown-linux-gnux32.tar.xz
-# Source3-md5:	38da0bf057e0801669f18f74555830bf
+# Source3-md5:	4b07c6922a0965791cf8eb28fee9e89d
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source4-md5:	3408e035e4257846e9417148e1f50412
+# Source4-md5:	3a9d54ab96f96664b2f6077cccb4e70b
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -366,7 +366,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md vendor/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
-%attr(755,root,root) %{_bindir}/miri
 %attr(755,root,root) %{_bindir}/rls
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
@@ -410,7 +409,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cargo
 %attr(755,root,root) %{_bindir}/cargo-clippy
 %attr(755,root,root) %{_bindir}/cargo-fmt
-%attr(755,root,root) %{_bindir}/cargo-miri
 %attr(755,root,root) %{_bindir}/clippy-driver
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
