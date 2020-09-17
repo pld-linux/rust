@@ -71,7 +71,7 @@ BuildRequires:	procps
 Requires:	gcc
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
-# https://doc.rust-lang.org/stable/book/getting-started.html#tier-1
+# https://doc.rust-lang.org/nightly/rustc/platform-support.html
 ExclusiveArch:	%{x8664} %{ix86} x32 aarch64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
