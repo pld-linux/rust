@@ -49,6 +49,7 @@ Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstra
 # Source3-md5:	4b07c6922a0965791cf8eb28fee9e89d
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
 # Source4-md5:	3a9d54ab96f96664b2f6077cccb4e70b
+Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -225,9 +226,10 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
 
 %if %{with bootstrap}
-%ifarch %{x8664}
+%ifarch %{x8664} x32
 tar xf %{SOURCE1}
 %endif
 %ifarch %{ix86}
@@ -278,6 +280,7 @@ find vendor -name .cargo-checksum.json \
 	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
 
 %build
+export PKG_CONFIG_ALLOW_CROSS=1
 %configure \
 	--build=%{rust_triple} \
 	--host=%{rust_triple} \

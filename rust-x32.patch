@@ -1,0 +1,152 @@
+--- rustc-1.44.1-src/src/librustc_errors/lib.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_errors/lib.rs	2020-09-19 16:51:37.200375178 +0200
+@@ -42,7 +42,7 @@
+ 
+ // `PResult` is used a lot. Make sure it doesn't unintentionally get bigger.
+ // (See also the comment on `DiagnosticBuilderInner`.)
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ rustc_data_structures::static_assert_size!(PResult<'_, bool>, 16);
+ 
+ /// Indicates the confidence in the correctness of a suggestion.
+--- rustc-1.44.1-src/src/librustc_ast/ast.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_ast/ast.rs	2020-09-19 20:00:01.696079898 +0200
+@@ -1011,7 +1011,7 @@
+ }
+ 
+ // `Expr` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ rustc_data_structures::static_assert_size!(Expr, 96);
+ 
+ impl Expr {
+--- rustc-1.44.1-src/src/librustc_ast/token.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_ast/token.rs	2020-09-19 20:00:34.444494028 +0200
+@@ -757,7 +757,7 @@
+ }
+ 
+ // `Nonterminal` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ rustc_data_structures::static_assert_size!(Nonterminal, 40);
+ 
+ impl Nonterminal {
+--- rustc-1.44.1-src/src/librustc_ast/tokenstream.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_ast/tokenstream.rs	2020-09-19 20:01:08.269632279 +0200
+@@ -147,7 +147,7 @@
+ pub type TreeAndJoint = (TokenTree, IsJoint);
+ 
+ // `TokenStream` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ rustc_data_structures::static_assert_size!(TokenStream, 8);
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, RustcEncodable, RustcDecodable)]
+--- rustc-1.44.1-src/src/librustc_middle/mir/mod.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_middle/mir/mod.rs	2020-09-19 21:14:39.635242732 +0200
+@@ -1557,7 +1557,7 @@
+ }
+ 
+ // `Statement` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(Statement<'_>, 32);
+ 
+ impl Statement<'_> {
+@@ -1810,7 +1810,7 @@
+ impl<'tcx> Copy for PlaceElem<'tcx> {}
+ 
+ // At least on 64 bit systems, `PlaceElem` should not be larger than two pointers.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(PlaceElem<'_>, 16);
+ 
+ /// Alias for projections as they appear in `UserTypeProjection`, where we
+--- rustc-1.44.1-src/src/librustc_middle/mir/tcx.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_middle/mir/tcx.rs	2020-09-19 21:15:10.600202818 +0200
+@@ -18,7 +18,7 @@
+ }
+ 
+ // At least on 64 bit systems, `PlaceTy` should not be larger than two or three pointers.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(PlaceTy<'_>, 16);
+ 
+ impl<'tcx> PlaceTy<'tcx> {
+--- rustc-1.44.1-src/src/librustc_middle/traits/mod.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_middle/traits/mod.rs	2020-09-19 21:15:40.648448077 +0200
+@@ -276,7 +276,7 @@
+ }
+ 
+ // `ObligationCauseCode` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(ObligationCauseCode<'_>, 32);
+ 
+ #[derive(Clone, Debug, PartialEq, Eq, Hash)]
+--- rustc-1.44.1-src/src/librustc_middle/ty/mod.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_middle/ty/mod.rs	2020-09-19 21:16:08.469909685 +0200
+@@ -614,7 +614,7 @@
+ }
+ 
+ // `TyS` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(TyS<'_>, 32);
+ 
+ impl<'tcx> Ord for TyS<'tcx> {
+--- rustc-1.44.1-src/src/librustc_middle/ty/sty.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_middle/ty/sty.rs	2020-09-19 21:16:35.264650688 +0200
+@@ -212,7 +212,7 @@
+ }
+ 
+ // `TyKind` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(TyKind<'_>, 24);
+ 
+ /// A closure can be modeled as a struct that looks like:
+--- rustc-1.44.1-src/src/librustc_infer/traits/mod.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_infer/traits/mod.rs	2020-09-19 22:11:38.115874035 +0200
+@@ -57,7 +57,7 @@
+ pub type TraitObligation<'tcx> = Obligation<'tcx, ty::PolyTraitPredicate<'tcx>>;
+ 
+ // `PredicateObligation` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(PredicateObligation<'_>, 112);
+ 
+ pub type Obligations<'tcx, O> = Vec<Obligation<'tcx, O>>;
+--- rustc-1.44.1-src/src/librustc_trait_selection/traits/fulfill.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_trait_selection/traits/fulfill.rs	2020-09-20 07:47:50.724260889 +0200
+@@ -80,7 +80,7 @@
+ }
+ 
+ // `PendingPredicateObligation` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ static_assert_size!(PendingPredicateObligation<'_>, 136);
+ 
+ impl<'a, 'tcx> FulfillmentContext<'tcx> {
+--- rustc-1.44.1-src/src/librustc_trait_selection/lib.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_trait_selection/lib.rs	2020-09-20 09:46:06.127051487 +0200
+@@ -22,7 +22,7 @@
+ 
+ #[macro_use]
+ extern crate rustc_macros;
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ #[macro_use]
+ extern crate rustc_data_structures;
+ #[macro_use]
+--- rustc-1.44.1-src/src/librustc_mir_build/hair/mod.rs.orig	2020-06-17 22:17:05.000000000 +0200
++++ rustc-1.44.1-src/src/librustc_mir_build/hair/mod.rs	2020-09-20 11:22:53.936804032 +0200
+@@ -94,7 +94,7 @@
+ }
+ 
+ // `Expr` is used a lot. Make sure it doesn't unintentionally get bigger.
+-#[cfg(target_arch = "x86_64")]
++#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
+ rustc_data_structures::static_assert_size!(Expr<'_>, 168);
+ 
+ /// The Hair trait implementor lowers their expressions (`&'tcx H::Expr`)
