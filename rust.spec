@@ -7,8 +7,6 @@
 %bcond_with	bootstrap	# bootstrap using precompiled binaries
 %bcond_with	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
 %bcond_without	system_llvm	# system LLVM
-%bcond_without	rustc		# rustc building
-%bcond_without	cargo		# cargo building
 %bcond_with	tests		# build without tests
 
 # The channel can be stable, beta, or nightly
@@ -28,8 +26,7 @@
 %define		bootstrap_date	2020-05-07
 
 %ifarch x32
-%undefine	with_cargo
-%undefine	with_rustc
+%define		with_cross	1
 %endif
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
@@ -49,23 +46,47 @@ Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstra
 # Source3-md5:	4b07c6922a0965791cf8eb28fee9e89d
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
 # Source4-md5:	3a9d54ab96f96664b2f6077cccb4e70b
-Patch0:		%{name}-x32.patch
+Patch0:		%{name}-no-miri.patch
+Patch1:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
+# make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
+BuildRequires:	procps
+BuildRequires:	python >= 1:2.7
+BuildRequires:	rpmbuild(macros) >= 1.752
+%if %{without cross}
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
 BuildRequires:	openssl-devel >= 1.0.1
-BuildRequires:	python >= 1:2.7
 BuildRequires:	zlib-devel
+%endif
 %if %{without bootstrap}
 BuildRequires:	%{name} >= %{bootstrap_rust}
 BuildRequires:	cargo >= %{bootstrap_cargo}
 BuildConflicts:	%{name} > %{version}
 %endif
-# make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
-BuildRequires:	procps
+%ifarch x32
+BuildRequires:	glibc-devel(x32)
+BuildRequires:	glibc-devel(x86_64)
+%if "%{_host_cpu}" == "x86_64"
+# building on x86_64 host with --target x32-pld-linux
+BuildRequires:	gcc-multilib-x32
+BuildRequires:	libstdc++-devel
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
+BuildRequires:	openssl-devel >= 1.0.1
+BuildRequires:	zlib-devel
+%else
+# building x86_64-hosted crosscompiler on x32 host
+BuildRequires:	gcc-multilib-64
+BuildRequires:	libstdc++-multilib-64-devel
+# how to specify?
+#BuildRequires:	llvm-devel.x86_64 >= 7.0
+#BuildRequires:	openssl-devel.x86_64
+#BuildRequires:	zlib-devel.x86_64
+%endif
+%endif
 # The C compiler is needed at runtime just for linking.  Someday rustc might
 # invoke the linker directly, and then we'll only need binutils.
 # https://github.com/rust-lang/rust/issues/11937
@@ -78,10 +99,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
 %define		rust_triple		x86_64-unknown-linux-gnux32
+%define		rust_host_triple	x86_64-unknown-linux-gnu
 %define		rust_bootstrap_triple	x86_64-unknown-linux-gnu
 %else
 %define		rust_triple		%{_target_cpu}-unknown-linux-gnu
-%define		rust_bootstrap_triple	%{_target_cpu}-unknown-linux-gnu
+%define		rust_host_triple	%{rust_triple}
+%define		rust_bootstrap_triple	%{rust_triple}
 %endif
 
 %if %{without bootstrap}
@@ -129,7 +152,7 @@ bezpieczną wielowątkowość.
 Summary:	Common debugger pretty printers for Rust
 Summary(pl.UTF-8):	Narzędzia wypisujące struktury Rusa wspólne dla różnych debuggerów
 Group:		Development/Debuggers
-BuildArch:	noarch
+%{?noarchpackage}
 
 %description debugger-common
 This package includes the common functionality for rust-gdb and
@@ -144,7 +167,7 @@ Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w GDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	gdb
-BuildArch:	noarch
+%{?noarchpackage}
 
 %description gdb
 This package includes the rust-gdb script, which allows easier
@@ -160,7 +183,7 @@ Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w LLDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	lldb
-BuildArch:	noarch
+%{?noarchpackage}
 
 %description lldb
 This package includes the rust-lldb script, which allows easier
@@ -174,7 +197,7 @@ odpluskwianie programów w języku Rust.
 Summary:	Documentation for Rust
 Summary(pl.UTF-8):	Dokumentacja do Rusta
 Group:		Documentation
-BuildArch:	noarch
+%{?noarchpackage}
 
 %description doc
 This package includes HTML documentation for the Rust programming
@@ -227,6 +250,8 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 %prep
 %setup -q -n %{rustc_package}
 %patch0 -p1
+# irrelevant when not building rustc for x32
+#patch1 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -236,7 +261,6 @@ tar xf %{SOURCE1}
 tar xf %{SOURCE2}
 %endif
 %ifarch x32
-tar xf %{SOURCE1}
 cd %{bootstrap_root}
 tar xf %{SOURCE3}
 %{__mv} rust-std-%{bootstrap_rust}-%{rust_triple} rust-std-%{rust_triple}
@@ -280,10 +304,9 @@ find vendor -name .cargo-checksum.json \
 	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
 
 %build
-export PKG_CONFIG_ALLOW_CROSS=1
 %configure \
-	--build=%{rust_triple} \
-	--host=%{rust_triple} \
+	--build=%{rust_bootstrap_triple} \
+	--host=%{rust_host_triple} \
 	--target=%{rust_triple} \
 	--libdir=%{common_libdir} \
 	--disable-codegen-tests \
@@ -384,6 +407,15 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
+
+# for cross-compiler (e.g. x86_64-hosted x32 rust)
+%if "%{rust_host_triple}" != "%{rust_triple}"
+%dir %{rustlibdir}/%{rust_host_triple}
+%{rustlibdir}/%{rust_host_triple}/analysis
+%dir %{rustlibdir}/%{rust_host_triple}/lib
+%attr(755,root,root) %{rustlibdir}/%{rust_host_triple}/lib/*.so
+%{rustlibdir}/%{rust_host_triple}/lib/*.rlib
+%endif
 
 %files debugger-common
 %defattr(644,root,root,755)

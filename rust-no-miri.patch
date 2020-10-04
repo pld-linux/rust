@@ -1,3 +1,4 @@
+(rebased to 1.44.1)
 From 416b010f4087d055febe2d55919f74e261ca8cd6 Mon Sep 17 00:00:00 2001
 From: Ralf Jung <post@ralfj.de>
 Date: Thu, 11 Jun 2020 09:25:06 +0200
@@ -25,7 +26,7 @@ diff --git a/src/bootstrap/tool.rs b/src/bootstrap/tool.rs
 index 6cd9f9029c948..9c95de0a81eae 100644
 --- a/src/bootstrap/tool.rs
 +++ b/src/bootstrap/tool.rs
-@@ -595,6 +595,7 @@ macro_rules! tool_extended {
+@@ -591,6 +591,7 @@ macro_rules! tool_extended {
         $toolstate:ident,
         $path:expr,
         $tool_name:expr,
@@ -33,7 +34,7 @@ index 6cd9f9029c948..9c95de0a81eae 100644
         $extra_deps:block;)+) => {
          $(
              #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-@@ -606,17 +607,22 @@ macro_rules! tool_extended {
+@@ -602,17 +603,22 @@ macro_rules! tool_extended {
  
          impl Step for $name {
              type Output = Option<PathBuf>;
@@ -61,28 +62,28 @@ index 6cd9f9029c948..9c95de0a81eae 100644
                              })
                          }),
                  )
-@@ -652,12 +658,12 @@ macro_rules! tool_extended {
- // Note: tools need to be also added to `Builder::get_step_descriptions` in `build.rs`
- // to make `./x.py build <tool>` work.
+@@ -646,12 +652,12 @@ macro_rules! tool_extended {
+ }
+ 
  tool_extended!((self, builder),
 -    Cargofmt, rustfmt, "src/tools/rustfmt", "cargo-fmt", {};
 -    CargoClippy, clippy, "src/tools/clippy", "cargo-clippy", {};
 -    Clippy, clippy, "src/tools/clippy", "clippy-driver", {};
 -    Miri, miri, "src/tools/miri", "miri", {};
--    CargoMiri, miri, "src/tools/miri/cargo-miri", "cargo-miri", {};
+-    CargoMiri, miri, "src/tools/miri", "cargo-miri", {};
 -    Rls, rls, "src/tools/rls", "rls", {
 +    Cargofmt, rustfmt, "src/tools/rustfmt", "cargo-fmt", stable=true, {};
 +    CargoClippy, clippy, "src/tools/clippy", "cargo-clippy", stable=true, {};
 +    Clippy, clippy, "src/tools/clippy", "clippy-driver", stable=true, {};
 +    Miri, miri, "src/tools/miri", "miri", stable=false, {};
-+    CargoMiri, miri, "src/tools/miri/cargo-miri", "cargo-miri", stable=false, {};
++    CargoMiri, miri, "src/tools/miri", "cargo-miri", stable=false, {};
 +    Rls, rls, "src/tools/rls", "rls", stable=true, {
-         builder.ensure(Clippy {
+         let clippy = builder.ensure(Clippy {
              compiler: self.compiler,
              target: self.target,
-@@ -665,7 +671,7 @@ tool_extended!((self, builder),
-         });
-         self.extra_features.push("clippy".to_owned());
+@@ -661,7 +667,7 @@ tool_extended!((self, builder),
+             self.extra_features.push("clippy".to_owned());
+         }
      };
 -    Rustfmt, rustfmt, "src/tools/rustfmt", "rustfmt", {};
 +    Rustfmt, rustfmt, "src/tools/rustfmt", "rustfmt", stable=true, {};
