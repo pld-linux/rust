@@ -57,6 +57,8 @@ BuildRequires:	procps
 BuildRequires:	python >= 1:2.7
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
+BuildRequires:	curl-devel
+BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -72,7 +74,9 @@ BuildRequires:	glibc-devel(x32)
 BuildRequires:	glibc-devel(x86_64)
 %if "%{_host_cpu}" == "x86_64"
 # building on x86_64 host with --target x32-pld-linux
+BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
+BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -82,6 +86,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	gcc-multilib-64
 BuildRequires:	libstdc++-multilib-64-devel
 # how to specify?
+#BuildRequires:	curl-devel.x86_64
+#BuildRequires:	libgit2-devel.x86_64
 #BuildRequires:	llvm-devel.x86_64 >= 7.0
 #BuildRequires:	openssl-devel.x86_64
 #BuildRequires:	zlib-devel.x86_64
