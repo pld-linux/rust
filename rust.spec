@@ -42,10 +42,8 @@ Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source1-md5:	62b0974a4bad5aeabd50c7a7fa74518c
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
 # Source2-md5:	758d55172c8dddb1ec71913b5f532bb2
-Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-std-%{bootstrap_rust}-x86_64-unknown-linux-gnux32.tar.xz
-# Source3-md5:	4b07c6922a0965791cf8eb28fee9e89d
-Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source4-md5:	3a9d54ab96f96664b2f6077cccb4e70b
+Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
+# Source3-md5:	3a9d54ab96f96664b2f6077cccb4e70b
 Patch0:		%{name}-no-miri.patch
 Patch1:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
@@ -266,14 +264,8 @@ tar xf %{SOURCE1}
 %ifarch %{ix86}
 tar xf %{SOURCE2}
 %endif
-%ifarch x32
-cd %{bootstrap_root}
-tar xf %{SOURCE3}
-%{__mv} rust-std-%{bootstrap_rust}-%{rust_triple} rust-std-%{rust_triple}
-cd ..
-%endif
 %ifarch aarch64
-tar xf %{SOURCE4}
+tar xf %{SOURCE3}
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
@@ -282,12 +274,6 @@ tar xf %{SOURCE4}
 	--disable-ldconfig
 test -f %{local_rust_root}/bin/cargo
 test -f %{local_rust_root}/bin/rustc
-%ifarch x32
-%{bootstrap_root}-root/rust-std-%{rust_triple}/install.sh \
-	--components=rust-std-%{rust_triple} \
-	--prefix=%{local_rust_root} \
-	--disable-ldconfig
-%endif
 %endif
 
 # unbundle
