@@ -151,6 +151,18 @@ Rust to systemowy język programowania działający bardzo szybko,
 zapobiegający naruszeniom ochrony pamięci i gwarantujący
 bezpieczną wielowątkowość.
 
+%package analyzer
+Summary:	Implementation of Language Server Protocol for Rust
+Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
+
+%description analyzer
+Implementation of Language Server Protocol for Rust.
+
+%description analyzer -l pl.UTF-8
+Implementacja Language Server Protocol dla Rusta.
+
 %package debugger-common
 Summary:	Common debugger pretty printers for Rust
 Summary(pl.UTF-8):	Narzędzia wypisujące struktury Rusa wspólne dla różnych debuggerów
@@ -195,6 +207,18 @@ debugging of Rust programs.
 %description lldb -l pl.UTF-8
 Ten pakiet zawiera skrypt rust-lldb, pozwalający na łatwiejsze
 odpluskwianie programów w języku Rust.
+
+%package rls
+Summary:	Rust Language Server for IDE integration
+Summary(pl.UTF-8):	Rust Language Server do integracji z IDE
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
+
+%description rls
+Rust Language Server for IDE integration.
+
+%description rls -l pl.UTF-8
+Rust Language Server do integracji z IDE.
 
 %package doc
 Summary:	Documentation for Rust
@@ -382,8 +406,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
-%attr(755,root,root) %{_bindir}/rls
-%attr(755,root,root) %{_bindir}/rust-analyzer
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
@@ -410,6 +432,10 @@ rm -rf $RPM_BUILD_ROOT
 %{rustlibdir}/%{rust_host_triple}/lib/*.rlib
 %endif
 
+%files analyzer
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rust-analyzer
+
 %files debugger-common
 %defattr(644,root,root,755)
 %dir %{_datadir}/%{name}
@@ -427,6 +453,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rust-gdb
 %attr(755,root,root) %{_bindir}/rust-gdbgui
 %{_datadir}/%{name}/etc/gdb_*.py*
+
+%files rls
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rls
 
 %files doc
 %defattr(644,root,root,755)
