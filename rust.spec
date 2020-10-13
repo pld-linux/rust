@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.43.1
-%define		bootstrap_cargo	1.43.1
-%define		bootstrap_date	2020-05-07
+%define		bootstrap_rust	1.46.0
+%define		bootstrap_cargo	1.46.0
+%define		bootstrap_date	2020-08-27
 
 %ifarch x32
 %define		with_cross	1
@@ -31,21 +31,20 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.44.1
-Release:	2
+Version:	1.47.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	0cc3b079ddb1eb9a17f9e7e52efcebc5
+# Source0-md5:	6283a61cac54bb0a7d32bc447d07fadc
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	62b0974a4bad5aeabd50c7a7fa74518c
+# Source1-md5:	45eaf35327db0bac923c65048637a2f5
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	758d55172c8dddb1ec71913b5f532bb2
+# Source2-md5:	6a2422d81e98df5b71a959c70aa4c81b
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	3a9d54ab96f96664b2f6077cccb4e70b
-Patch0:		%{name}-no-miri.patch
-Patch1:		%{name}-x32.patch
+# Source3-md5:	144376df8b0ddfef57900b867746a9ab
+Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -58,7 +57,7 @@ BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 8.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	zlib-devel
 %endif
@@ -76,7 +75,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 7.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 8.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	zlib-devel
 %else
@@ -253,9 +252,8 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 # irrelevant when not building rustc for x32
-#patch1 -p1
+#patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -282,8 +280,8 @@ test -f %{local_rust_root}/bin/rustc
 %{?with_system_llvm:%{__rm} -r src/llvm-project}
 
 # extract bundled licenses for packaging
-sed -e '/*\//q' vendor/backtrace-sys/src/libbacktrace/backtrace.h \
-	>vendor/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
+sed -e '/*\//q' library/backtrace/crates/backtrace-sys/src/libbacktrace/backtrace.h \
+	>library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
 
 # rust-gdb has hardcoded SYSROOT/lib -- let's make it noarch
 sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
@@ -383,14 +381,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md vendor/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
+%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
 %attr(755,root,root) %{_bindir}/rls
+%attr(755,root,root) %{_bindir}/rust-analyzer
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
+%attr(755,root,root) %{_libdir}/libchalk_derive-*.so
 %attr(755,root,root) %{_libdir}/librustc*-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
 %attr(755,root,root) %{_libdir}/libtest-*.so
+%attr(755,root,root) %{_libdir}/libtracing_attributes-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
@@ -413,7 +414,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/etc
-%{_datadir}/%{name}/etc/debugger_*.py*
+%{_datadir}/%{name}/etc/lldb_commands
+%{_datadir}/%{name}/etc/rust_types.py
 
 %files lldb
 %defattr(644,root,root,755)
