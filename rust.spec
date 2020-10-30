@@ -277,7 +277,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 %prep
 %setup -q -n %{rustc_package}
 # irrelevant when not building rustc for x32
-#patch0 -p1
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
