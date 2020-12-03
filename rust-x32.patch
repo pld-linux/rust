@@ -1,5 +1,5 @@
---- rustc-1.47.0-src.orig/src/librustc_errors/lib.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_errors/lib.rs	2020-10-30 13:52:39.921952637 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_errors/src/lib.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_errors/src/lib.rs	2020-10-30 13:52:39.921952637 +0100
 @@ -45,7 +45,7 @@
  
  // `PResult` is used a lot. Make sure it doesn't unintentionally get bigger.
@@ -9,30 +9,30 @@
  rustc_data_structures::static_assert_size!(PResult<'_, bool>, 16);
  
  /// Indicates the confidence in the correctness of a suggestion.
---- rustc-1.47.0-src.orig/src/librustc_ast/ast.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_ast/ast.rs	2020-10-30 13:53:59.025035237 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_ast/src/ast.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_ast/src/ast.rs	2020-10-30 13:53:59.025035237 +0100
 @@ -1056,7 +1056,7 @@
  }
  
  // `Expr` is used a lot. Make sure it doesn't unintentionally get bigger.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- rustc_data_structures::static_assert_size!(Expr, 104);
+ rustc_data_structures::static_assert_size!(Expr, 112);
  
  impl Expr {
---- rustc-1.47.0-src.orig/src/librustc_ast/token.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_ast/token.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_ast/src/token.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_ast/src/token.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -710,7 +710,7 @@
  }
  
  // `Nonterminal` is used a lot. Make sure it doesn't unintentionally get bigger.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- rustc_data_structures::static_assert_size!(Nonterminal, 40);
+ rustc_data_structures::static_assert_size!(Nonterminal, 48);
  
  #[derive(Debug, Copy, Clone, PartialEq, Encodable, Decodable)]
---- rustc-1.47.0-src.orig/src/librustc_ast/tokenstream.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_ast/tokenstream.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_ast/src/tokenstream.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_ast/src/tokenstream.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -130,7 +130,7 @@
  pub type TreeAndJoint = (TokenTree, IsJoint);
  
@@ -42,8 +42,8 @@
  rustc_data_structures::static_assert_size!(TokenStream, 8);
  
  #[derive(Clone, Copy, Debug, PartialEq, Encodable, Decodable)]
---- rustc-1.47.0-src.orig/src/librustc_middle/mir/mod.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_middle/mir/mod.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_middle/src/mir/mod.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_middle/src/mir/mod.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -1353,7 +1353,7 @@
  }
  
@@ -59,11 +59,11 @@
  // At least on 64 bit systems, `PlaceElem` should not be larger than two pointers.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- static_assert_size!(PlaceElem<'_>, 16);
+ static_assert_size!(PlaceElem<'_>, 24);
  
  /// Alias for projections as they appear in `UserTypeProjection`, where we
---- rustc-1.47.0-src.orig/src/librustc_middle/mir/tcx.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_middle/mir/tcx.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_middle/src/mir/tcx.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_middle/src/mir/tcx.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -17,7 +17,7 @@
  }
  
@@ -73,8 +73,8 @@
  static_assert_size!(PlaceTy<'_>, 16);
  
  impl<'tcx> PlaceTy<'tcx> {
---- rustc-1.47.0-src.orig/src/librustc_middle/traits/mod.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_middle/traits/mod.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_middle/src/traits/mod.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_middle/src/traits/mod.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -339,7 +339,7 @@
  }
  
@@ -84,8 +84,8 @@
  static_assert_size!(ObligationCauseCode<'_>, 32);
  
  #[derive(Clone, Debug, PartialEq, Eq, Hash, Lift)]
---- rustc-1.47.0-src.orig/src/librustc_middle/ty/mod.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_middle/ty/mod.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_middle/src/ty/mod.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_middle/src/ty/mod.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -604,7 +604,7 @@
  }
  
@@ -95,8 +95,8 @@
  static_assert_size!(TyS<'_>, 32);
  
  impl<'tcx> Ord for TyS<'tcx> {
---- rustc-1.47.0-src.orig/src/librustc_middle/ty/sty.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_middle/ty/sty.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_middle/src/ty/sty.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_middle/src/ty/sty.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -213,7 +213,7 @@
  }
  
@@ -106,30 +106,30 @@
  static_assert_size!(TyKind<'_>, 24);
  
  /// A closure can be modeled as a struct that looks like:
---- rustc-1.47.0-src.orig/src/librustc_infer/traits/mod.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_infer/traits/mod.rs	2020-10-30 13:53:29.548462138 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_infer/src/traits/mod.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_infer/src/traits/mod.rs	2020-10-30 13:53:29.548462138 +0100
 @@ -56,7 +56,7 @@
  pub type TraitObligation<'tcx> = Obligation<'tcx, ty::PolyTraitPredicate<'tcx>>;
  
  // `PredicateObligation` is used a lot. Make sure it doesn't unintentionally get bigger.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- static_assert_size!(PredicateObligation<'_>, 40);
+ static_assert_size!(PredicateObligation<'_>, 32);
  
  pub type Obligations<'tcx, O> = Vec<Obligation<'tcx, O>>;
---- rustc-1.47.0-src.orig/src/librustc_trait_selection/traits/fulfill.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_trait_selection/traits/fulfill.rs	2020-10-30 13:53:12.381849892 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_trait_selection/src/traits/fulfill.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_trait_selection/src/traits/fulfill.rs	2020-10-30 13:53:12.381849892 +0100
 @@ -85,7 +85,7 @@
  }
  
  // `PendingPredicateObligation` is used a lot. Make sure it doesn't unintentionally get bigger.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- static_assert_size!(PendingPredicateObligation<'_>, 64);
+ static_assert_size!(PendingPredicateObligation<'_>, 56);
  
  impl<'a, 'tcx> FulfillmentContext<'tcx> {
---- rustc-1.47.0-src.orig/src/librustc_trait_selection/lib.rs	2020-10-07 09:53:22.000000000 +0200
-+++ rustc-1.47.0-src/src/librustc_trait_selection/lib.rs	2020-10-30 13:52:39.925285960 +0100
+--- rustc-1.47.0-src.orig/compiler/rustc_trait_selection/src/lib.rs	2020-10-07 09:53:22.000000000 +0200
++++ rustc-1.47.0-src/compiler/rustc_trait_selection/src/lib.rs	2020-10-30 13:52:39.925285960 +0100
 @@ -20,7 +20,7 @@
  
  #[macro_use]

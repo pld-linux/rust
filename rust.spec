@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.46.0
-%define		bootstrap_cargo	1.46.0
-%define		bootstrap_date	2020-08-27
+%define		bootstrap_rust	1.47.0
+%define		bootstrap_cargo	1.47.0
+%define		bootstrap_date	2020-10-08
 
 %ifarch x32
 %define		with_cross	1
@@ -31,19 +31,19 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.47.0
+Version:	1.48.0
 Release:	0.1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	6283a61cac54bb0a7d32bc447d07fadc
+# Source0-md5:	1d8996bba1abbd5b3b149ccc89589664
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	45eaf35327db0bac923c65048637a2f5
+# Source1-md5:	9365de1153dae7bf1f99224382f8d77c
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	6a2422d81e98df5b71a959c70aa4c81b
+# Source2-md5:	9c351771a541e38416dd99ca85309059
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	144376df8b0ddfef57900b867746a9ab
+# Source3-md5:	1bb96238b441204e2b47561857ca9916
 Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -301,7 +301,10 @@ test -f %{local_rust_root}/bin/rustc
 # unbundle
 # We're disabling jemalloc, but rust-src still wants it.
 #%{__rm} -r src/jemalloc
-%{?with_system_llvm:%{__rm} -r src/llvm-project}
+%if %{with system_llvm}
+%{__rm} -r src/llvm-project
+mkdir -p src/llvm-project/libunwind
+%endif
 
 # extract bundled licenses for packaging
 sed -e '/*\//q' library/backtrace/crates/backtrace-sys/src/libbacktrace/backtrace.h \
