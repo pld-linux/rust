@@ -366,7 +366,6 @@ rm -rf $RPM_BUILD_ROOT
 
 export DESTDIR=$RPM_BUILD_ROOT
 %x_py install
-%x_py install src
 
 # Make sure the shared libraries are in the proper libdir
 %if "%{_libdir}" != "%{common_libdir}"
