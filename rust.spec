@@ -44,6 +44,8 @@ Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source2-md5:	9c351771a541e38416dd99ca85309059
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
 # Source3-md5:	1bb96238b441204e2b47561857ca9916
+Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
+# Source4-md5:	e178fcecb4bfdbacc967b76a5313c889
 Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -97,7 +99,7 @@ Requires:	gcc
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-ExclusiveArch:	%{x8664} %{ix86} x32 aarch64
+ExclusiveArch:	%{x8664} %{ix86} x32 aarch64 armv6hl armv7hl armv7hnl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch x32
@@ -105,9 +107,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		rust_host_triple	x86_64-unknown-linux-gnu
 %define		rust_bootstrap_triple	x86_64-unknown-linux-gnu
 %else
+%ifarch armv6hl armv7hl armv7hnl
+%define		rust_triple		arm-unknown-linux-gnueabihf
+%define		rust_host_triple	%{rust_triple}
+%define		rust_bootstrap_triple	%{rust_triple}
+%else
 %define		rust_triple		%{_target_cpu}-unknown-linux-gnu
 %define		rust_host_triple	%{rust_triple}
 %define		rust_bootstrap_triple	%{rust_triple}
+%endif
 %endif
 
 %if %{without bootstrap}
@@ -288,6 +296,9 @@ tar xf %{SOURCE2}
 %endif
 %ifarch aarch64
 tar xf %{SOURCE3}
+%endif
+%ifarch armv6hl armv7hl armv7hnl
+tar xf %{SOURCE4}
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
