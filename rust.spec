@@ -436,15 +436,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
 
-# for cross-compiler (e.g. x86_64-hosted x32 rust)
-%if "%{rust_host_triple}" != "%{rust_triple}"
-%dir %{rustlibdir}/%{rust_host_triple}
-%{rustlibdir}/%{rust_host_triple}/analysis
-%dir %{rustlibdir}/%{rust_host_triple}/lib
-%attr(755,root,root) %{rustlibdir}/%{rust_host_triple}/lib/*.so
-%{rustlibdir}/%{rust_host_triple}/lib/*.rlib
-%endif
-
 %files analyzer
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rust-analyzer
