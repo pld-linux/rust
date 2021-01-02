@@ -17,7 +17,7 @@
  // `Expr` is used a lot. Make sure it doesn't unintentionally get bigger.
 -#[cfg(target_arch = "x86_64")]
 +#[cfg(all(target_arch = "x86_64", target_pointer_size = "64"))]
- rustc_data_structures::static_assert_size!(Expr, 112);
+ rustc_data_structures::static_assert_size!(Expr, 120);
  
  impl Expr {
 --- rustc-1.47.0-src.orig/compiler/rustc_ast/src/token.rs	2020-10-07 09:53:22.000000000 +0200
