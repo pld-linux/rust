@@ -406,6 +406,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
+%attr(755,root,root) %{_bindir}/miri
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
@@ -468,6 +469,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cargo
 %attr(755,root,root) %{_bindir}/cargo-clippy
 %attr(755,root,root) %{_bindir}/cargo-fmt
+%attr(755,root,root) %{_bindir}/cargo-miri
 %attr(755,root,root) %{_bindir}/clippy-driver
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
