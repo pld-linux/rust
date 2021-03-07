@@ -175,7 +175,7 @@ Implementacja Language Server Protocol dla Rusta.
 Summary:	Common debugger pretty printers for Rust
 Summary(pl.UTF-8):	Narzędzia wypisujące struktury Rusa wspólne dla różnych debuggerów
 Group:		Development/Debuggers
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description debugger-common
 This package includes the common functionality for rust-gdb and
@@ -190,7 +190,7 @@ Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w GDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	gdb
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description gdb
 This package includes the rust-gdb script, which allows easier
@@ -206,7 +206,7 @@ Summary(pl.UTF-8):	Ładne wypisywanie struktur Rusta w LLDB
 Group:		Development/Debuggers
 Requires:	%{name}-debugger-common = %{version}-%{release}
 Requires:	lldb
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description lldb
 This package includes the rust-lldb script, which allows easier
@@ -232,7 +232,7 @@ Rust Language Server do integracji z IDE.
 Summary:	Documentation for Rust
 Summary(pl.UTF-8):	Dokumentacja do Rusta
 Group:		Documentation
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description doc
 This package includes HTML documentation for the Rust programming
