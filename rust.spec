@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.48.0
-%define		bootstrap_cargo	1.48.0
-%define		bootstrap_date	2020-11-19
+%define		bootstrap_rust	1.51.0
+%define		bootstrap_cargo	1.51.0
+%define		bootstrap_date	2021-03-25
 
 %ifarch x32
 %define		with_cross	1
@@ -31,21 +31,21 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.49.0
+Version:	1.52.0
 Release:	0.1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	f13014e17f84a99ff749f81e0cd1d2b1
+# Source0-md5:	f95ca614a531b3c1edd4918eaa329732
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	9aab1315df1f461bc988c5b5abcb8c89
+# Source1-md5:	7640d6538716c6492e56f361e3af0631
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	107dda909166a9c57d7907ac956eecd9
+# Source2-md5:	64f117dc1ae1543c8910eaa9a971ddd4
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	905c4ad9d3737fdf04c1acfd1b612b7c
+# Source3-md5:	3ac79872671df7ea0215fd351f52ffcf
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	f8502775faa60c018e38eda59c43147e
+# Source4-md5:	f624772d7c7ba2e83a51b4e9c1657f7b
 Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -59,8 +59,10 @@ BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 8.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 9.0}
 BuildRequires:	openssl-devel >= 1.0.1
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRequires:	zlib-devel
 %endif
 %if %{without bootstrap}
@@ -77,7 +79,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 8.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 9.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	zlib-devel
 %else
@@ -285,7 +287,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 %prep
 %setup -q -n %{rustc_package}
 # irrelevant when not building rustc for x32
-%patch0 -p1
+#%%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -423,11 +425,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
-%attr(755,root,root) %{_libdir}/libchalk_derive-*.so
 %attr(755,root,root) %{_libdir}/librustc*-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
 %attr(755,root,root) %{_libdir}/libtest-*.so
-%attr(755,root,root) %{_libdir}/libtracing_attributes-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
@@ -475,6 +475,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cargo-fmt
 %attr(755,root,root) %{_bindir}/cargo-miri
 %attr(755,root,root) %{_bindir}/clippy-driver
+%attr(755,root,root) %{_libexecdir}/cargo-credential-1password
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
 %dir %{_datadir}/cargo/registry
