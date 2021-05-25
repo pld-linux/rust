@@ -28,6 +28,11 @@
 %ifarch x32
 %define		with_cross	1
 %endif
+
+%if %{without full_debuginfo}
+%define		_enable_debug_packages	0
+%endif
+
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
