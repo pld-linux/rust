@@ -89,14 +89,13 @@ BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	zlib-devel
 %else
 # building x86_64-hosted crosscompiler on x32 host
+BuildRequires:	curl-devel(x86-64)
 BuildRequires:	gcc-multilib-64
+BuildRequires:	libgit2-devel(x86-64)
 BuildRequires:	libstdc++-multilib-64-devel
-# how to specify? - rpm.org adds arch provides on packages (__isa), uncomment once we switch
-#BuildRequires:	curl-devel(x86-64)
-#BuildRequires:	libgit2-devel(x86-64)
-#BuildRequires:	llvm-devel(x86-64)>= 7.0
-#BuildRequires:	openssl-devel(x86-64)
-#BuildRequires:	zlib-devel(x86-64)
+%{?with_system_llvm:BuildRequires:	llvm-devel(x86-64) >= 9.0}
+BuildRequires:	openssl-devel(x86-64)
+BuildRequires:	zlib-devel(x86-64)
 %endif
 %endif
 # The C compiler is needed at runtime just for linking.  Someday rustc might
