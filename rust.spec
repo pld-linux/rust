@@ -76,8 +76,8 @@ BuildRequires:	cargo >= %{bootstrap_cargo}
 BuildConflicts:	%{name} > %{version}
 %endif
 %ifarch x32
-BuildRequires:	glibc-devel(x32)
-BuildRequires:	glibc-devel(x86_64)
+BuildRequires:	glibc-devel(x86-64)
+BuildRequires:	glibc-devel(x86-x32)
 %if "%{_host_cpu}" == "x86_64"
 # building on x86_64 host with --target x32-pld-linux
 BuildRequires:	curl-devel
@@ -90,18 +90,29 @@ BuildRequires:	zlib-devel
 %else
 # building x86_64-hosted crosscompiler on x32 host
 BuildRequires:	curl-devel(x86-64)
+BuildRequires:	curl-devel(x86-x32)
 BuildRequires:	gcc-multilib-64
 BuildRequires:	libgit2-devel(x86-64) >= 1.1.0
+BuildRequires:	libgit2-devel(x86-x32) >= 1.1.0
 BuildRequires:	libstdc++-multilib-64-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel(x86-64) >= 9.0}
+%if %{with system_llvm}
+BuildRequires:	llvm-devel(x86-64) >= 9.0
+BuildRequires:	llvm-devel(x86-x32) >= 9.0
+%endif
 BuildRequires:	openssl-devel(x86-64)
+BuildRequires:	openssl-devel(x86-x32)
 BuildRequires:	zlib-devel(x86-64)
+BuildRequires:	zlib-devel(x86-x32)
 %endif
 %endif
 # The C compiler is needed at runtime just for linking.  Someday rustc might
 # invoke the linker directly, and then we'll only need binutils.
 # https://github.com/rust-lang/rust/issues/11937
 Requires:	gcc
+Requires:	%{name}-std%{?_isa} = %{version}-%{release}
+%ifarch x32
+Requires:	%{name}-std(x86-64) = %{version}-%{release}
+%endif
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/nightly/rustc/platform-support.html
@@ -165,11 +176,35 @@ Rust to systemowy język programowania działający bardzo szybko,
 zapobiegający naruszeniom ochrony pamięci i gwarantujący
 bezpieczną wielowątkowość.
 
+%package analysis
+Summary:	Metadata about the standard library
+Summary(pl.UTF-8):	Metadane o standardowej bibliotece
+Group:		Development/Tools
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description analysis
+Metadata about the standard library.
+
+%description analysis -l pl.UTF-8
+Metadane o standardowej bibliotece.
+
+%package std
+Summary:	Standard library for Rust
+Summary(pl.UTF-8):	Standardowa biblioteka Rusta
+Group:		Development/Tools
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description std
+Standard library for Rust.
+
+%description std -l pl.UTF-8
+Standardowa biblioteka Rusta.
+
 %package analyzer
 Summary:	Implementation of Language Server Protocol for Rust
 Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
 Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description analyzer
 Implementation of Language Server Protocol for Rust.
@@ -226,7 +261,8 @@ odpluskwianie programów w języku Rust.
 Summary:	Rust Language Server for IDE integration
 Summary(pl.UTF-8):	Rust Language Server do integracji z IDE
 Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name}-analysis%{?_isa} = %{version}-%{release}
 
 %description rls
 Rust Language Server for IDE integration.
@@ -252,7 +288,7 @@ programowania Rust i jego biblioteki standardowej.
 Summary:	Rust's package manager and build tool
 Summary(pl.UTF-8):	Zarządca pakietów i narzędzie do budowania
 Group:		Development/Tools
-Requires:	%{name}
+Requires:	%{name}%{?_isa}
 
 %description -n cargo
 Cargo is a tool that allows Rust projects to declare their various
@@ -435,8 +471,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
-%dir %{rustlibdir}/%{rust_triple}
+
+%files analysis
+%defattr(644,root,root,755)
 %{rustlibdir}/%{rust_triple}/analysis
+
+%files std
+%defattr(644,root,root,755)
+%dir %{rustlibdir}/%{rust_triple}
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
