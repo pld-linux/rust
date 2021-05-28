@@ -180,7 +180,7 @@ bezpieczną wielowątkowość.
 Summary:	Metadata about the standard library
 Summary(pl.UTF-8):	Metadane o standardowej bibliotece
 Group:		Development/Tools
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description analysis
 Metadata about the standard library.
@@ -192,7 +192,7 @@ Metadane o standardowej bibliotece.
 Summary:	Standard library for Rust
 Summary(pl.UTF-8):	Standardowa biblioteka Rusta
 Group:		Development/Tools
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description std
 Standard library for Rust.
@@ -204,7 +204,7 @@ Standardowa biblioteka Rusta.
 Summary:	Implementation of Language Server Protocol for Rust
 Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
 Group:		Development/Tools
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description analyzer
 Implementation of Language Server Protocol for Rust.
@@ -261,8 +261,8 @@ odpluskwianie programów w języku Rust.
 Summary:	Rust Language Server for IDE integration
 Summary(pl.UTF-8):	Rust Language Server do integracji z IDE
 Group:		Development/Tools
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	%{name}-analysis%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-analysis = %{version}-%{release}
 
 %description rls
 Rust Language Server for IDE integration.
