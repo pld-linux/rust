@@ -51,7 +51,6 @@ Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source3-md5:	3ac79872671df7ea0215fd351f52ffcf
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
 # Source4-md5:	f624772d7c7ba2e83a51b4e9c1657f7b
-Patch0:		%{name}-x32.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -326,8 +325,6 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-# irrelevant when not building rustc for x32
-#%%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
