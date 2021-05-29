@@ -122,6 +122,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		rust_triple		x86_64-unknown-linux-gnux32
 %define		rust_host_triple	x86_64-unknown-linux-gnu
 %define		rust_bootstrap_triple	x86_64-unknown-linux-gnu
+# libs in _libdir are x86_64 64bit
+%define		_lib			lib64
+%define		_libdir			%{_prefix}/lib64
 %else
 %ifarch armv6hl armv7hl armv7hnl
 %define		rust_triple		arm-unknown-linux-gnueabihf
@@ -419,9 +422,13 @@ find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
 # The libdir libraries are identical to those under rustlib/.  It's easier on
 # library loading if we keep them in libdir, but we do need them in rustlib/
 # to support dynamic linking for compiler plugins, so we'll symlink.
-(cd "$RPM_BUILD_ROOT%{rustlibdir}/%{rust_triple}/lib" &&
-	find ../../../../%{_lib} -maxdepth 1 -name '*.so' \
-	-exec ln -v -f -s -t . '{}' '+')
+for l in libstd libtest ; do
+	liblib=$RPM_BUILD_ROOT%{_libdir}/${l}-*.so
+	libstd=$RPM_BUILD_ROOT%{rustlibdir}/%{rust_triple}/lib/${l}-*.so
+	if [ "$(basename ${liblib})" = "$(basename ${libstd})" ]; then
+		ln -vfsr ${libstd} $RPM_BUILD_ROOT%{_libdir}/
+	fi
+done
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
 find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
@@ -462,7 +469,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
-%attr(755,root,root) %{_libdir}/librustc*-*.so
+%attr(755,root,root) %{_libdir}/librustc_driver-*.so
 %attr(755,root,root) %{_libdir}/libstd-*.so
 %attr(755,root,root) %{_libdir}/libtest-*.so
 %{_mandir}/man1/rustc.1*
