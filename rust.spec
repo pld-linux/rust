@@ -51,6 +51,8 @@ Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source3-md5:	3ac79872671df7ea0215fd351f52ffcf
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
 # Source4-md5:	f624772d7c7ba2e83a51b4e9c1657f7b
+Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
+# Source5-md5:	077d3f28a33af2cdb3897da9f8b81ca4
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -126,14 +128,20 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_lib			lib64
 %define		_libdir			%{_prefix}/lib64
 %else
-%ifarch armv6hl armv7hl armv7hnl
+%ifarch armv6hl
 %define		rust_triple		arm-unknown-linux-gnueabihf
+%define		rust_host_triple	%{rust_triple}
+%define		rust_bootstrap_triple	%{rust_triple}
+%else
+%ifarch armv7hl armv7hnl
+%define		rust_triple		armv7-unknown-linux-gnueabihf
 %define		rust_host_triple	%{rust_triple}
 %define		rust_bootstrap_triple	%{rust_triple}
 %else
 %define		rust_triple		%{_target_cpu}-unknown-linux-gnu
 %define		rust_host_triple	%{rust_triple}
 %define		rust_bootstrap_triple	%{rust_triple}
+%endif
 %endif
 %endif
 
@@ -339,8 +347,11 @@ tar xf %{SOURCE2}
 %ifarch aarch64
 tar xf %{SOURCE3}
 %endif
-%ifarch armv6hl armv7hl armv7hnl
+%ifarch armv6hl
 tar xf %{SOURCE4}
+%endif
+%ifarch armv7hl armv7hnl
+tar xf %{SOURCE5}
 %endif
 %{__mv} %{bootstrap_root} %{bootstrap_root}-root
 %{bootstrap_root}-root/install.sh \
