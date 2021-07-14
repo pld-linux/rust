@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.53.0
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -53,6 +53,7 @@ Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source4-md5:	e36ad0e20aef949b4335cf2599a136bb
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
 # Source5-md5:	77d28773b9fa07979a075e5232b23ac7
+Patch0:		disable_miri.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -114,6 +115,7 @@ Requires:	%{name}-std%{?_isa} = %{version}-%{release}
 %ifarch x32
 Requires:	%{name}-std(x86-64) = %{version}-%{release}
 %endif
+Obsoletes:	rust-analyzer < 1.53.0
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/nightly/rustc/platform-support.html
@@ -209,18 +211,6 @@ Standard library for Rust.
 
 %description std -l pl.UTF-8
 Standardowa biblioteka Rusta.
-
-%package analyzer
-Summary:	Implementation of Language Server Protocol for Rust
-Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
-Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
-
-%description analyzer
-Implementation of Language Server Protocol for Rust.
-
-%description analyzer -l pl.UTF-8
-Implementacja Language Server Protocol dla Rusta.
 
 %package debugger-common
 Summary:	Common debugger pretty printers for Rust
@@ -336,6 +326,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -476,7 +467,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
-%attr(755,root,root) %{_bindir}/miri
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
@@ -497,10 +487,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
-
-%files analyzer
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rust-analyzer
 
 %files debugger-common
 %defattr(644,root,root,755)
@@ -534,7 +520,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cargo
 %attr(755,root,root) %{_bindir}/cargo-clippy
 %attr(755,root,root) %{_bindir}/cargo-fmt
-%attr(755,root,root) %{_bindir}/cargo-miri
 %attr(755,root,root) %{_bindir}/clippy-driver
 %attr(755,root,root) %{_libexecdir}/cargo-credential-1password
 %{_mandir}/man1/cargo*.1*
