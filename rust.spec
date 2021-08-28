@@ -367,6 +367,15 @@ sed -e '/*\//q' library/backtrace/crates/backtrace-sys/src/libbacktrace/backtrac
 sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 	src/etc/rust-gdb
 
+# cargo has hardcoded libexec path - honour rpm _libexecdir
+%if "%{_libexecdir}" != "%{_prefix}/libexec"
+suffix="%(echo "%{_libexecdir}" | %{__sed} -e 's,^%{_prefix}/,,')"
+%{__sed} -i -e 's,"libexec","'${suffix}'",' \
+	src/bootstrap/dist.rs \
+	src/tools/cargo/src/cargo/ops/registry/auth.rs
+%{__sed} -i -e 's,libexec/,'${suffix}'/,' src/tools/cargo/tests/testsuite/credential_process.rs
+%endif
+
 # The configure macro will modify some autoconf-related files, which upsets
 # cargo when it tries to verify checksums in those files.  If we just truncate
 # that file list, cargo won't have anything to complain about.
