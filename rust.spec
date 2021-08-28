@@ -1,4 +1,5 @@
 # TODO
+# - unpackaged %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
 # - consider a rust-std package containing .../rustlib/$target
 #   This might allow multilib cross-compilation to work naturally.
 # - package additional tools
