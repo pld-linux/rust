@@ -22,9 +22,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.53.0
-%define		bootstrap_cargo	1.53.0
-%define		bootstrap_date	2021-06-17
+%define		bootstrap_rust	1.54.0
+%define		bootstrap_cargo	1.54.0
+%define		bootstrap_date	2021-07-29
 
 %ifarch x32
 %define		with_cross	1
@@ -37,23 +37,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.54.0
-Release:	2
+Version:	1.55.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	f1fc7b0f0c7aff2b8d61e58b510a6f66
+# Source0-md5:	bb05ec6801c08eb1353fa7316e02ee26
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	3f2ea3d908dac317d6006a117463f18e
+# Source1-md5:	12cfee7377dafd0583fe53d7ed5d45fb
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	2ea9461d6c06c38ad85cc6037d70b9d7
+# Source2-md5:	ec48712d83df42479eebca05bca06201
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	0772ec454b29685a4d79ead06c5cdd23
+# Source3-md5:	b8c06e3435e8f37cfd8911273255019c
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	7ecbfb7344a3dbafcaddffb898afbfa9
+# Source4-md5:	ed4754c59f8476fa60e8266002b8f1ba
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	3650d93b062c6605e3aa96ce4d63335c
+# Source5-md5:	9ceab67a2b1299a9314756280d90548b
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
