@@ -66,7 +66,10 @@ BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.1.0
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 10.0}
+%if %{with system_llvm}
+BuildRequires:	llvm >= 10.0
+BuildRequires:	llvm-devel >= 10.0
+%endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
