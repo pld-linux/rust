@@ -22,9 +22,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.txt
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.54.0
-%define		bootstrap_cargo	1.54.0
-%define		bootstrap_date	2021-07-29
+%define		bootstrap_rust	1.55.0
+%define		bootstrap_cargo	1.55.0
+%define		bootstrap_date	2021-09-09
 
 %ifarch x32
 %define		with_cross	1
@@ -37,23 +37,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.55.0
-Release:	2
+Version:	1.56.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	bb05ec6801c08eb1353fa7316e02ee26
+# Source0-md5:	3ad94ba9f05779800a5da6c02e00c444
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	12cfee7377dafd0583fe53d7ed5d45fb
+# Source1-md5:	59b0a04436f96250a307086b6fc2ce34
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	ec48712d83df42479eebca05bca06201
+# Source2-md5:	693c87cf2fc1a41169f55fdbf8426a2e
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	b8c06e3435e8f37cfd8911273255019c
+# Source3-md5:	475f762804d4ad8695029a70f8b93a6d
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	ed4754c59f8476fa60e8266002b8f1ba
+# Source4-md5:	56a568e97e7a5c3cb80569ab84f4657b
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	9ceab67a2b1299a9314756280d90548b
+# Source5-md5:	991a439bcdcbcf1b2bbe55ce9e90404f
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -363,10 +363,6 @@ test -f %{local_rust_root}/bin/rustc
 mkdir -p src/llvm-project/libunwind
 %endif
 
-# extract bundled licenses for packaging
-sed -e '/*\//q' library/backtrace/crates/backtrace-sys/src/libbacktrace/backtrace.h \
-	>library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
-
 # rust-gdb has hardcoded SYSROOT/lib -- let's make it noarch
 sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 	src/etc/rust-gdb
@@ -477,7 +473,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md library/backtrace/crates/backtrace-sys/src/libbacktrace/LICENSE-libbacktrace
+%doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
