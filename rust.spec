@@ -64,7 +64,7 @@ BuildRequires:	python >= 1:2.7
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
 BuildRequires:	curl-devel
-BuildRequires:	libgit2-devel >= 1.1.0
+BuildRequires:	libgit2-devel >= 1.3.0
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
 BuildRequires:	llvm >= 10.0
@@ -87,7 +87,7 @@ BuildRequires:	glibc-devel(x86-x32)
 # building on x86_64 host with --target x32-pld-linux
 BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
-BuildRequires:	libgit2-devel >= 1.1.0
+BuildRequires:	libgit2-devel >= 1.3.0
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 10.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -97,8 +97,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	curl-devel(x86-64)
 BuildRequires:	curl-devel(x86-x32)
 BuildRequires:	gcc-multilib-64
-BuildRequires:	libgit2-devel(x86-64) >= 1.1.0
-BuildRequires:	libgit2-devel(x86-x32) >= 1.1.0
+BuildRequires:	libgit2-devel(x86-64) >= 1.3.0
+BuildRequires:	libgit2-devel(x86-x32) >= 1.3.0
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
 BuildRequires:	llvm-devel(x86-64) >= 10.0
