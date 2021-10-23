@@ -1,0 +1,4018 @@
+diff -urN rustc-1.56.0-src/Cargo.lock rustc-1.56.0-src-git2/Cargo.lock
+--- rustc-1.56.0-src/Cargo.lock	2021-10-18 11:52:36.000000000 +0200
++++ rustc-1.56.0-src-git2/Cargo.lock	2021-10-23 20:59:08.434911180 +0200
+@@ -1429,7 +1429,7 @@
+ 
+ [[package]]
+ name = "git2"
+-version = "0.13.17"
++version = "0.13.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1d250f5f82326884bd39c2853577e70a121775db76818ffa452ed1e80de12986"
+ dependencies = [
+@@ -1889,7 +1889,7 @@
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.12.18+1.1.0"
++version = "0.12.24+1.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3da6a42da88fc37ee1ecda212ffa254c25713532980005d5f7c0b0fbe7e6e885"
+ dependencies = [
+diff -urN rustc-1.56.0-src/src/tools/cargo/Cargo.toml rustc-1.56.0-src-git2/src/tools/cargo/Cargo.toml
+--- rustc-1.56.0-src/src/tools/cargo/Cargo.toml	2021-10-18 11:52:56.000000000 +0200
++++ rustc-1.56.0-src-git2/src/tools/cargo/Cargo.toml	2021-10-23 21:00:31.124770799 +0200
+@@ -44,7 +44,7 @@
+ lazycell = "1.2.0"
+ libc = "0.2"
+ log = "0.4.6"
+-libgit2-sys = "0.12.18"
++libgit2-sys = "0.12.24"
+ memchr = "2.1.3"
+ num_cpus = "1.0"
+ opener = "0.5"
+diff -urN rustc-1.56.0-src/src/tools/miri/cargo-miri/Cargo.lock rustc-1.56.0-src-git2/src/tools/miri/cargo-miri/Cargo.lock
+--- rustc-1.56.0-src/src/tools/miri/cargo-miri/Cargo.lock	2021-10-18 11:52:56.000000000 +0200
++++ rustc-1.56.0-src-git2/src/tools/miri/cargo-miri/Cargo.lock	2021-10-23 21:01:01.564718045 +0200
+@@ -181,7 +181,7 @@
+ 
+ [[package]]
+ name = "git2"
+-version = "0.13.17"
++version = "0.13.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1d250f5f82326884bd39c2853577e70a121775db76818ffa452ed1e80de12986"
+ dependencies = [
+@@ -232,7 +232,7 @@
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.12.18+1.1.0"
++version = "0.12.24+1.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3da6a42da88fc37ee1ecda212ffa254c25713532980005d5f7c0b0fbe7e6e885"
+ dependencies = [
+diff -urN rustc-1.56.0-src/src/tools/rls/Cargo.lock rustc-1.56.0-src-git2/src/tools/rls/Cargo.lock
+--- rustc-1.56.0-src/src/tools/rls/Cargo.lock	2021-10-18 11:52:56.000000000 +0200
++++ rustc-1.56.0-src-git2/src/tools/rls/Cargo.lock	2021-10-23 20:55:59.835212449 +0200
+@@ -854,7 +854,7 @@
+ 
+ [[package]]
+ name = "git2"
+-version = "0.13.17"
++version = "0.13.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1d250f5f82326884bd39c2853577e70a121775db76818ffa452ed1e80de12986"
+ dependencies = [
+@@ -1216,7 +1216,7 @@
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.12.18+1.1.0"
++version = "0.12.24+1.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3da6a42da88fc37ee1ecda212ffa254c25713532980005d5f7c0b0fbe7e6e885"
+ dependencies = [
+diff -urN rustc-1.56.0-src/vendor/git2/Cargo.lock rustc-1.56.0-src-git2/vendor/git2/Cargo.lock
+--- rustc-1.56.0-src/vendor/git2/Cargo.lock	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/Cargo.lock	2021-10-23 20:59:46.411513930 +0200
+@@ -94,7 +94,7 @@
+ 
+ [[package]]
+ name = "git2"
+-version = "0.13.17"
++version = "0.13.23"
+ dependencies = [
+  "bitflags",
+  "libc",
+@@ -162,7 +162,7 @@
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.12.18+1.1.0"
++version = "0.12.24+1.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3da6a42da88fc37ee1ecda212ffa254c25713532980005d5f7c0b0fbe7e6e885"
+ dependencies = [
+diff -urN rustc-1.56.0-src/vendor/git2/Cargo.toml rustc-1.56.0-src-git2/vendor/git2/Cargo.toml
+--- rustc-1.56.0-src/vendor/git2/Cargo.toml	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/Cargo.toml	2021-10-23 20:47:39.252455615 +0200
+@@ -13,7 +13,7 @@
+ [package]
+ edition = "2018"
+ name = "git2"
+-version = "0.13.17"
++version = "0.13.23"
+ authors = ["Josh Triplett <josh@joshtriplett.org>", "Alex Crichton <alex@alexcrichton.com>"]
+ description = "Bindings to libgit2 for interoperating with git repositories. This library is\nboth threadsafe and memory safe and allows both reading and writing git\nrepositories.\n"
+ documentation = "https://docs.rs/git2"
+@@ -29,7 +29,7 @@
+ version = "0.2"
+ 
+ [dependencies.libgit2-sys]
+-version = "0.12.18"
++version = "0.12.24"
+ 
+ [dependencies.log]
+ version = "0.4.8"
+diff -urN rustc-1.56.0-src/vendor/git2/README.md rustc-1.56.0-src-git2/vendor/git2/README.md
+--- rustc-1.56.0-src/vendor/git2/README.md	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/README.md	2021-10-23 20:47:39.252455615 +0200
+@@ -12,8 +12,7 @@
+ ## Rust version requirements
+ 
+ git2-rs works with stable Rust, and typically works with the most recent prior
+-stable release as well. Check the MSRV job of [the CI script](.github/workflows/main.yml) to see the oldest
+-version of Rust known to pass tests.
++stable release as well.
+ 
+ ## Version of libgit2
+ 
+diff -urN rustc-1.56.0-src/vendor/git2/src/attr.rs rustc-1.56.0-src-git2/vendor/git2/src/attr.rs
+--- rustc-1.56.0-src/vendor/git2/src/attr.rs	1970-01-01 01:00:00.000000000 +0100
++++ rustc-1.56.0-src-git2/vendor/git2/src/attr.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -0,0 +1,175 @@
++use crate::raw;
++use std::ptr;
++use std::str;
++
++/// All possible states of an attribute.
++///
++/// This enum is used to interpret the value returned by
++/// [`Repository::get_attr`](crate::Repository::get_attr) and
++/// [`Repository::get_attr_bytes`](crate::Repository::get_attr_bytes).
++#[derive(Debug, Clone, Copy, Eq)]
++pub enum AttrValue<'string> {
++    /// The attribute is set to true.
++    True,
++    /// The attribute is unset (set to false).
++    False,
++    /// The attribute is set to a [valid UTF-8 string](prim@str).
++    String(&'string str),
++    /// The attribute is set to a string that might not be [valid UTF-8](prim@str).
++    Bytes(&'string [u8]),
++    /// The attribute is not specified.
++    Unspecified,
++}
++
++macro_rules! from_value {
++    ($value:expr => $string:expr) => {
++        match unsafe { raw::git_attr_value($value.map_or(ptr::null(), |v| v.as_ptr().cast())) } {
++            raw::GIT_ATTR_VALUE_TRUE => Self::True,
++            raw::GIT_ATTR_VALUE_FALSE => Self::False,
++            raw::GIT_ATTR_VALUE_STRING => $string,
++            raw::GIT_ATTR_VALUE_UNSPECIFIED => Self::Unspecified,
++            _ => unreachable!(),
++        }
++    };
++}
++
++impl<'string> AttrValue<'string> {
++    /// Returns the state of an attribute by inspecting its [value](crate::Repository::get_attr)
++    /// by a [string](prim@str).
++    ///
++    /// This function always returns [`AttrValue::String`] and never returns [`AttrValue::Bytes`]
++    /// when the attribute is set to a string.
++    pub fn from_string(value: Option<&'string str>) -> Self {
++        from_value!(value => Self::String(value.unwrap()))
++    }
++
++    /// Returns the state of an attribute by inspecting its [value](crate::Repository::get_attr_bytes)
++    /// by a [byte](u8) [slice].
++    ///
++    /// This function will perform UTF-8 validation when the attribute is set to a string, returns
++    /// [`AttrValue::String`] if it's valid UTF-8 and [`AttrValue::Bytes`] otherwise.
++    pub fn from_bytes(value: Option<&'string [u8]>) -> Self {
++        let mut value = Self::always_bytes(value);
++        if let Self::Bytes(bytes) = value {
++            if let Ok(string) = str::from_utf8(bytes) {
++                value = Self::String(string);
++            }
++        }
++        value
++    }
++
++    /// Returns the state of an attribute just like [`AttrValue::from_bytes`], but skips UTF-8
++    /// validation and always returns [`AttrValue::Bytes`] when it's set to a string.
++    pub fn always_bytes(value: Option<&'string [u8]>) -> Self {
++        from_value!(value => Self::Bytes(value.unwrap()))
++    }
++}
++
++/// Compare two [`AttrValue`]s.
++///
++/// Note that this implementation does not differentiate between [`AttrValue::String`] and
++/// [`AttrValue::Bytes`].
++impl PartialEq for AttrValue<'_> {
++    fn eq(&self, other: &AttrValue<'_>) -> bool {
++        match (self, other) {
++            (Self::True, AttrValue::True)
++            | (Self::False, AttrValue::False)
++            | (Self::Unspecified, AttrValue::Unspecified) => true,
++            (AttrValue::String(string), AttrValue::Bytes(bytes))
++            | (AttrValue::Bytes(bytes), AttrValue::String(string)) => string.as_bytes() == *bytes,
++            (AttrValue::String(left), AttrValue::String(right)) => left == right,
++            (AttrValue::Bytes(left), AttrValue::Bytes(right)) => left == right,
++            _ => false,
++        }
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::AttrValue;
++
++    macro_rules! test_attr_value {
++        ($function:ident, $variant:ident) => {
++            const ATTR_TRUE: &str = "[internal]__TRUE__";
++            const ATTR_FALSE: &str = "[internal]__FALSE__";
++            const ATTR_UNSET: &str = "[internal]__UNSET__";
++            let as_bytes = AsRef::<[u8]>::as_ref;
++            // Use `matches!` here since the `PartialEq` implementation does not differentiate
++            // between `String` and `Bytes`.
++            assert!(matches!(
++                AttrValue::$function(Some(ATTR_TRUE.as_ref())),
++                AttrValue::$variant(s) if as_bytes(s) == ATTR_TRUE.as_bytes()
++            ));
++            assert!(matches!(
++                AttrValue::$function(Some(ATTR_FALSE.as_ref())),
++                AttrValue::$variant(s) if as_bytes(s) == ATTR_FALSE.as_bytes()
++            ));
++            assert!(matches!(
++                AttrValue::$function(Some(ATTR_UNSET.as_ref())),
++                AttrValue::$variant(s) if as_bytes(s) == ATTR_UNSET.as_bytes()
++            ));
++            assert!(matches!(
++                AttrValue::$function(Some("foo".as_ref())),
++                AttrValue::$variant(s) if as_bytes(s) == b"foo"
++            ));
++            assert!(matches!(
++                AttrValue::$function(Some("bar".as_ref())),
++                AttrValue::$variant(s) if as_bytes(s) == b"bar"
++            ));
++            assert_eq!(AttrValue::$function(None), AttrValue::Unspecified);
++        };
++    }
++
++    #[test]
++    fn attr_value_from_string() {
++        test_attr_value!(from_string, String);
++    }
++
++    #[test]
++    fn attr_value_from_bytes() {
++        test_attr_value!(from_bytes, String);
++        assert!(matches!(
++            AttrValue::from_bytes(Some(&[0xff])),
++            AttrValue::Bytes(&[0xff])
++        ));
++        assert!(matches!(
++            AttrValue::from_bytes(Some(b"\xffoobar")),
++            AttrValue::Bytes(b"\xffoobar")
++        ));
++    }
++
++    #[test]
++    fn attr_value_always_bytes() {
++        test_attr_value!(always_bytes, Bytes);
++        assert!(matches!(
++            AttrValue::always_bytes(Some(&[0xff; 2])),
++            AttrValue::Bytes(&[0xff, 0xff])
++        ));
++        assert!(matches!(
++            AttrValue::always_bytes(Some(b"\xffoo")),
++            AttrValue::Bytes(b"\xffoo")
++        ));
++    }
++
++    #[test]
++    fn attr_value_partial_eq() {
++        assert_eq!(AttrValue::True, AttrValue::True);
++        assert_eq!(AttrValue::False, AttrValue::False);
++        assert_eq!(AttrValue::String("foo"), AttrValue::String("foo"));
++        assert_eq!(AttrValue::Bytes(b"foo"), AttrValue::Bytes(b"foo"));
++        assert_eq!(AttrValue::String("bar"), AttrValue::Bytes(b"bar"));
++        assert_eq!(AttrValue::Bytes(b"bar"), AttrValue::String("bar"));
++        assert_eq!(AttrValue::Unspecified, AttrValue::Unspecified);
++        assert_ne!(AttrValue::True, AttrValue::False);
++        assert_ne!(AttrValue::False, AttrValue::Unspecified);
++        assert_ne!(AttrValue::Unspecified, AttrValue::True);
++        assert_ne!(AttrValue::True, AttrValue::String("true"));
++        assert_ne!(AttrValue::Unspecified, AttrValue::Bytes(b"unspecified"));
++        assert_ne!(AttrValue::Bytes(b"false"), AttrValue::False);
++        assert_ne!(AttrValue::String("unspecified"), AttrValue::Unspecified);
++        assert_ne!(AttrValue::String("foo"), AttrValue::String("bar"));
++        assert_ne!(AttrValue::Bytes(b"foo"), AttrValue::Bytes(b"bar"));
++        assert_ne!(AttrValue::String("foo"), AttrValue::Bytes(b"bar"));
++        assert_ne!(AttrValue::Bytes(b"foo"), AttrValue::String("bar"));
++    }
++}
+diff -urN rustc-1.56.0-src/vendor/git2/src/blame.rs rustc-1.56.0-src-git2/vendor/git2/src/blame.rs
+--- rustc-1.56.0-src/vendor/git2/src/blame.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/blame.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -228,6 +228,18 @@
+         }
+         self
+     }
++
++    /// The first line in the file to blame.
++    pub fn min_line(&mut self, lineno: usize) -> &mut BlameOptions {
++        self.raw.min_line = lineno;
++        self
++    }
++
++    /// The last line in the file to blame.
++    pub fn max_line(&mut self, lineno: usize) -> &mut BlameOptions {
++        self.raw.max_line = lineno;
++        self
++    }
+ }
+ 
+ impl<'repo> Binding for Blame<'repo> {
+@@ -235,7 +247,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_blame) -> Blame<'repo> {
+         Blame {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -256,7 +268,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_blame_hunk) -> BlameHunk<'blame> {
+         BlameHunk {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/blob.rs rustc-1.56.0-src-git2/vendor/git2/src/blob.rs
+--- rustc-1.56.0-src/vendor/git2/src/blob.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/blob.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -56,7 +56,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_blob) -> Blob<'repo> {
+         Blob {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -110,7 +110,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_writestream) -> BlobWriter<'repo> {
+         BlobWriter {
+-            raw: raw,
++            raw,
+             need_cleanup: true,
+             _marker: marker::PhantomData,
+         }
+diff -urN rustc-1.56.0-src/vendor/git2/src/branch.rs rustc-1.56.0-src-git2/vendor/git2/src/branch.rs
+--- rustc-1.56.0-src/vendor/git2/src/branch.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/branch.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -28,6 +28,17 @@
+         Branch { inner: reference }
+     }
+ 
++    /// Ensure the branch name is well-formed.
++    pub fn name_is_valid(name: &str) -> Result<bool, Error> {
++        crate::init();
++        let name = CString::new(name)?;
++        let mut valid: libc::c_int = 0;
++        unsafe {
++            try_call!(raw::git_branch_name_is_valid(&mut valid, name.as_ptr()));
++        }
++        Ok(valid == 1)
++    }
++
+     /// Gain access to the reference that is this branch
+     pub fn get(&self) -> &Reference<'repo> {
+         &self.inner
+@@ -120,7 +131,7 @@
+     /// pointer.
+     pub unsafe fn from_raw(raw: *mut raw::git_branch_iterator) -> Branches<'repo> {
+         Branches {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -151,7 +162,7 @@
+ 
+ #[cfg(test)]
+ mod tests {
+-    use crate::BranchType;
++    use crate::{Branch, BranchType};
+ 
+     #[test]
+     fn smoke() {
+@@ -175,4 +186,12 @@
+ 
+         b1.delete().unwrap();
+     }
++
++    #[test]
++    fn name_is_valid() {
++        assert!(Branch::name_is_valid("foo").unwrap());
++        assert!(!Branch::name_is_valid("").unwrap());
++        assert!(!Branch::name_is_valid("with spaces").unwrap());
++        assert!(!Branch::name_is_valid("~tilde").unwrap());
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/call.rs rustc-1.56.0-src-git2/vendor/git2/src/call.rs
+--- rustc-1.56.0-src/vendor/git2/src/call.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/call.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -58,7 +58,9 @@
+ 
+     use crate::call::Convert;
+     use crate::{raw, BranchType, ConfigLevel, Direction, ObjectType, ResetType};
+-    use crate::{AutotagOption, DiffFormat, FetchPrune, FileFavor, SubmoduleIgnore};
++    use crate::{
++        AutotagOption, DiffFormat, FetchPrune, FileFavor, SubmoduleIgnore, SubmoduleUpdate,
++    };
+ 
+     impl<T: Copy> Convert<T> for T {
+         fn convert(&self) -> T {
+@@ -208,6 +210,18 @@
+             }
+         }
+     }
++
++    impl Convert<raw::git_submodule_update_t> for SubmoduleUpdate {
++        fn convert(&self) -> raw::git_submodule_update_t {
++            match *self {
++                SubmoduleUpdate::Checkout => raw::GIT_SUBMODULE_UPDATE_CHECKOUT,
++                SubmoduleUpdate::Rebase => raw::GIT_SUBMODULE_UPDATE_REBASE,
++                SubmoduleUpdate::Merge => raw::GIT_SUBMODULE_UPDATE_MERGE,
++                SubmoduleUpdate::None => raw::GIT_SUBMODULE_UPDATE_NONE,
++                SubmoduleUpdate::Default => raw::GIT_SUBMODULE_UPDATE_DEFAULT,
++            }
++        }
++    }
+ 
+     impl Convert<raw::git_remote_autotag_option_t> for AutotagOption {
+         fn convert(&self) -> raw::git_remote_autotag_option_t {
+diff -urN rustc-1.56.0-src/vendor/git2/src/cert.rs rustc-1.56.0-src-git2/vendor/git2/src/cert.rs
+--- rustc-1.56.0-src/vendor/git2/src/cert.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/cert.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -100,7 +100,7 @@
+     type Raw = *mut raw::git_cert;
+     unsafe fn from_raw(raw: *mut raw::git_cert) -> Cert<'a> {
+         Cert {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/commit.rs rustc-1.56.0-src-git2/vendor/git2/src/commit.rs
+--- rustc-1.56.0-src/vendor/git2/src/commit.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/commit.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -6,7 +6,7 @@
+ use std::str;
+ 
+ use crate::util::Binding;
+-use crate::{raw, signature, Error, Object, Oid, Signature, Time, Tree};
++use crate::{raw, signature, Buf, Error, IntoCString, Mailmap, Object, Oid, Signature, Time, Tree};
+ 
+ /// A structure to represent a git [commit][1]
+ ///
+@@ -105,6 +105,20 @@
+         str::from_utf8(self.raw_header_bytes()).ok()
+     }
+ 
++    /// Get an arbitrary header field.
++    pub fn header_field_bytes<T: IntoCString>(&self, field: T) -> Result<Buf, Error> {
++        let buf = Buf::new();
++        let raw_field = field.into_c_string()?;
++        unsafe {
++            try_call!(raw::git_commit_header_field(
++                buf.raw(),
++                &*self.raw,
++                raw_field
++            ));
++        }
++        Ok(buf)
++    }
++
+     /// Get the full raw text of the commit header.
+     pub fn raw_header_bytes(&self) -> &[u8] {
+         unsafe { crate::opt_bytes(self, raw::git_commit_raw_header(&*self.raw)).unwrap() }
+@@ -169,6 +183,20 @@
+         }
+     }
+ 
++    /// Get the author of this commit, using the mailmap to map names and email
++    /// addresses to canonical real names and email addresses.
++    pub fn author_with_mailmap(&self, mailmap: &Mailmap) -> Result<Signature<'static>, Error> {
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_commit_author_with_mailmap(
++                &mut ret,
++                &*self.raw,
++                &*mailmap.raw()
++            ));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
+     /// Get the committer of this commit.
+     pub fn committer(&self) -> Signature<'_> {
+         unsafe {
+@@ -177,6 +205,20 @@
+         }
+     }
+ 
++    /// Get the committer of this commit, using the mailmap to map names and email
++    /// addresses to canonical real names and email addresses.
++    pub fn committer_with_mailmap(&self, mailmap: &Mailmap) -> Result<Signature<'static>, Error> {
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_commit_committer_with_mailmap(
++                &mut ret,
++                &*self.raw,
++                &*mailmap.raw()
++            ));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
+     /// Amend this existing commit with all non-`None` values
+     ///
+     /// This creates a new commit that is exactly the same as the old commit,
+@@ -271,7 +313,7 @@
+     type Raw = *mut raw::git_commit;
+     unsafe fn from_raw(raw: *mut raw::git_commit) -> Commit<'repo> {
+         Commit {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -367,6 +409,11 @@
+         commit.tree().unwrap();
+         assert_eq!(commit.parents().count(), 0);
+ 
++        let tree_header_bytes = commit.header_field_bytes("tree").unwrap();
++        assert_eq!(
++            crate::Oid::from_str(tree_header_bytes.as_str().unwrap()).unwrap(),
++            commit.tree_id()
++        );
+         assert_eq!(commit.author().name(), Some("name"));
+         assert_eq!(commit.author().email(), Some("email"));
+         assert_eq!(commit.committer().name(), Some("name"));
+diff -urN rustc-1.56.0-src/vendor/git2/src/config.rs rustc-1.56.0-src-git2/vendor/git2/src/config.rs
+--- rustc-1.56.0-src/vendor/git2/src/config.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/config.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -465,7 +465,7 @@
+ impl Binding for Config {
+     type Raw = *mut raw::git_config;
+     unsafe fn from_raw(raw: *mut raw::git_config) -> Config {
+-        Config { raw: raw }
++        Config { raw }
+     }
+     fn raw(&self) -> *mut raw::git_config {
+         self.raw
+@@ -534,7 +534,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_config_entry) -> ConfigEntry<'cfg> {
+         ConfigEntry {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+             owned: true,
+         }
+@@ -549,7 +549,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_config_iterator) -> ConfigEntries<'cfg> {
+         ConfigEntries {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -571,7 +571,7 @@
+             try_call_iter!(raw::git_config_next(&mut raw, self.raw));
+             Some(Ok(ConfigEntry {
+                 owned: false,
+-                raw: raw,
++                raw,
+                 _marker: marker::PhantomData,
+             }))
+         }
+diff -urN rustc-1.56.0-src/vendor/git2/src/cred.rs rustc-1.56.0-src-git2/vendor/git2/src/cred.rs
+--- rustc-1.56.0-src/vendor/git2/src/cred.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/cred.rs	2021-10-23 20:47:39.252455615 +0200
+@@ -22,6 +22,7 @@
+     pub username: Option<String>,
+     protocol: Option<String>,
+     host: Option<String>,
++    port: Option<u16>,
+     path: Option<String>,
+     url: String,
+     commands: Vec<String>,
+@@ -170,7 +171,7 @@
+     type Raw = *mut raw::git_cred;
+ 
+     unsafe fn from_raw(raw: *mut raw::git_cred) -> Cred {
+-        Cred { raw: raw }
++        Cred { raw }
+     }
+     fn raw(&self) -> *mut raw::git_cred {
+         self.raw
+@@ -199,6 +200,7 @@
+         let mut ret = CredentialHelper {
+             protocol: None,
+             host: None,
++            port: None,
+             path: None,
+             username: None,
+             url: url.to_string(),
+@@ -210,6 +212,7 @@
+             if let Some(url::Host::Domain(s)) = url.host() {
+                 ret.host = Some(s.to_string());
+             }
++            ret.port = url.port();
+             ret.protocol = Some(url.scheme().to_string());
+         }
+         ret
+@@ -408,7 +411,11 @@
+                 let _ = writeln!(stdin, "protocol={}", p);
+             }
+             if let Some(ref p) = self.host {
+-                let _ = writeln!(stdin, "host={}", p);
++                if let Some(ref p2) = self.port {
++                    let _ = writeln!(stdin, "host={}:{}", p, p2);
++                } else {
++                    let _ = writeln!(stdin, "host={}", p);
++                }
+             }
+             if let Some(ref p) = self.path {
+                 let _ = writeln!(stdin, "path={}", p);
+@@ -640,6 +647,19 @@
+     }
+ 
+     #[test]
++    fn credential_helper9() {
++        let cfg = test_cfg! {
++            "credential.helper" => "!f() { while read line; do eval $line; done; if [ \"$host\" = example.com:3000 ]; then echo username=a; echo password=b; fi; }; f"
++        };
++        let (u, p) = CredentialHelper::new("https://example.com:3000/foo/bar")
++            .config(&cfg)
++            .execute()
++            .unwrap();
++        assert_eq!(u, "a");
++        assert_eq!(p, "b");
++    }
++
++    #[test]
+     #[cfg(feature = "ssh")]
+     fn ssh_key_from_memory() {
+         let cred = Cred::ssh_key_from_memory(
+diff -urN rustc-1.56.0-src/vendor/git2/src/describe.rs rustc-1.56.0-src-git2/vendor/git2/src/describe.rs
+--- rustc-1.56.0-src/vendor/git2/src/describe.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/describe.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -44,7 +44,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_describe_result) -> Describe<'repo> {
+         Describe {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/diff.rs rustc-1.56.0-src-git2/vendor/git2/src/diff.rs
+--- rustc-1.56.0-src/vendor/git2/src/diff.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/diff.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -58,6 +58,11 @@
+     raw: raw::git_diff_format_email_options,
+ }
+ 
++/// Control behavior of formatting emails
++pub struct DiffPatchidOptions {
++    raw: raw::git_diff_patchid_options,
++}
++
+ /// An iterator over the diffs in a delta
+ pub struct Deltas<'diff> {
+     range: Range<usize>,
+@@ -278,6 +283,21 @@
+         Ok(buf)
+     }
+ 
++    /// Create an patchid from a diff.
++    pub fn patchid(&self, opts: Option<&mut DiffPatchidOptions>) -> Result<Oid, Error> {
++        let mut raw = raw::git_oid {
++            id: [0; raw::GIT_OID_RAWSZ],
++        };
++        unsafe {
++            try_call!(raw::git_diff_patchid(
++                &mut raw,
++                self.raw,
++                opts.map(|o| &mut o.raw)
++            ));
++            Ok(Binding::from_raw(&raw as *const _))
++        }
++    }
++
+     // TODO: num_deltas_of_type, find_similar
+ }
+ impl Diff<'static> {
+@@ -289,6 +309,7 @@
+     /// a patch file likely contains abbreviated object IDs, so the
+     /// object IDs parsed by this function will also be abreviated.
+     pub fn from_buffer(buffer: &[u8]) -> Result<Diff<'static>, Error> {
++        crate::init();
+         let mut diff: *mut raw::git_diff = std::ptr::null_mut();
+         unsafe {
+             // NOTE: Doesn't depend on repo, so lifetime can be 'static
+@@ -318,9 +339,9 @@
+             (*data)(delta, hunk, line)
+         });
+         if r == Some(true) {
+-            0
++            raw::GIT_OK
+         } else {
+-            -1
++            raw::GIT_EUSER
+         }
+     }
+ }
+@@ -341,9 +362,9 @@
+             }
+         });
+         if r == Some(true) {
+-            0
++            raw::GIT_OK
+         } else {
+-            -1
++            raw::GIT_EUSER
+         }
+     }
+ }
+@@ -365,9 +386,9 @@
+             }
+         });
+         if r == Some(true) {
+-            0
++            raw::GIT_OK
+         } else {
+-            -1
++            raw::GIT_EUSER
+         }
+     }
+ }
+@@ -389,9 +410,9 @@
+             }
+         });
+         if r == Some(true) {
+-            0
++            raw::GIT_OK
+         } else {
+-            -1
++            raw::GIT_EUSER
+         }
+     }
+ }
+@@ -415,9 +436,9 @@
+             }
+         });
+         if r == Some(true) {
+-            0
++            raw::GIT_OK
+         } else {
+-            -1
++            raw::GIT_EUSER
+         }
+     }
+ }
+@@ -426,7 +447,7 @@
+     type Raw = *mut raw::git_diff;
+     unsafe fn from_raw(raw: *mut raw::git_diff) -> Diff<'repo> {
+         Diff {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -524,7 +545,7 @@
+     type Raw = *mut raw::git_diff_delta;
+     unsafe fn from_raw(raw: *mut raw::git_diff_delta) -> DiffDelta<'a> {
+         DiffDelta {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -609,7 +630,7 @@
+     type Raw = *const raw::git_diff_file;
+     unsafe fn from_raw(raw: *const raw::git_diff_file) -> DiffFile<'a> {
+         DiffFile {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -793,6 +814,11 @@
+         self.flag(raw::GIT_DIFF_IGNORE_WHITESPACE_EOL, ignore)
+     }
+ 
++    /// Ignore blank lines
++    pub fn ignore_blank_lines(&mut self, ignore: bool) -> &mut DiffOptions {
++        self.flag(raw::GIT_DIFF_IGNORE_BLANK_LINES, ignore)
++    }
++
+     /// When generating patch text, include the content of untracked files.
+     ///
+     /// This automatically turns on `include_untracked` but it does not turn on
+@@ -931,6 +957,61 @@
+ }
+ impl<'diff> ExactSizeIterator for Deltas<'diff> {}
+ 
++/// Line origin constants.
++#[derive(Copy, Clone, Debug, PartialEq)]
++pub enum DiffLineType {
++    /// These values will be sent to `git_diff_line_cb` along with the line
++    Context,
++    ///
++    Addition,
++    ///
++    Deletion,
++    /// Both files have no LF at end
++    ContextEOFNL,
++    /// Old has no LF at end, new does
++    AddEOFNL,
++    /// Old has LF at end, new does not
++    DeleteEOFNL,
++    /// The following values will only be sent to a `git_diff_line_cb` when
++    /// the content of a diff is being formatted through `git_diff_print`.
++    FileHeader,
++    ///
++    HunkHeader,
++    /// For "Binary files x and y differ"
++    Binary,
++}
++
++impl Binding for DiffLineType {
++    type Raw = raw::git_diff_line_t;
++    unsafe fn from_raw(raw: raw::git_diff_line_t) -> Self {
++        match raw {
++            raw::GIT_DIFF_LINE_CONTEXT => DiffLineType::Context,
++            raw::GIT_DIFF_LINE_ADDITION => DiffLineType::Addition,
++            raw::GIT_DIFF_LINE_DELETION => DiffLineType::Deletion,
++            raw::GIT_DIFF_LINE_CONTEXT_EOFNL => DiffLineType::ContextEOFNL,
++            raw::GIT_DIFF_LINE_ADD_EOFNL => DiffLineType::AddEOFNL,
++            raw::GIT_DIFF_LINE_DEL_EOFNL => DiffLineType::DeleteEOFNL,
++            raw::GIT_DIFF_LINE_FILE_HDR => DiffLineType::FileHeader,
++            raw::GIT_DIFF_LINE_HUNK_HDR => DiffLineType::HunkHeader,
++            raw::GIT_DIFF_LINE_BINARY => DiffLineType::Binary,
++            _ => panic!("Unknown git diff line type"),
++        }
++    }
++    fn raw(&self) -> raw::git_diff_line_t {
++        match *self {
++            DiffLineType::Context => raw::GIT_DIFF_LINE_CONTEXT,
++            DiffLineType::Addition => raw::GIT_DIFF_LINE_ADDITION,
++            DiffLineType::Deletion => raw::GIT_DIFF_LINE_DELETION,
++            DiffLineType::ContextEOFNL => raw::GIT_DIFF_LINE_CONTEXT_EOFNL,
++            DiffLineType::AddEOFNL => raw::GIT_DIFF_LINE_ADD_EOFNL,
++            DiffLineType::DeleteEOFNL => raw::GIT_DIFF_LINE_DEL_EOFNL,
++            DiffLineType::FileHeader => raw::GIT_DIFF_LINE_FILE_HDR,
++            DiffLineType::HunkHeader => raw::GIT_DIFF_LINE_HUNK_HDR,
++            DiffLineType::Binary => raw::GIT_DIFF_LINE_BINARY,
++        }
++    }
++}
++
+ impl<'a> DiffLine<'a> {
+     /// Line number in old file or `None` for added line
+     pub fn old_lineno(&self) -> Option<u32> {
+@@ -968,6 +1049,12 @@
+         }
+     }
+ 
++    /// origin of this `DiffLine`.
++    ///
++    pub fn origin_value(&self) -> DiffLineType {
++        unsafe { Binding::from_raw((*self.raw).origin as raw::git_diff_line_t) }
++    }
++
+     /// Sigil showing the origin of this `DiffLine`.
+     ///
+     ///  * ` ` - Line context
+@@ -999,7 +1086,7 @@
+     type Raw = *const raw::git_diff_line;
+     unsafe fn from_raw(raw: *const raw::git_diff_line) -> DiffLine<'a> {
+         DiffLine {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -1061,7 +1148,7 @@
+     type Raw = *const raw::git_diff_hunk;
+     unsafe fn from_raw(raw: *const raw::git_diff_hunk) -> DiffHunk<'a> {
+         DiffHunk {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -1083,7 +1170,7 @@
+ }
+ 
+ impl DiffStats {
+-    /// Get the total number of files chaned in a diff.
++    /// Get the total number of files changed in a diff.
+     pub fn files_changed(&self) -> usize {
+         unsafe { raw::git_diff_stats_files_changed(&*self.raw) as usize }
+     }
+@@ -1117,7 +1204,7 @@
+     type Raw = *mut raw::git_diff_stats;
+ 
+     unsafe fn from_raw(raw: *mut raw::git_diff_stats) -> DiffStats {
+-        DiffStats { raw: raw }
++        DiffStats { raw }
+     }
+     fn raw(&self) -> *mut raw::git_diff_stats {
+         self.raw
+@@ -1166,7 +1253,7 @@
+     type Raw = *const raw::git_diff_binary;
+     unsafe fn from_raw(raw: *const raw::git_diff_binary) -> DiffBinary<'a> {
+         DiffBinary {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -1198,7 +1285,7 @@
+     type Raw = *const raw::git_diff_binary_file;
+     unsafe fn from_raw(raw: *const raw::git_diff_binary_file) -> DiffBinaryFile<'a> {
+         DiffBinaryFile {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -1433,9 +1520,29 @@
+     }
+ }
+ 
++impl DiffPatchidOptions {
++    /// Creates a new set of patchid options,
++    /// initialized to the default values
++    pub fn new() -> Self {
++        let mut opts = DiffPatchidOptions {
++            raw: unsafe { mem::zeroed() },
++        };
++        assert_eq!(
++            unsafe {
++                raw::git_diff_patchid_options_init(
++                    &mut opts.raw,
++                    raw::GIT_DIFF_PATCHID_OPTIONS_VERSION,
++                )
++            },
++            0
++        );
++        opts
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+-    use crate::{DiffOptions, Signature, Time};
++    use crate::{DiffLineType, DiffOptions, Oid, Signature, Time};
+     use std::borrow::Borrow;
+     use std::fs::File;
+     use std::io::Write;
+@@ -1450,6 +1557,8 @@
+         assert_eq!(stats.insertions(), 0);
+         assert_eq!(stats.deletions(), 0);
+         assert_eq!(stats.files_changed(), 0);
++        let patchid = diff.patchid(None).unwrap();
++        assert_ne!(patchid, Oid::zero());
+     }
+ 
+     #[test]
+@@ -1684,4 +1793,58 @@
+             assert_eq!(line.trim(), "")
+         }
+     }
++
++    #[test]
++    fn foreach_diff_line_origin_value() {
++        let foo_path = Path::new("foo");
++        let (td, repo) = crate::test::repo_init();
++        t!(t!(File::create(&td.path().join(foo_path))).write_all(b"bar\n"));
++        let mut index = t!(repo.index());
++        t!(index.add_path(foo_path));
++        let mut opts = DiffOptions::new();
++        opts.include_untracked(true);
++        let diff = t!(repo.diff_tree_to_index(None, Some(&index), Some(&mut opts)));
++        let mut origin_values: Vec<DiffLineType> = Vec::new();
++        t!(diff.foreach(
++            &mut |_file, _progress| { true },
++            None,
++            None,
++            Some(&mut |_file, _hunk, line| {
++                origin_values.push(line.origin_value());
++                true
++            })
++        ));
++        assert_eq!(origin_values.len(), 1);
++        assert_eq!(origin_values[0], DiffLineType::Addition);
++    }
++
++    #[test]
++    fn foreach_exits_with_euser() {
++        let foo_path = Path::new("foo");
++        let bar_path = Path::new("foo");
++
++        let (td, repo) = crate::test::repo_init();
++        t!(t!(File::create(&td.path().join(foo_path))).write_all(b"bar\n"));
++
++        let mut index = t!(repo.index());
++        t!(index.add_path(foo_path));
++        t!(index.add_path(bar_path));
++
++        let mut opts = DiffOptions::new();
++        opts.include_untracked(true);
++        let diff = t!(repo.diff_tree_to_index(None, Some(&index), Some(&mut opts)));
++
++        let mut calls = 0;
++        let result = diff.foreach(
++            &mut |_file, _progress| {
++                calls += 1;
++                false
++            },
++            None,
++            None,
++            None,
++        );
++
++        assert_eq!(result.unwrap_err().code(), crate::ErrorCode::User);
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/error.rs rustc-1.56.0-src-git2/vendor/git2/src/error.rs
+--- rustc-1.56.0-src/vendor/git2/src/error.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/error.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -69,12 +69,12 @@
+     }
+ 
+     unsafe fn from_raw(code: c_int, ptr: *const raw::git_error) -> Error {
+-        let msg = CStr::from_ptr((*ptr).message as *const _).to_bytes();
+-        let msg = String::from_utf8_lossy(msg).into_owned();
++        let message = CStr::from_ptr((*ptr).message as *const _).to_bytes();
++        let message = String::from_utf8_lossy(message).into_owned();
+         Error {
+-            code: code,
++            code,
+             klass: (*ptr).klass,
+-            message: msg,
++            message,
+         }
+     }
+ 
+diff -urN rustc-1.56.0-src/vendor/git2/src/index.rs rustc-1.56.0-src-git2/vendor/git2/src/index.rs
+--- rustc-1.56.0-src/vendor/git2/src/index.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/index.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -166,7 +166,7 @@
+                 gid: entry.gid,
+                 file_size: entry.file_size,
+                 id: *entry.id.raw(),
+-                flags: flags,
++                flags,
+                 flags_extended: entry.flags_extended,
+                 path: path.as_ptr(),
+                 mtime: raw::git_index_time {
+@@ -223,7 +223,7 @@
+                 gid: entry.gid,
+                 file_size: entry.file_size,
+                 id: *entry.id.raw(),
+-                flags: flags,
++                flags,
+                 flags_extended: entry.flags_extended,
+                 path: path.as_ptr(),
+                 mtime: raw::git_index_time {
+@@ -600,7 +600,7 @@
+ impl Binding for Index {
+     type Raw = *mut raw::git_index;
+     unsafe fn from_raw(raw: *mut raw::git_index) -> Index {
+-        Index { raw: raw }
++        Index { raw }
+     }
+     fn raw(&self) -> *mut raw::git_index {
+         self.raw
+@@ -718,15 +718,15 @@
+         let path = slice::from_raw_parts(path as *const u8, pathlen);
+ 
+         IndexEntry {
+-            dev: dev,
+-            ino: ino,
+-            mode: mode,
+-            uid: uid,
+-            gid: gid,
+-            file_size: file_size,
++            dev,
++            ino,
++            mode,
++            uid,
++            gid,
++            file_size,
+             id: Binding::from_raw(&id as *const _),
+-            flags: flags,
+-            flags_extended: flags_extended,
++            flags,
++            flags_extended,
+             path: path.to_vec(),
+             mtime: Binding::from_raw(mtime),
+             ctime: Binding::from_raw(ctime),
+diff -urN rustc-1.56.0-src/vendor/git2/src/lib.rs rustc-1.56.0-src-git2/vendor/git2/src/lib.rs
+--- rustc-1.56.0-src/vendor/git2/src/lib.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/lib.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -80,6 +80,7 @@
+ use std::sync::Once;
+ 
+ pub use crate::apply::{ApplyLocation, ApplyOptions};
++pub use crate::attr::AttrValue;
+ pub use crate::blame::{Blame, BlameHunk, BlameIter, BlameOptions};
+ pub use crate::blob::{Blob, BlobWriter};
+ pub use crate::branch::{Branch, Branches};
+@@ -91,15 +92,20 @@
+ pub use crate::describe::{Describe, DescribeFormatOptions, DescribeOptions};
+ pub use crate::diff::{Deltas, Diff, DiffDelta, DiffFile, DiffOptions};
+ pub use crate::diff::{DiffBinary, DiffBinaryFile, DiffBinaryKind};
+-pub use crate::diff::{DiffFindOptions, DiffHunk, DiffLine, DiffStats};
++pub use crate::diff::{DiffFindOptions, DiffHunk, DiffLine, DiffLineType, DiffStats};
+ pub use crate::error::Error;
+ pub use crate::index::{
+     Index, IndexConflict, IndexConflicts, IndexEntries, IndexEntry, IndexMatchedPath,
+ };
+ pub use crate::indexer::{IndexerProgress, Progress};
++pub use crate::mailmap::Mailmap;
+ pub use crate::mempack::Mempack;
+ pub use crate::merge::{AnnotatedCommit, MergeOptions};
+-pub use crate::message::{message_prettify, DEFAULT_COMMENT_CHAR};
++pub use crate::message::{
++    message_prettify, message_trailers_bytes, message_trailers_strs, MessageTrailersBytes,
++    MessageTrailersBytesIterator, MessageTrailersStrs, MessageTrailersStrsIterator,
++    DEFAULT_COMMENT_CHAR,
++};
+ pub use crate::note::{Note, Notes};
+ pub use crate::object::Object;
+ pub use crate::odb::{Odb, OdbObject, OdbPackwriter, OdbReader, OdbWriter};
+@@ -128,9 +134,12 @@
+ pub use crate::submodule::{Submodule, SubmoduleUpdateOptions};
+ pub use crate::tag::Tag;
+ pub use crate::time::{IndexTime, Time};
++pub use crate::tracing::{trace_set, TraceLevel};
++pub use crate::transaction::Transaction;
+ pub use crate::tree::{Tree, TreeEntry, TreeIter, TreeWalkMode, TreeWalkResult};
+ pub use crate::treebuilder::TreeBuilder;
+ pub use crate::util::IntoCString;
++pub use crate::version::Version;
+ pub use crate::worktree::{Worktree, WorktreeAddOptions, WorktreeLockStatus, WorktreePruneOptions};
+ 
+ // Create a convinience method on bitflag struct which checks the given flag
+@@ -633,6 +642,7 @@
+ mod test;
+ #[macro_use]
+ mod panic;
++mod attr;
+ mod call;
+ mod util;
+ 
+@@ -657,6 +667,7 @@
+ mod error;
+ mod index;
+ mod indexer;
++mod mailmap;
+ mod mempack;
+ mod merge;
+ mod message;
+@@ -685,8 +696,11 @@
+ mod tag;
+ mod tagforeach;
+ mod time;
++mod tracing;
++mod transaction;
+ mod tree;
+ mod treebuilder;
++mod version;
+ mod worktree;
+ 
+ fn init() {
+@@ -929,6 +943,34 @@
+     }
+ }
+ 
++impl SubmoduleIgnore {
++    /// Converts a [`raw::git_submodule_ignore_t`] to a [`SubmoduleIgnore`]
++    pub fn from_raw(raw: raw::git_submodule_ignore_t) -> Self {
++        match raw {
++            raw::GIT_SUBMODULE_IGNORE_UNSPECIFIED => SubmoduleIgnore::Unspecified,
++            raw::GIT_SUBMODULE_IGNORE_NONE => SubmoduleIgnore::None,
++            raw::GIT_SUBMODULE_IGNORE_UNTRACKED => SubmoduleIgnore::Untracked,
++            raw::GIT_SUBMODULE_IGNORE_DIRTY => SubmoduleIgnore::Dirty,
++            raw::GIT_SUBMODULE_IGNORE_ALL => SubmoduleIgnore::All,
++            n => panic!("unknown submodule ignore rule: {}", n),
++        }
++    }
++}
++
++impl SubmoduleUpdate {
++    /// Converts a [`raw::git_submodule_update_t`] to a [`SubmoduleUpdate`]
++    pub fn from_raw(raw: raw::git_submodule_update_t) -> Self {
++        match raw {
++            raw::GIT_SUBMODULE_UPDATE_CHECKOUT => SubmoduleUpdate::Checkout,
++            raw::GIT_SUBMODULE_UPDATE_REBASE => SubmoduleUpdate::Rebase,
++            raw::GIT_SUBMODULE_UPDATE_MERGE => SubmoduleUpdate::Merge,
++            raw::GIT_SUBMODULE_UPDATE_NONE => SubmoduleUpdate::None,
++            raw::GIT_SUBMODULE_UPDATE_DEFAULT => SubmoduleUpdate::Default,
++            n => panic!("unknown submodule update strategy: {}", n),
++        }
++    }
++}
++
+ bitflags! {
+     /// Status flags for a single file
+     ///
+@@ -1171,6 +1213,7 @@
+ /// These values represent settings for the `submodule.$name.ignore`
+ /// configuration value which says how deeply to look at the working
+ /// directory when getting the submodule status.
++#[derive(Debug)]
+ pub enum SubmoduleIgnore {
+     /// Use the submodule's configuration
+     Unspecified,
+@@ -1184,6 +1227,31 @@
+     All,
+ }
+ 
++/// Submodule update values
++///
++/// These values represent settings for the `submodule.$name.update`
++/// configuration value which says how to handle `git submodule update`
++/// for this submodule. The value is usually set in the ".gitmodules"
++/// file and copied to ".git/config" when the submodule is initialized.
++#[derive(Debug)]
++pub enum SubmoduleUpdate {
++    /// The default; when a submodule is updated, checkout the new detached
++    /// HEAD to the submodule directory.
++    Checkout,
++    /// Update by rebasing the current checked out branch onto the commit from
++    /// the superproject.
++    Rebase,
++    /// Update by merging the commit in the superproject into the current
++    /// checkout out branch of the submodule.
++    Merge,
++    /// Do not update this submodule even when the commit in the superproject
++    /// is updated.
++    None,
++    /// Not used except as static initializer when we don't want any particular
++    /// update rule to be specified.
++    Default,
++}
++
+ bitflags! {
+     /// ...
+     pub struct PathspecFlags: u32 {
+diff -urN rustc-1.56.0-src/vendor/git2/src/mailmap.rs rustc-1.56.0-src-git2/vendor/git2/src/mailmap.rs
+--- rustc-1.56.0-src/vendor/git2/src/mailmap.rs	1970-01-01 01:00:00.000000000 +0100
++++ rustc-1.56.0-src-git2/vendor/git2/src/mailmap.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -0,0 +1,134 @@
++use std::ffi::CString;
++use std::ptr;
++
++use crate::util::Binding;
++use crate::{raw, Error, Signature};
++
++/// A structure to represent a repository's .mailmap file.
++///
++/// The representation cannot be written to disk.
++pub struct Mailmap {
++    raw: *mut raw::git_mailmap,
++}
++
++impl Binding for Mailmap {
++    type Raw = *mut raw::git_mailmap;
++
++    unsafe fn from_raw(ptr: *mut raw::git_mailmap) -> Mailmap {
++        Mailmap { raw: ptr }
++    }
++
++    fn raw(&self) -> *mut raw::git_mailmap {
++        self.raw
++    }
++}
++
++impl Drop for Mailmap {
++    fn drop(&mut self) {
++        unsafe {
++            raw::git_mailmap_free(self.raw);
++        }
++    }
++}
++
++impl Mailmap {
++    /// Creates an empty, in-memory mailmap object.
++    pub fn new() -> Result<Mailmap, Error> {
++        crate::init();
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_mailmap_new(&mut ret));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
++    /// Creates an in-memory mailmap object representing the given buffer.
++    pub fn from_buffer(buf: &str) -> Result<Mailmap, Error> {
++        crate::init();
++        let mut ret = ptr::null_mut();
++        let len = buf.len();
++        let buf = CString::new(buf)?;
++        unsafe {
++            try_call!(raw::git_mailmap_from_buffer(&mut ret, buf, len));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
++    /// Adds a new entry to this in-memory mailmap object.
++    pub fn add_entry(
++        &mut self,
++        real_name: Option<&str>,
++        real_email: Option<&str>,
++        replace_name: Option<&str>,
++        replace_email: &str,
++    ) -> Result<(), Error> {
++        let real_name = crate::opt_cstr(real_name)?;
++        let real_email = crate::opt_cstr(real_email)?;
++        let replace_name = crate::opt_cstr(replace_name)?;
++        let replace_email = CString::new(replace_email)?;
++        unsafe {
++            try_call!(raw::git_mailmap_add_entry(
++                self.raw,
++                real_name,
++                real_email,
++                replace_name,
++                replace_email
++            ));
++            Ok(())
++        }
++    }
++
++    /// Resolves a signature to its real name and email address.
++    pub fn resolve_signature(&self, sig: &Signature<'_>) -> Result<Signature<'static>, Error> {
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_mailmap_resolve_signature(
++                &mut ret,
++                &*self.raw,
++                sig.raw()
++            ));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn smoke() {
++        let sig_name = "name";
++        let sig_email = "email";
++        let sig = t!(Signature::now(sig_name, sig_email));
++
++        let mut mm = t!(Mailmap::new());
++
++        let mailmapped_sig = t!(mm.resolve_signature(&sig));
++        assert_eq!(mailmapped_sig.name(), Some(sig_name));
++        assert_eq!(mailmapped_sig.email(), Some(sig_email));
++
++        t!(mm.add_entry(None, None, None, sig_email));
++        t!(mm.add_entry(
++            Some("real name"),
++            Some("real@email"),
++            Some(sig_name),
++            sig_email,
++        ));
++
++        let mailmapped_sig = t!(mm.resolve_signature(&sig));
++        assert_eq!(mailmapped_sig.name(), Some("real name"));
++        assert_eq!(mailmapped_sig.email(), Some("real@email"));
++    }
++
++    #[test]
++    fn from_buffer() {
++        let buf = "<prøper@emæil> <email>";
++        let mm = t!(Mailmap::from_buffer(&buf));
++
++        let sig = t!(Signature::now("name", "email"));
++        let mailmapped_sig = t!(mm.resolve_signature(&sig));
++        assert_eq!(mailmapped_sig.name(), Some("name"));
++        assert_eq!(mailmapped_sig.email(), Some("prøper@emæil"));
++    }
++}
+diff -urN rustc-1.56.0-src/vendor/git2/src/mempack.rs rustc-1.56.0-src-git2/vendor/git2/src/mempack.rs
+--- rustc-1.56.0-src/vendor/git2/src/mempack.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/mempack.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -16,7 +16,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_odb_backend) -> Mempack<'odb> {
+         Mempack {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/merge.rs rustc-1.56.0-src-git2/vendor/git2/src/merge.rs
+--- rustc-1.56.0-src/vendor/git2/src/merge.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/merge.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -178,7 +178,7 @@
+     type Raw = *mut raw::git_annotated_commit;
+     unsafe fn from_raw(raw: *mut raw::git_annotated_commit) -> AnnotatedCommit<'repo> {
+         AnnotatedCommit {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/message.rs rustc-1.56.0-src-git2/vendor/git2/src/message.rs
+--- rustc-1.56.0-src/vendor/git2/src/message.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/message.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -1,4 +1,7 @@
++use core::ops::Range;
++use std::ffi::CStr;
+ use std::ffi::CString;
++use std::ptr;
+ 
+ use libc::{c_char, c_int};
+ 
+@@ -31,12 +34,216 @@
+ /// The default comment character for `message_prettify` ('#')
+ pub const DEFAULT_COMMENT_CHAR: Option<u8> = Some(b'#');
+ 
++/// Get the trailers for the given message.
++///
++/// Use this function when you are dealing with a UTF-8-encoded message.
++pub fn message_trailers_strs(message: &str) -> Result<MessageTrailersStrs, Error> {
++    _message_trailers(message.into_c_string()?).map(|res| MessageTrailersStrs(res))
++}
++
++/// Get the trailers for the given message.
++///
++/// Use this function when the message might not be UTF-8-encoded,
++/// or if you want to handle the returned trailer key–value pairs
++/// as bytes.
++pub fn message_trailers_bytes<S: IntoCString>(message: S) -> Result<MessageTrailersBytes, Error> {
++    _message_trailers(message.into_c_string()?).map(|res| MessageTrailersBytes(res))
++}
++
++fn _message_trailers(message: CString) -> Result<MessageTrailers, Error> {
++    let ret = MessageTrailers::new();
++    unsafe {
++        try_call!(raw::git_message_trailers(ret.raw(), message));
++    }
++    Ok(ret)
++}
++
++/// Collection of UTF-8-encoded trailers.
++///
++/// Use `iter()` to get access to the values.
++pub struct MessageTrailersStrs(MessageTrailers);
++
++impl MessageTrailersStrs {
++    /// Create a borrowed iterator.
++    pub fn iter(&self) -> MessageTrailersStrsIterator<'_> {
++        MessageTrailersStrsIterator(self.0.iter())
++    }
++    /// The number of trailer key–value pairs.
++    pub fn len(&self) -> usize {
++        self.0.len()
++    }
++    /// Convert to the “bytes” variant.
++    pub fn to_bytes(self) -> MessageTrailersBytes {
++        MessageTrailersBytes(self.0)
++    }
++}
++
++/// Collection of unencoded (bytes) trailers.
++///
++/// Use `iter()` to get access to the values.
++pub struct MessageTrailersBytes(MessageTrailers);
++
++impl MessageTrailersBytes {
++    /// Create a borrowed iterator.
++    pub fn iter(&self) -> MessageTrailersBytesIterator<'_> {
++        MessageTrailersBytesIterator(self.0.iter())
++    }
++    /// The number of trailer key–value pairs.
++    pub fn len(&self) -> usize {
++        self.0.len()
++    }
++}
++
++struct MessageTrailers {
++    raw: raw::git_message_trailer_array,
++}
++
++impl MessageTrailers {
++    fn new() -> MessageTrailers {
++        crate::init();
++        unsafe {
++            Binding::from_raw(&mut raw::git_message_trailer_array {
++                trailers: ptr::null_mut(),
++                count: 0,
++                _trailer_block: ptr::null_mut(),
++            } as *mut _)
++        }
++    }
++    fn iter(&self) -> MessageTrailersIterator<'_> {
++        MessageTrailersIterator {
++            trailers: self,
++            range: Range {
++                start: 0,
++                end: self.raw.count,
++            },
++        }
++    }
++    fn len(&self) -> usize {
++        self.raw.count
++    }
++}
++
++impl Drop for MessageTrailers {
++    fn drop(&mut self) {
++        unsafe {
++            raw::git_message_trailer_array_free(&mut self.raw);
++        }
++    }
++}
++
++impl Binding for MessageTrailers {
++    type Raw = *mut raw::git_message_trailer_array;
++    unsafe fn from_raw(raw: *mut raw::git_message_trailer_array) -> MessageTrailers {
++        MessageTrailers { raw: *raw }
++    }
++    fn raw(&self) -> *mut raw::git_message_trailer_array {
++        &self.raw as *const _ as *mut _
++    }
++}
++
++struct MessageTrailersIterator<'a> {
++    trailers: &'a MessageTrailers,
++    range: Range<usize>,
++}
++
++fn to_raw_tuple(trailers: &MessageTrailers, index: usize) -> (*const c_char, *const c_char) {
++    unsafe {
++        let addr = trailers.raw.trailers.wrapping_add(index);
++        ((*addr).key, (*addr).value)
++    }
++}
++
++/// Borrowed iterator over the UTF-8-encoded trailers.
++pub struct MessageTrailersStrsIterator<'a>(MessageTrailersIterator<'a>);
++
++impl<'pair> Iterator for MessageTrailersStrsIterator<'pair> {
++    type Item = (&'pair str, &'pair str);
++
++    fn next(&mut self) -> Option<Self::Item> {
++        self.0
++            .range
++            .next()
++            .map(|index| to_str_tuple(&self.0.trailers, index))
++    }
++
++    fn size_hint(&self) -> (usize, Option<usize>) {
++        self.0.range.size_hint()
++    }
++}
++
++impl ExactSizeIterator for MessageTrailersStrsIterator<'_> {
++    fn len(&self) -> usize {
++        self.0.range.len()
++    }
++}
++
++impl DoubleEndedIterator for MessageTrailersStrsIterator<'_> {
++    fn next_back(&mut self) -> Option<Self::Item> {
++        self.0
++            .range
++            .next_back()
++            .map(|index| to_str_tuple(&self.0.trailers, index))
++    }
++}
++
++fn to_str_tuple(trailers: &MessageTrailers, index: usize) -> (&str, &str) {
++    unsafe {
++        let (rkey, rvalue) = to_raw_tuple(&trailers, index);
++        let key = CStr::from_ptr(rkey).to_str().unwrap();
++        let value = CStr::from_ptr(rvalue).to_str().unwrap();
++        (key, value)
++    }
++}
++
++/// Borrowed iterator over the raw (bytes) trailers.
++pub struct MessageTrailersBytesIterator<'a>(MessageTrailersIterator<'a>);
++
++impl<'pair> Iterator for MessageTrailersBytesIterator<'pair> {
++    type Item = (&'pair [u8], &'pair [u8]);
++
++    fn next(&mut self) -> Option<Self::Item> {
++        self.0
++            .range
++            .next()
++            .map(|index| to_bytes_tuple(&self.0.trailers, index))
++    }
++
++    fn size_hint(&self) -> (usize, Option<usize>) {
++        self.0.range.size_hint()
++    }
++}
++
++impl ExactSizeIterator for MessageTrailersBytesIterator<'_> {
++    fn len(&self) -> usize {
++        self.0.range.len()
++    }
++}
++
++impl DoubleEndedIterator for MessageTrailersBytesIterator<'_> {
++    fn next_back(&mut self) -> Option<Self::Item> {
++        self.0
++            .range
++            .next_back()
++            .map(|index| to_bytes_tuple(&self.0.trailers, index))
++    }
++}
++
++fn to_bytes_tuple(trailers: &MessageTrailers, index: usize) -> (&[u8], &[u8]) {
++    unsafe {
++        let (rkey, rvalue) = to_raw_tuple(&trailers, index);
++        let key = CStr::from_ptr(rkey).to_bytes();
++        let value = CStr::from_ptr(rvalue).to_bytes();
++        (key, value)
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+-    use crate::{message_prettify, DEFAULT_COMMENT_CHAR};
+ 
+     #[test]
+     fn prettify() {
++        use crate::{message_prettify, DEFAULT_COMMENT_CHAR};
++
+         // This does not attempt to duplicate the extensive tests for
+         // git_message_prettify in libgit2, just a few representative values to
+         // make sure the interface works as expected.
+@@ -58,4 +265,80 @@
+             "1\n"
+         );
+     }
++
++    #[test]
++    fn trailers() {
++        use crate::{message_trailers_bytes, message_trailers_strs, MessageTrailersStrs};
++        use std::collections::HashMap;
++
++        // no trailers
++        let message1 = "
++WHAT ARE WE HERE FOR
++
++What are we here for?
++
++Just to be eaten?
++";
++        let expected: HashMap<&str, &str> = HashMap::new();
++        assert_eq!(expected, to_map(&message_trailers_strs(message1).unwrap()));
++
++        // standard PSA
++        let message2 = "
++Attention all
++
++We are out of tomatoes.
++
++Spoken-by: Major Turnips
++Transcribed-by: Seargant Persimmons
++Signed-off-by: Colonel Kale
++";
++        let expected: HashMap<&str, &str> = vec![
++            ("Spoken-by", "Major Turnips"),
++            ("Transcribed-by", "Seargant Persimmons"),
++            ("Signed-off-by", "Colonel Kale"),
++        ]
++        .into_iter()
++        .collect();
++        assert_eq!(expected, to_map(&message_trailers_strs(message2).unwrap()));
++
++        // ignore everything after `---`
++        let message3 = "
++The fate of Seargant Green-Peppers
++
++Seargant Green-Peppers was killed by Caterpillar Battalion 44.
++
++Signed-off-by: Colonel Kale
++---
++I never liked that guy, anyway.
++
++Opined-by: Corporal Garlic
++";
++        let expected: HashMap<&str, &str> = vec![("Signed-off-by", "Colonel Kale")]
++            .into_iter()
++            .collect();
++        assert_eq!(expected, to_map(&message_trailers_strs(message3).unwrap()));
++
++        // Raw bytes message; not valid UTF-8
++        // Source: https://stackoverflow.com/a/3886015/1725151
++        let message4 = b"
++Be honest guys
++
++Am I a malformed brussels sprout?
++
++Signed-off-by: Lieutenant \xe2\x28\xa1prout
++";
++
++        let trailer = message_trailers_bytes(&message4[..]).unwrap();
++        let expected = (&b"Signed-off-by"[..], &b"Lieutenant \xe2\x28\xa1prout"[..]);
++        let actual = trailer.iter().next().unwrap();
++        assert_eq!(expected, actual);
++
++        fn to_map(trailers: &MessageTrailersStrs) -> HashMap<&str, &str> {
++            let mut map = HashMap::with_capacity(trailers.len());
++            for (key, value) in trailers.iter() {
++                map.insert(key, value);
++            }
++            map
++        }
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/note.rs rustc-1.56.0-src-git2/vendor/git2/src/note.rs
+--- rustc-1.56.0-src/vendor/git2/src/note.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/note.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -53,7 +53,7 @@
+     type Raw = *mut raw::git_note;
+     unsafe fn from_raw(raw: *mut raw::git_note) -> Note<'repo> {
+         Note {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -80,7 +80,7 @@
+     type Raw = *mut raw::git_note_iterator;
+     unsafe fn from_raw(raw: *mut raw::git_note_iterator) -> Notes<'repo> {
+         Notes {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/object.rs rustc-1.56.0-src-git2/vendor/git2/src/object.rs
+--- rustc-1.56.0-src/vendor/git2/src/object.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/object.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -232,7 +232,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_object) -> Object<'repo> {
+         Object {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/odb.rs rustc-1.56.0-src-git2/vendor/git2/src/odb.rs
+--- rustc-1.56.0-src/vendor/git2/src/odb.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/odb.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -23,7 +23,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_odb) -> Odb<'repo> {
+         Odb {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -273,7 +273,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_odb_object) -> OdbObject<'a> {
+         OdbObject {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -327,7 +327,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_odb_stream) -> OdbReader<'repo> {
+         OdbReader {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -386,7 +386,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_odb_stream) -> OdbWriter<'repo> {
+         OdbWriter {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/oid_array.rs rustc-1.56.0-src-git2/vendor/git2/src/oid_array.rs
+--- rustc-1.56.0-src/vendor/git2/src/oid_array.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/oid_array.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -32,7 +32,7 @@
+ impl Binding for OidArray {
+     type Raw = raw::git_oidarray;
+     unsafe fn from_raw(raw: raw::git_oidarray) -> OidArray {
+-        OidArray { raw: raw }
++        OidArray { raw }
+     }
+     fn raw(&self) -> raw::git_oidarray {
+         self.raw
+diff -urN rustc-1.56.0-src/vendor/git2/src/oid.rs rustc-1.56.0-src-git2/vendor/git2/src/oid.rs
+--- rustc-1.56.0-src/vendor/git2/src/oid.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/oid.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -35,7 +35,7 @@
+                 s.len() as libc::size_t
+             ));
+         }
+-        Ok(Oid { raw: raw })
++        Ok(Oid { raw })
+     }
+ 
+     /// Parse a raw object id into an Oid structure.
+@@ -52,7 +52,7 @@
+             unsafe {
+                 try_call!(raw::git_oid_fromraw(&mut raw, bytes.as_ptr()));
+             }
+-            Ok(Oid { raw: raw })
++            Ok(Oid { raw })
+         }
+     }
+ 
+diff -urN rustc-1.56.0-src/vendor/git2/src/opts.rs rustc-1.56.0-src-git2/vendor/git2/src/opts.rs
+--- rustc-1.56.0-src/vendor/git2/src/opts.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/opts.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -3,7 +3,7 @@
+ use std::ffi::CString;
+ 
+ use crate::util::Binding;
+-use crate::{call, raw, Buf, ConfigLevel, Error, IntoCString};
++use crate::{raw, Buf, ConfigLevel, Error, IntoCString};
+ 
+ /// Set the search path for a level of config data. The search path applied to
+ /// shared attributes and ignore files, too.
+@@ -23,11 +23,11 @@
+     P: IntoCString,
+ {
+     crate::init();
+-    call::c_try(raw::git_libgit2_opts(
++    try_call!(raw::git_libgit2_opts(
+         raw::GIT_OPT_SET_SEARCH_PATH as libc::c_int,
+         level as libc::c_int,
+-        path.into_c_string()?.as_ptr(),
+-    ))?;
++        path.into_c_string()?.as_ptr()
++    ));
+     Ok(())
+ }
+ 
+@@ -42,11 +42,11 @@
+ /// the global state.
+ pub unsafe fn reset_search_path(level: ConfigLevel) -> Result<(), Error> {
+     crate::init();
+-    call::c_try(raw::git_libgit2_opts(
++    try_call!(raw::git_libgit2_opts(
+         raw::GIT_OPT_SET_SEARCH_PATH as libc::c_int,
+         level as libc::c_int,
+-        core::ptr::null::<u8>(),
+-    ))?;
++        core::ptr::null::<u8>()
++    ));
+     Ok(())
+ }
+ 
+@@ -61,11 +61,11 @@
+ pub unsafe fn get_search_path(level: ConfigLevel) -> Result<CString, Error> {
+     crate::init();
+     let buf = Buf::new();
+-    call::c_try(raw::git_libgit2_opts(
++    try_call!(raw::git_libgit2_opts(
+         raw::GIT_OPT_GET_SEARCH_PATH as libc::c_int,
+         level as libc::c_int,
+-        buf.raw(),
+-    ))?;
++        buf.raw() as *const _
++    ));
+     buf.into_c_string()
+ }
+ 
+diff -urN rustc-1.56.0-src/vendor/git2/src/packbuilder.rs rustc-1.56.0-src-git2/vendor/git2/src/packbuilder.rs
+--- rustc-1.56.0-src/vendor/git2/src/packbuilder.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/packbuilder.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -21,7 +21,7 @@
+ /// A builder for creating a packfile
+ pub struct PackBuilder<'repo> {
+     raw: *mut raw::git_packbuilder,
+-    progress: Option<Box<Box<ProgressCb<'repo>>>>,
++    _progress: Option<Box<Box<ProgressCb<'repo>>>>,
+     _marker: marker::PhantomData<&'repo Repository>,
+ }
+ 
+@@ -122,7 +122,7 @@
+                 ptr as *mut _
+             ));
+         }
+-        self.progress = Some(progress);
++        self._progress = Some(progress);
+         Ok(())
+     }
+ 
+@@ -135,7 +135,7 @@
+                 None,
+                 ptr::null_mut()
+             ));
+-            self.progress = None;
++            self._progress = None;
+         }
+         Ok(())
+     }
+@@ -174,7 +174,7 @@
+     unsafe fn from_raw(ptr: *mut raw::git_packbuilder) -> PackBuilder<'repo> {
+         PackBuilder {
+             raw: ptr,
+-            progress: None,
++            _progress: None,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/panic.rs rustc-1.56.0-src-git2/vendor/git2/src/panic.rs
+--- rustc-1.56.0-src/vendor/git2/src/panic.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/panic.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -24,7 +24,7 @@
+ pub fn check() {
+     let err = LAST_ERROR.with(|slot| slot.borrow_mut().take());
+     if let Some(err) = err {
+-        panic!(err)
++        std::panic::resume_unwind(err);
+     }
+ }
+ 
+diff -urN rustc-1.56.0-src/vendor/git2/src/patch.rs rustc-1.56.0-src-git2/vendor/git2/src/patch.rs
+--- rustc-1.56.0-src/vendor/git2/src/patch.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/patch.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -21,7 +21,7 @@
+     type Raw = *mut raw::git_patch;
+     unsafe fn from_raw(raw: Self::Raw) -> Self {
+         Patch {
+-            raw: raw,
++            raw,
+             buffers: PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/pathspec.rs rustc-1.56.0-src-git2/vendor/git2/src/pathspec.rs
+--- rustc-1.56.0-src/vendor/git2/src/pathspec.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/pathspec.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -168,7 +168,7 @@
+     type Raw = *mut raw::git_pathspec;
+ 
+     unsafe fn from_raw(raw: *mut raw::git_pathspec) -> Pathspec {
+-        Pathspec { raw: raw }
++        Pathspec { raw }
+     }
+     fn raw(&self) -> *mut raw::git_pathspec {
+         self.raw
+@@ -268,7 +268,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_pathspec_match_list) -> PathspecMatchList<'ps> {
+         PathspecMatchList {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/rebase.rs rustc-1.56.0-src-git2/vendor/git2/src/rebase.rs
+--- rustc-1.56.0-src/vendor/git2/src/rebase.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/rebase.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -230,7 +230,7 @@
+     type Raw = *mut raw::git_rebase;
+     unsafe fn from_raw(raw: *mut raw::git_rebase) -> Rebase<'repo> {
+         Rebase {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -324,7 +324,7 @@
+     type Raw = *const raw::git_rebase_operation;
+     unsafe fn from_raw(raw: *const raw::git_rebase_operation) -> RebaseOperation<'rebase> {
+         RebaseOperation {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/reference.rs rustc-1.56.0-src-git2/vendor/git2/src/reference.rs
+--- rustc-1.56.0-src/vendor/git2/src/reference.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/reference.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -387,7 +387,7 @@
+     type Raw = *mut raw::git_reference;
+     unsafe fn from_raw(raw: *mut raw::git_reference) -> Reference<'repo> {
+         Reference {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -419,7 +419,7 @@
+     type Raw = *mut raw::git_reference_iterator;
+     unsafe fn from_raw(raw: *mut raw::git_reference_iterator) -> References<'repo> {
+         References {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/reflog.rs rustc-1.56.0-src-git2/vendor/git2/src/reflog.rs
+--- rustc-1.56.0-src/vendor/git2/src/reflog.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/reflog.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -103,7 +103,7 @@
+     type Raw = *mut raw::git_reflog;
+ 
+     unsafe fn from_raw(raw: *mut raw::git_reflog) -> Reflog {
+-        Reflog { raw: raw }
++        Reflog { raw }
+     }
+     fn raw(&self) -> *mut raw::git_reflog {
+         self.raw
+@@ -151,7 +151,7 @@
+ 
+     unsafe fn from_raw(raw: *const raw::git_reflog_entry) -> ReflogEntry<'reflog> {
+         ReflogEntry {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/refspec.rs rustc-1.56.0-src-git2/vendor/git2/src/refspec.rs
+--- rustc-1.56.0-src/vendor/git2/src/refspec.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/refspec.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -112,7 +112,7 @@
+ 
+     unsafe fn from_raw(raw: *const raw::git_refspec) -> Refspec<'remote> {
+         Refspec {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/remote.rs rustc-1.56.0-src-git2/vendor/git2/src/remote.rs
+--- rustc-1.56.0-src/vendor/git2/src/remote.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/remote.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -1,11 +1,12 @@
+ use libc;
+-use std::ffi::CString;
++use raw::git_strarray;
+ use std::marker;
+ use std::mem;
+ use std::ops::Range;
+ use std::ptr;
+ use std::slice;
+ use std::str;
++use std::{ffi::CString, os::raw::c_char};
+ 
+ use crate::string_array::StringArray;
+ use crate::util::Binding;
+@@ -43,6 +44,8 @@
+     prune: FetchPrune,
+     update_fetchhead: bool,
+     download_tags: AutotagOption,
++    custom_headers: Vec<CString>,
++    custom_headers_ptrs: Vec<*const c_char>,
+ }
+ 
+ /// Options to control the behavior of a git push.
+@@ -50,6 +53,8 @@
+     callbacks: Option<RemoteCallbacks<'cb>>,
+     proxy: Option<ProxyOptions<'cb>>,
+     pb_parallelism: u32,
++    custom_headers: Vec<CString>,
++    custom_headers_ptrs: Vec<*const c_char>,
+ }
+ 
+ /// Holds callbacks for a connection to a `Remote`. Disconnects when dropped
+@@ -62,7 +67,7 @@
+ pub fn remote_into_raw(remote: Remote<'_>) -> *mut raw::git_remote {
+     let ret = remote.raw;
+     mem::forget(remote);
+-    return ret;
++    ret
+ }
+ 
+ impl<'repo> Remote<'repo> {
+@@ -221,6 +226,17 @@
+         Ok(())
+     }
+ 
++    /// Cancel the operation
++    ///
++    /// At certain points in its operation, the network code checks whether the
++    /// operation has been cancelled and if so stops the operation.
++    pub fn stop(&mut self) -> Result<(), Error> {
++        unsafe {
++            try_call!(raw::git_remote_stop(self.raw));
++        }
++        Ok(())
++    }
++
+     /// Get the number of refspecs for a remote
+     pub fn refspecs(&self) -> Refspecs<'_> {
+         let cnt = unsafe { raw::git_remote_refspec_count(&*self.raw) as usize };
+@@ -345,6 +361,15 @@
+         }
+     }
+ 
++    /// Prune tracking refs that are no longer present on remote
++    pub fn prune(&mut self, callbacks: Option<RemoteCallbacks<'_>>) -> Result<(), Error> {
++        let cbs = Box::new(callbacks.unwrap_or_else(RemoteCallbacks::new));
++        unsafe {
++            try_call!(raw::git_remote_prune(self.raw, &cbs.raw()));
++        }
++        Ok(())
++    }
++
+     /// Get the remote's list of fetch refspecs
+     pub fn fetch_refspecs(&self) -> Result<StringArray, Error> {
+         unsafe {
+@@ -381,7 +406,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_remote) -> Remote<'repo> {
+         Remote {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -454,6 +479,8 @@
+             prune: FetchPrune::Unspecified,
+             update_fetchhead: true,
+             download_tags: AutotagOption::Unspecified,
++            custom_headers: Vec::new(),
++            custom_headers_ptrs: Vec::new(),
+         }
+     }
+ 
+@@ -491,6 +518,16 @@
+         self.download_tags = opt;
+         self
+     }
++
++    /// Set extra headers for this fetch operation.
++    pub fn custom_headers(&mut self, custom_headers: &[&str]) -> &mut Self {
++        self.custom_headers = custom_headers
++            .iter()
++            .map(|&s| CString::new(s).unwrap())
++            .collect();
++        self.custom_headers_ptrs = self.custom_headers.iter().map(|s| s.as_ptr()).collect();
++        self
++    }
+ }
+ 
+ impl<'cb> Binding for FetchOptions<'cb> {
+@@ -515,10 +552,9 @@
+             prune: crate::call::convert(&self.prune),
+             update_fetchhead: crate::call::convert(&self.update_fetchhead),
+             download_tags: crate::call::convert(&self.download_tags),
+-            // TODO: expose this as a builder option
+-            custom_headers: raw::git_strarray {
+-                count: 0,
+-                strings: ptr::null_mut(),
++            custom_headers: git_strarray {
++                count: self.custom_headers_ptrs.len(),
++                strings: self.custom_headers_ptrs.as_ptr() as *mut _,
+             },
+         }
+     }
+@@ -537,6 +573,8 @@
+             callbacks: None,
+             proxy: None,
+             pb_parallelism: 1,
++            custom_headers: Vec::new(),
++            custom_headers_ptrs: Vec::new(),
+         }
+     }
+ 
+@@ -562,6 +600,16 @@
+         self.pb_parallelism = parallel;
+         self
+     }
++
++    /// Set extra headers for this push operation.
++    pub fn custom_headers(&mut self, custom_headers: &[&str]) -> &mut Self {
++        self.custom_headers = custom_headers
++            .iter()
++            .map(|&s| CString::new(s).unwrap())
++            .collect();
++        self.custom_headers_ptrs = self.custom_headers.iter().map(|s| s.as_ptr()).collect();
++        self
++    }
+ }
+ 
+ impl<'cb> Binding for PushOptions<'cb> {
+@@ -584,10 +632,9 @@
+                 .map(|m| m.raw())
+                 .unwrap_or_else(|| ProxyOptions::new().raw()),
+             pb_parallelism: self.pb_parallelism as libc::c_uint,
+-            // TODO: expose this as a builder option
+-            custom_headers: raw::git_strarray {
+-                count: 0,
+-                strings: ptr::null_mut(),
++            custom_headers: git_strarray {
++                count: self.custom_headers_ptrs.len(),
++                strings: self.custom_headers_ptrs.as_ptr() as *mut _,
+             },
+         }
+     }
+@@ -614,6 +661,11 @@
+     pub fn default_branch(&self) -> Result<Buf, Error> {
+         self.remote.default_branch()
+     }
++
++    /// access remote bound to this connection
++    pub fn remote(&mut self) -> &mut Remote<'repo> {
++        self.remote
++    }
+ }
+ 
+ impl<'repo, 'connection, 'cb> Drop for RemoteConnection<'repo, 'connection, 'cb> {
+@@ -636,7 +688,7 @@
+         drop(repo);
+ 
+         let repo = t!(Repository::init(td.path()));
+-        let origin = t!(repo.find_remote("origin"));
++        let mut origin = t!(repo.find_remote("origin"));
+         assert_eq!(origin.name(), Some("origin"));
+         assert_eq!(origin.url(), Some("/path/to/nowhere"));
+         assert_eq!(origin.pushurl(), None);
+@@ -646,6 +698,8 @@
+ 
+         let stats = origin.stats();
+         assert_eq!(stats.total_objects(), 0);
++
++        t!(origin.stop());
+     }
+ 
+     #[test]
+@@ -847,4 +901,46 @@
+         let commit = repo.find_commit(commit).unwrap();
+         assert_eq!(commit.message(), Some("initial"));
+     }
++
++    #[test]
++    fn prune() {
++        let (td, remote_repo) = crate::test::repo_init();
++        let oid = remote_repo.head().unwrap().target().unwrap();
++        let commit = remote_repo.find_commit(oid).unwrap();
++        remote_repo.branch("stale", &commit, true).unwrap();
++
++        let td2 = TempDir::new().unwrap();
++        let url = crate::test::path2url(&td.path());
++        let repo = Repository::clone(&url, &td2).unwrap();
++
++        fn assert_branch_count(repo: &Repository, count: usize) {
++            assert_eq!(
++                repo.branches(Some(crate::BranchType::Remote))
++                    .unwrap()
++                    .filter(|b| b.as_ref().unwrap().0.name().unwrap() == Some("origin/stale"))
++                    .count(),
++                count,
++            );
++        }
++
++        assert_branch_count(&repo, 1);
++
++        // delete `stale` branch on remote repo
++        let mut stale_branch = remote_repo
++            .find_branch("stale", crate::BranchType::Local)
++            .unwrap();
++        stale_branch.delete().unwrap();
++
++        // prune
++        let mut remote = repo.find_remote("origin").unwrap();
++        remote.connect(Direction::Push).unwrap();
++        let mut callbacks = RemoteCallbacks::new();
++        callbacks.update_tips(|refname, _a, b| {
++            assert_eq!(refname, "refs/remotes/origin/stale");
++            assert!(b.is_zero());
++            true
++        });
++        remote.prune(Some(callbacks)).unwrap();
++        assert_branch_count(&repo, 0);
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/repo.rs rustc-1.56.0-src-git2/vendor/git2/src/repo.rs
+--- rustc-1.56.0-src/vendor/git2/src/repo.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/repo.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -19,19 +19,82 @@
+ use crate::worktree::{Worktree, WorktreeAddOptions};
+ use crate::CherrypickOptions;
+ use crate::RevertOptions;
++use crate::{mailmap::Mailmap, panic};
+ use crate::{
+     raw, AttrCheckFlags, Buf, Error, Object, Remote, RepositoryOpenFlags, RepositoryState, Revspec,
+     StashFlags,
+ };
+ use crate::{
+-    AnnotatedCommit, MergeAnalysis, MergeOptions, MergePreference, SubmoduleIgnore, SubmoduleStatus,
++    AnnotatedCommit, MergeAnalysis, MergeOptions, MergePreference, SubmoduleIgnore,
++    SubmoduleStatus, SubmoduleUpdate,
+ };
+ use crate::{ApplyLocation, ApplyOptions, Rebase, RebaseOptions};
+ use crate::{Blame, BlameOptions, Reference, References, ResetType, Signature, Submodule};
+ use crate::{Blob, BlobWriter, Branch, BranchType, Branches, Commit, Config, Index, Oid, Tree};
+ use crate::{Describe, IntoCString, Reflog, RepositoryInitMode, RevparseMode};
+ use crate::{DescribeOptions, Diff, DiffOptions, Odb, PackBuilder, TreeBuilder};
+-use crate::{Note, Notes, ObjectType, Revwalk, Status, StatusOptions, Statuses, Tag};
++use crate::{Note, Notes, ObjectType, Revwalk, Status, StatusOptions, Statuses, Tag, Transaction};
++
++type MergeheadForeachCb<'a> = dyn FnMut(&Oid) -> bool + 'a;
++type FetchheadForeachCb<'a> = dyn FnMut(&str, &[u8], &Oid, bool) -> bool + 'a;
++
++struct FetchheadForeachCbData<'a> {
++    callback: &'a mut FetchheadForeachCb<'a>,
++}
++
++struct MergeheadForeachCbData<'a> {
++    callback: &'a mut MergeheadForeachCb<'a>,
++}
++
++extern "C" fn mergehead_foreach_cb(oid: *const raw::git_oid, payload: *mut c_void) -> c_int {
++    panic::wrap(|| unsafe {
++        let data = &mut *(payload as *mut MergeheadForeachCbData<'_>);
++        let res = {
++            let callback = &mut data.callback;
++            callback(&Binding::from_raw(oid))
++        };
++
++        if res {
++            0
++        } else {
++            1
++        }
++    })
++    .unwrap_or(1)
++}
++
++extern "C" fn fetchhead_foreach_cb(
++    ref_name: *const c_char,
++    remote_url: *const c_char,
++    oid: *const raw::git_oid,
++    is_merge: c_uint,
++    payload: *mut c_void,
++) -> c_int {
++    panic::wrap(|| unsafe {
++        let data = &mut *(payload as *mut FetchheadForeachCbData<'_>);
++        let res = {
++            let callback = &mut data.callback;
++
++            assert!(!ref_name.is_null());
++            assert!(!remote_url.is_null());
++            assert!(!oid.is_null());
++
++            let ref_name = str::from_utf8(CStr::from_ptr(ref_name).to_bytes()).unwrap();
++            let remote_url = CStr::from_ptr(remote_url).to_bytes();
++            let oid = Binding::from_raw(oid);
++            let is_merge = is_merge == 1;
++
++            callback(&ref_name, remote_url, &oid, is_merge)
++        };
++
++        if res {
++            0
++        } else {
++            1
++        }
++    })
++    .unwrap_or(1)
++}
+ 
+ /// An owned git repository, representing all state associated with the
+ /// underlying filesystem.
+@@ -952,6 +1015,14 @@
+     }
+ 
+     /// Get the value of a git attribute for a path as a string.
++    ///
++    /// This function will return a special string if the attribute is set to a special value.
++    /// Interpreting the special string is discouraged. You should always use
++    /// [`AttrValue::from_string`](crate::AttrValue::from_string) to interpret the return value
++    /// and avoid the special string.
++    ///
++    /// As such, the return type of this function will probably be changed in the next major version
++    /// to prevent interpreting the returned string without checking whether it's special.
+     pub fn get_attr(
+         &self,
+         path: &Path,
+@@ -964,6 +1035,14 @@
+     }
+ 
+     /// Get the value of a git attribute for a path as a byte slice.
++    ///
++    /// This function will return a special byte slice if the attribute is set to a special value.
++    /// Interpreting the special byte slice is discouraged. You should always use
++    /// [`AttrValue::from_bytes`](crate::AttrValue::from_bytes) to interpret the return value and
++    /// avoid the special string.
++    ///
++    /// As such, the return type of this function will probably be changed in the next major version
++    /// to prevent interpreting the returned byte slice without checking whether it's special.
+     pub fn get_attr_bytes(
+         &self,
+         path: &Path,
+@@ -1619,6 +1698,62 @@
+         Ok(SubmoduleStatus::from_bits_truncate(ret as u32))
+     }
+ 
++    /// Set the ignore rule for the submodule in the configuration
++    ///
++    /// This does not affect any currently-loaded instances.
++    pub fn submodule_set_ignore(
++        &mut self,
++        name: &str,
++        ignore: SubmoduleIgnore,
++    ) -> Result<(), Error> {
++        let name = CString::new(name)?;
++        unsafe {
++            try_call!(raw::git_submodule_set_ignore(self.raw(), name, ignore));
++        }
++        Ok(())
++    }
++
++    /// Set the update rule for the submodule in the configuration
++    ///
++    /// This setting won't affect any existing instances.
++    pub fn submodule_set_update(
++        &mut self,
++        name: &str,
++        update: SubmoduleUpdate,
++    ) -> Result<(), Error> {
++        let name = CString::new(name)?;
++        unsafe {
++            try_call!(raw::git_submodule_set_update(self.raw(), name, update));
++        }
++        Ok(())
++    }
++
++    /// Set the URL for the submodule in the configuration
++    ///
++    /// After calling this, you may wish to call [`Submodule::sync`] to write
++    /// the changes to the checked out submodule repository.
++    pub fn submodule_set_url(&mut self, name: &str, url: &str) -> Result<(), Error> {
++        let name = CString::new(name)?;
++        let url = CString::new(url)?;
++        unsafe {
++            try_call!(raw::git_submodule_set_url(self.raw(), name, url));
++        }
++        Ok(())
++    }
++
++    /// Set the branch for the submodule in the configuration
++    ///
++    /// After calling this, you may wish to call [`Submodule::sync`] to write
++    /// the changes to the checked out submodule repository.
++    pub fn submodule_set_branch(&mut self, name: &str, branch_name: &str) -> Result<(), Error> {
++        let name = CString::new(name)?;
++        let branch_name = CString::new(branch_name)?;
++        unsafe {
++            try_call!(raw::git_submodule_set_branch(self.raw(), name, branch_name));
++        }
++        Ok(())
++    }
++
+     /// Lookup a reference to one of the objects in a repository.
+     pub fn find_tree(&self, oid: Oid) -> Result<Tree<'_>, Error> {
+         let mut raw = ptr::null_mut();
+@@ -2708,7 +2843,7 @@
+         let raw_opts = options.map(|o| o.raw());
+         let ptr_raw_opts = match raw_opts.as_ref() {
+             Some(v) => v,
+-            None => 0 as *const _,
++            None => std::ptr::null(),
+         };
+         unsafe {
+             try_call!(raw::git_cherrypick(self.raw(), commit.raw(), ptr_raw_opts));
+@@ -2794,6 +2929,26 @@
+         }
+     }
+ 
++    /// Apply a Diff to the provided tree, and return the resulting Index.
++    pub fn apply_to_tree(
++        &self,
++        tree: &Tree<'_>,
++        diff: &Diff<'_>,
++        options: Option<&mut ApplyOptions<'_>>,
++    ) -> Result<Index, Error> {
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_apply_to_tree(
++                &mut ret,
++                self.raw,
++                tree.raw(),
++                diff.raw(),
++                options.map(|s| s.raw()).unwrap_or(ptr::null())
++            ));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
+     /// Reverts the given commit, producing changes in the index and working directory.
+     pub fn revert(
+         &self,
+@@ -2880,6 +3035,70 @@
+             Ok(Binding::from_raw(raw))
+         }
+     }
++
++    /// Create a new transaction
++    pub fn transaction<'a>(&'a self) -> Result<Transaction<'a>, Error> {
++        let mut raw = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_transaction_new(&mut raw, self.raw));
++            Ok(Binding::from_raw(raw))
++        }
++    }
++
++    /// Gets this repository's mailmap.
++    pub fn mailmap(&self) -> Result<Mailmap, Error> {
++        let mut ret = ptr::null_mut();
++        unsafe {
++            try_call!(raw::git_mailmap_from_repository(&mut ret, self.raw));
++            Ok(Binding::from_raw(ret))
++        }
++    }
++
++    ///  If a merge is in progress, invoke 'callback' for each commit ID in the
++    ///  MERGE_HEAD file.
++    pub fn mergehead_foreach<C>(&mut self, mut callback: C) -> Result<(), Error>
++    where
++        C: FnMut(&Oid) -> bool,
++    {
++        unsafe {
++            let mut data = MergeheadForeachCbData {
++                callback: &mut callback,
++            };
++            let cb: raw::git_repository_mergehead_foreach_cb = Some(mergehead_foreach_cb);
++            try_call!(raw::git_repository_mergehead_foreach(
++                self.raw(),
++                cb,
++                &mut data as *mut _ as *mut _
++            ));
++            Ok(())
++        }
++    }
++
++    /// Invoke 'callback' for each entry in the given FETCH_HEAD file.
++    ///
++    /// `callback` will be called with with following arguments:
++    ///
++    /// - `&str`: the reference name
++    /// - `&[u8]`: the remote url
++    /// - `&Oid`: the reference target OID
++    /// - `bool`: was the reference the result of a merge
++    pub fn fetchhead_foreach<C>(&self, mut callback: C) -> Result<(), Error>
++    where
++        C: FnMut(&str, &[u8], &Oid, bool) -> bool,
++    {
++        unsafe {
++            let mut data = FetchheadForeachCbData {
++                callback: &mut callback,
++            };
++            let cb: raw::git_repository_fetchhead_foreach_cb = Some(fetchhead_foreach_cb);
++            try_call!(raw::git_repository_fetchhead_foreach(
++                self.raw(),
++                cb,
++                &mut data as *mut _ as *mut _
++            ));
++            Ok(())
++        }
++    }
+ }
+ 
+ impl Binding for Repository {
+@@ -3062,7 +3281,9 @@
+ mod tests {
+     use crate::build::CheckoutBuilder;
+     use crate::CherrypickOptions;
+-    use crate::{ObjectType, Oid, Repository, ResetType};
++    use crate::{
++        ObjectType, Oid, Repository, ResetType, Signature, SubmoduleIgnore, SubmoduleUpdate,
++    };
+     use std::ffi::OsStr;
+     use std::fs;
+     use std::path::Path;
+@@ -3705,4 +3926,143 @@
+ 
+         Ok(())
+     }
++
++    #[test]
++    fn smoke_submodule_set() -> Result<(), crate::Error> {
++        let (td1, _repo) = crate::test::repo_init();
++        let (td2, mut repo2) = crate::test::repo_init();
++        let url = crate::test::path2url(td1.path());
++        let name = "bar";
++        {
++            let mut s = repo2.submodule(&url, Path::new(name), true)?;
++            fs::remove_dir_all(td2.path().join("bar")).unwrap();
++            Repository::clone(&url, td2.path().join("bar"))?;
++            s.add_to_index(false)?;
++            s.add_finalize()?;
++        }
++
++        // update strategy
++        repo2.submodule_set_update(name, SubmoduleUpdate::None)?;
++        assert!(matches!(
++            repo2.find_submodule(name)?.update_strategy(),
++            SubmoduleUpdate::None
++        ));
++        repo2.submodule_set_update(name, SubmoduleUpdate::Rebase)?;
++        assert!(matches!(
++            repo2.find_submodule(name)?.update_strategy(),
++            SubmoduleUpdate::Rebase
++        ));
++
++        // ignore rule
++        repo2.submodule_set_ignore(name, SubmoduleIgnore::Untracked)?;
++        assert!(matches!(
++            repo2.find_submodule(name)?.ignore_rule(),
++            SubmoduleIgnore::Untracked
++        ));
++        repo2.submodule_set_ignore(name, SubmoduleIgnore::Dirty)?;
++        assert!(matches!(
++            repo2.find_submodule(name)?.ignore_rule(),
++            SubmoduleIgnore::Dirty
++        ));
++
++        // url
++        repo2.submodule_set_url(name, "fake-url")?;
++        assert_eq!(repo2.find_submodule(name)?.url(), Some("fake-url"));
++
++        // branch
++        repo2.submodule_set_branch(name, "fake-branch")?;
++        assert_eq!(repo2.find_submodule(name)?.branch(), Some("fake-branch"));
++
++        Ok(())
++    }
++
++    #[test]
++    fn smoke_mailmap_from_repository() {
++        let (_td, repo) = crate::test::repo_init();
++
++        let commit = {
++            let head = t!(repo.head()).target().unwrap();
++            t!(repo.find_commit(head))
++        };
++
++        // This is our baseline for HEAD.
++        let author = commit.author();
++        let committer = commit.committer();
++        assert_eq!(author.name(), Some("name"));
++        assert_eq!(author.email(), Some("email"));
++        assert_eq!(committer.name(), Some("name"));
++        assert_eq!(committer.email(), Some("email"));
++
++        // There is no .mailmap file in the test repo so all signature identities are equal.
++        let mailmap = t!(repo.mailmap());
++        let mailmapped_author = t!(commit.author_with_mailmap(&mailmap));
++        let mailmapped_committer = t!(commit.committer_with_mailmap(&mailmap));
++        assert_eq!(mailmapped_author.name(), author.name());
++        assert_eq!(mailmapped_author.email(), author.email());
++        assert_eq!(mailmapped_committer.name(), committer.name());
++        assert_eq!(mailmapped_committer.email(), committer.email());
++
++        let commit = {
++            // - Add a .mailmap file to the repository.
++            // - Commit with a signature identity different from the author's.
++            // - Include entries for both author and committer to prove we call
++            //   the right raw functions.
++            let mailmap_file = Path::new(".mailmap");
++            let p = Path::new(repo.workdir().unwrap()).join(&mailmap_file);
++            t!(fs::write(
++                p,
++                r#"
++Author Name <author.proper@email> name <email>
++Committer Name <committer.proper@email> <committer@email>"#,
++            ));
++            let mut index = t!(repo.index());
++            t!(index.add_path(&mailmap_file));
++            let id_mailmap = t!(index.write_tree());
++            let tree_mailmap = t!(repo.find_tree(id_mailmap));
++
++            let head = t!(repo.commit(
++                Some("HEAD"),
++                &author,
++                t!(&Signature::now("committer", "committer@email")),
++                "Add mailmap",
++                &tree_mailmap,
++                &[&commit],
++            ));
++            t!(repo.find_commit(head))
++        };
++
++        // Sanity check that we're working with the right commit and that its
++        // author and committer identities differ.
++        let author = commit.author();
++        let committer = commit.committer();
++        assert_ne!(author.name(), committer.name());
++        assert_ne!(author.email(), committer.email());
++        assert_eq!(author.name(), Some("name"));
++        assert_eq!(author.email(), Some("email"));
++        assert_eq!(committer.name(), Some("committer"));
++        assert_eq!(committer.email(), Some("committer@email"));
++
++        // Fetch the newly added .mailmap from the repository.
++        let mailmap = t!(repo.mailmap());
++        let mailmapped_author = t!(commit.author_with_mailmap(&mailmap));
++        let mailmapped_committer = t!(commit.committer_with_mailmap(&mailmap));
++
++        let mm_resolve_author = t!(mailmap.resolve_signature(&author));
++        let mm_resolve_committer = t!(mailmap.resolve_signature(&committer));
++
++        // Mailmap Signature lifetime is independent of Commit lifetime.
++        drop(author);
++        drop(committer);
++        drop(commit);
++
++        // author_with_mailmap() + committer_with_mailmap() work
++        assert_eq!(mailmapped_author.name(), Some("Author Name"));
++        assert_eq!(mailmapped_author.email(), Some("author.proper@email"));
++        assert_eq!(mailmapped_committer.name(), Some("Committer Name"));
++        assert_eq!(mailmapped_committer.email(), Some("committer.proper@email"));
++
++        // resolve_signature() works
++        assert_eq!(mm_resolve_author.email(), mailmapped_author.email());
++        assert_eq!(mm_resolve_committer.email(), mailmapped_committer.email());
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/revspec.rs rustc-1.56.0-src-git2/vendor/git2/src/revspec.rs
+--- rustc-1.56.0-src/vendor/git2/src/revspec.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/revspec.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -14,11 +14,7 @@
+         to: Option<Object<'repo>>,
+         mode: RevparseMode,
+     ) -> Revspec<'repo> {
+-        Revspec {
+-            from: from,
+-            to: to,
+-            mode: mode,
+-        }
++        Revspec { from, to, mode }
+     }
+ 
+     /// Access the `from` range of this revspec.
+diff -urN rustc-1.56.0-src/vendor/git2/src/revwalk.rs rustc-1.56.0-src-git2/vendor/git2/src/revwalk.rs
+--- rustc-1.56.0-src/vendor/git2/src/revwalk.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/revwalk.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -1,9 +1,9 @@
+-use libc::c_uint;
++use libc::{c_int, c_uint, c_void};
+ use std::ffi::CString;
+ use std::marker;
+ 
+ use crate::util::Binding;
+-use crate::{raw, Error, Oid, Repository, Sort};
++use crate::{panic, raw, Error, Oid, Repository, Sort};
+ 
+ /// A revwalk allows traversal of the commit graph defined by including one or
+ /// more leaves and excluding one or more roots.
+@@ -12,6 +12,40 @@
+     _marker: marker::PhantomData<&'repo Repository>,
+ }
+ 
++/// A `Revwalk` with an assiciated "hide callback", see `with_hide_callback`
++pub struct RevwalkWithHideCb<'repo, 'cb, C>
++where
++    C: FnMut(Oid) -> bool,
++{
++    revwalk: Revwalk<'repo>,
++    _marker: marker::PhantomData<&'cb C>,
++}
++
++extern "C" fn revwalk_hide_cb<C>(commit_id: *const raw::git_oid, payload: *mut c_void) -> c_int
++where
++    C: FnMut(Oid) -> bool,
++{
++    panic::wrap(|| unsafe {
++        let hide_cb = payload as *mut C;
++        if (*hide_cb)(Oid::from_raw(commit_id)) {
++            1
++        } else {
++            0
++        }
++    })
++    .unwrap_or(-1)
++}
++
++impl<'repo, 'cb, C: FnMut(Oid) -> bool> RevwalkWithHideCb<'repo, 'cb, C> {
++    /// Consumes the `RevwalkWithHideCb` and returns the contained `Revwalk`.
++    ///
++    /// Note that this will reset the `Revwalk`.
++    pub fn into_inner(mut self) -> Result<Revwalk<'repo>, Error> {
++        self.revwalk.reset()?;
++        Ok(self.revwalk)
++    }
++}
++
+ impl<'repo> Revwalk<'repo> {
+     /// Reset a revwalk to allow re-configuring it.
+     ///
+@@ -119,6 +153,29 @@
+         Ok(())
+     }
+ 
++    /// Hide all commits for which the callback returns true from
++    /// the walk.
++    pub fn with_hide_callback<'cb, C>(
++        self,
++        callback: &'cb C,
++    ) -> Result<RevwalkWithHideCb<'repo, 'cb, C>, Error>
++    where
++        C: FnMut(Oid) -> bool,
++    {
++        let r = RevwalkWithHideCb {
++            revwalk: self,
++            _marker: marker::PhantomData,
++        };
++        unsafe {
++            raw::git_revwalk_add_hide_cb(
++                r.revwalk.raw(),
++                Some(revwalk_hide_cb::<C>),
++                callback as *const _ as *mut c_void,
++            );
++        };
++        Ok(r)
++    }
++
+     /// Hide the repository's HEAD
+     ///
+     /// For more information, see `hide`.
+@@ -163,7 +220,7 @@
+     type Raw = *mut raw::git_revwalk;
+     unsafe fn from_raw(raw: *mut raw::git_revwalk) -> Revwalk<'repo> {
+         Revwalk {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -191,6 +248,15 @@
+     }
+ }
+ 
++impl<'repo, 'cb, C: FnMut(Oid) -> bool> Iterator for RevwalkWithHideCb<'repo, 'cb, C> {
++    type Item = Result<Oid, Error>;
++    fn next(&mut self) -> Option<Result<Oid, Error>> {
++        let out = self.revwalk.next();
++        crate::panic::check();
++        out
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+     #[test]
+@@ -216,4 +282,35 @@
+         walk.hide_head().unwrap();
+         assert_eq!(walk.by_ref().count(), 0);
+     }
++
++    #[test]
++    fn smoke_hide_cb() {
++        let (_td, repo) = crate::test::repo_init();
++        let head = repo.head().unwrap();
++        let target = head.target().unwrap();
++
++        let mut walk = repo.revwalk().unwrap();
++        walk.push(target).unwrap();
++
++        let oids: Vec<crate::Oid> = walk.by_ref().collect::<Result<Vec<_>, _>>().unwrap();
++
++        assert_eq!(oids.len(), 1);
++        assert_eq!(oids[0], target);
++
++        walk.reset().unwrap();
++        walk.push_head().unwrap();
++        assert_eq!(walk.by_ref().count(), 1);
++
++        walk.reset().unwrap();
++        walk.push_head().unwrap();
++
++        let hide_cb = |oid| oid == target;
++        let mut walk = walk.with_hide_callback(&hide_cb).unwrap();
++
++        assert_eq!(walk.by_ref().count(), 0);
++
++        let mut walk = walk.into_inner().unwrap();
++        walk.push_head().unwrap();
++        assert_eq!(walk.by_ref().count(), 1);
++    }
+ }
+diff -urN rustc-1.56.0-src/vendor/git2/src/signature.rs rustc-1.56.0-src-git2/vendor/git2/src/signature.rs
+--- rustc-1.56.0-src/vendor/git2/src/signature.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/signature.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -105,7 +105,7 @@
+     type Raw = *mut raw::git_signature;
+     unsafe fn from_raw(raw: *mut raw::git_signature) -> Signature<'a> {
+         Signature {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+             owned: true,
+         }
+diff -urN rustc-1.56.0-src/vendor/git2/src/status.rs rustc-1.56.0-src-git2/vendor/git2/src/status.rs
+--- rustc-1.56.0-src/vendor/git2/src/status.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/status.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -72,7 +72,7 @@
+             let r = raw::git_status_init_options(&mut raw, raw::GIT_STATUS_OPTIONS_VERSION);
+             assert_eq!(r, 0);
+             StatusOptions {
+-                raw: raw,
++                raw,
+                 pathspec: Vec::new(),
+                 ptrs: Vec::new(),
+             }
+@@ -264,7 +264,7 @@
+     type Raw = *mut raw::git_status_list;
+     unsafe fn from_raw(raw: *mut raw::git_status_list) -> Statuses<'repo> {
+         Statuses {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -340,7 +340,7 @@
+ 
+     unsafe fn from_raw(raw: *const raw::git_status_entry) -> StatusEntry<'statuses> {
+         StatusEntry {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/string_array.rs rustc-1.56.0-src-git2/vendor/git2/src/string_array.rs
+--- rustc-1.56.0-src/vendor/git2/src/string_array.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/string_array.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -79,7 +79,7 @@
+ impl Binding for StringArray {
+     type Raw = raw::git_strarray;
+     unsafe fn from_raw(raw: raw::git_strarray) -> StringArray {
+-        StringArray { raw: raw }
++        StringArray { raw }
+     }
+     fn raw(&self) -> raw::git_strarray {
+         self.raw
+diff -urN rustc-1.56.0-src/vendor/git2/src/submodule.rs rustc-1.56.0-src-git2/vendor/git2/src/submodule.rs
+--- rustc-1.56.0-src/vendor/git2/src/submodule.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/submodule.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -5,8 +5,8 @@
+ use std::ptr;
+ use std::str;
+ 
+-use crate::build::CheckoutBuilder;
+ use crate::util::{self, Binding};
++use crate::{build::CheckoutBuilder, SubmoduleIgnore, SubmoduleUpdate};
+ use crate::{raw, Error, FetchOptions, Oid, Repository};
+ 
+ /// A structure to represent a git [submodule][1]
+@@ -113,6 +113,16 @@
+         unsafe { Binding::from_raw_opt(raw::git_submodule_wd_id(self.raw)) }
+     }
+ 
++    /// Get the ignore rule that will be used for the submodule.
++    pub fn ignore_rule(&self) -> SubmoduleIgnore {
++        SubmoduleIgnore::from_raw(unsafe { raw::git_submodule_ignore(self.raw) })
++    }
++
++    /// Get the update rule that will be used for the submodule.
++    pub fn update_strategy(&self) -> SubmoduleUpdate {
++        SubmoduleUpdate::from_raw(unsafe { raw::git_submodule_update_strategy(self.raw) })
++    }
++
+     /// Copy submodule info into ".git/config" file.
+     ///
+     /// Just like "git submodule init", this copies information about the
+@@ -223,7 +233,7 @@
+     type Raw = *mut raw::git_submodule;
+     unsafe fn from_raw(raw: *mut raw::git_submodule) -> Submodule<'repo> {
+         Submodule {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/tag.rs rustc-1.56.0-src-git2/vendor/git2/src/tag.rs
+--- rustc-1.56.0-src/vendor/git2/src/tag.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/tag.rs	2021-10-23 20:47:39.255788944 +0200
+@@ -86,7 +86,7 @@
+         unsafe { Binding::from_raw(raw::git_tag_target_id(&*self.raw)) }
+     }
+ 
+-    /// Get the OID of the tagged object of a tag
++    /// Get the ObjectType of the tagged object of a tag
+     pub fn target_type(&self) -> Option<ObjectType> {
+         unsafe { ObjectType::from_raw(raw::git_tag_target_type(&*self.raw)) }
+     }
+@@ -118,7 +118,7 @@
+     type Raw = *mut raw::git_tag;
+     unsafe fn from_raw(raw: *mut raw::git_tag) -> Tag<'repo> {
+         Tag {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/time.rs rustc-1.56.0-src-git2/vendor/git2/src/time.rs
+--- rustc-1.56.0-src/vendor/git2/src/time.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/time.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -61,7 +61,7 @@
+ impl Binding for Time {
+     type Raw = raw::git_time;
+     unsafe fn from_raw(raw: raw::git_time) -> Time {
+-        Time { raw: raw }
++        Time { raw }
+     }
+     fn raw(&self) -> raw::git_time {
+         self.raw
+@@ -73,8 +73,8 @@
+     pub fn new(seconds: i32, nanoseconds: u32) -> IndexTime {
+         unsafe {
+             Binding::from_raw(raw::git_index_time {
+-                seconds: seconds,
+-                nanoseconds: nanoseconds,
++                seconds,
++                nanoseconds,
+             })
+         }
+     }
+@@ -92,7 +92,7 @@
+ impl Binding for IndexTime {
+     type Raw = raw::git_index_time;
+     unsafe fn from_raw(raw: raw::git_index_time) -> IndexTime {
+-        IndexTime { raw: raw }
++        IndexTime { raw }
+     }
+     fn raw(&self) -> raw::git_index_time {
+         self.raw
+diff -urN rustc-1.56.0-src/vendor/git2/src/tracing.rs rustc-1.56.0-src-git2/vendor/git2/src/tracing.rs
+--- rustc-1.56.0-src/vendor/git2/src/tracing.rs	1970-01-01 01:00:00.000000000 +0100
++++ rustc-1.56.0-src-git2/vendor/git2/src/tracing.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -0,0 +1,82 @@
++use std::sync::atomic::{AtomicUsize, Ordering};
++
++use libc::c_char;
++
++use crate::{panic, raw, util::Binding};
++
++/// Available tracing levels.  When tracing is set to a particular level,
++/// callers will be provided tracing at the given level and all lower levels.
++#[derive(Copy, Clone, Debug)]
++pub enum TraceLevel {
++    /// No tracing will be performed.
++    None,
++
++    /// Severe errors that may impact the program's execution
++    Fatal,
++
++    /// Errors that do not impact the program's execution
++    Error,
++
++    /// Warnings that suggest abnormal data
++    Warn,
++
++    /// Informational messages about program execution
++    Info,
++
++    /// Detailed data that allows for debugging
++    Debug,
++
++    /// Exceptionally detailed debugging data
++    Trace,
++}
++
++impl Binding for TraceLevel {
++    type Raw = raw::git_trace_level_t;
++    unsafe fn from_raw(raw: raw::git_trace_level_t) -> Self {
++        match raw {
++            raw::GIT_TRACE_NONE => Self::None,
++            raw::GIT_TRACE_FATAL => Self::Fatal,
++            raw::GIT_TRACE_ERROR => Self::Error,
++            raw::GIT_TRACE_WARN => Self::Warn,
++            raw::GIT_TRACE_INFO => Self::Info,
++            raw::GIT_TRACE_DEBUG => Self::Debug,
++            raw::GIT_TRACE_TRACE => Self::Trace,
++            _ => panic!("Unknown git trace level"),
++        }
++    }
++    fn raw(&self) -> raw::git_trace_level_t {
++        match *self {
++            Self::None => raw::GIT_TRACE_NONE,
++            Self::Fatal => raw::GIT_TRACE_FATAL,
++            Self::Error => raw::GIT_TRACE_ERROR,
++            Self::Warn => raw::GIT_TRACE_WARN,
++            Self::Info => raw::GIT_TRACE_INFO,
++            Self::Debug => raw::GIT_TRACE_DEBUG,
++            Self::Trace => raw::GIT_TRACE_TRACE,
++        }
++    }
++}
++
++pub type TracingCb = fn(TraceLevel, &str);
++
++static CALLBACK: AtomicUsize = AtomicUsize::new(0);
++
++///
++pub fn trace_set(level: TraceLevel, cb: TracingCb) -> bool {
++    CALLBACK.store(cb as usize, Ordering::SeqCst);
++
++    unsafe {
++        raw::git_trace_set(level.raw(), Some(tracing_cb_c));
++    }
++
++    return true;
++}
++
++extern "C" fn tracing_cb_c(level: raw::git_trace_level_t, msg: *const c_char) {
++    let cb = CALLBACK.load(Ordering::SeqCst);
++    panic::wrap(|| unsafe {
++        let cb: TracingCb = std::mem::transmute(cb);
++        let msg = std::ffi::CStr::from_ptr(msg).to_str().unwrap();
++        cb(Binding::from_raw(level), msg);
++    });
++}
+diff -urN rustc-1.56.0-src/vendor/git2/src/transaction.rs rustc-1.56.0-src-git2/vendor/git2/src/transaction.rs
+--- rustc-1.56.0-src/vendor/git2/src/transaction.rs	1970-01-01 01:00:00.000000000 +0100
++++ rustc-1.56.0-src-git2/vendor/git2/src/transaction.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -0,0 +1,285 @@
++use std::ffi::CString;
++use std::marker;
++
++use crate::{raw, util::Binding, Error, Oid, Reflog, Repository, Signature};
++
++/// A structure representing a transactional update of a repository's references.
++///
++/// Transactions work by locking loose refs for as long as the [`Transaction`]
++/// is held, and committing all changes to disk when [`Transaction::commit`] is
++/// called. Note that comitting is not atomic: if an operation fails, the
++/// transaction aborts, but previous successful operations are not rolled back.
++pub struct Transaction<'repo> {
++    raw: *mut raw::git_transaction,
++    _marker: marker::PhantomData<&'repo Repository>,
++}
++
++impl Drop for Transaction<'_> {
++    fn drop(&mut self) {
++        unsafe { raw::git_transaction_free(self.raw) }
++    }
++}
++
++impl<'repo> Binding for Transaction<'repo> {
++    type Raw = *mut raw::git_transaction;
++
++    unsafe fn from_raw(ptr: *mut raw::git_transaction) -> Transaction<'repo> {
++        Transaction {
++            raw: ptr,
++            _marker: marker::PhantomData,
++        }
++    }
++
++    fn raw(&self) -> *mut raw::git_transaction {
++        self.raw
++    }
++}
++
++impl<'repo> Transaction<'repo> {
++    /// Lock the specified reference by name.
++    pub fn lock_ref(&mut self, refname: &str) -> Result<(), Error> {
++        let refname = CString::new(refname).unwrap();
++        unsafe {
++            try_call!(raw::git_transaction_lock_ref(self.raw, refname));
++        }
++
++        Ok(())
++    }
++
++    /// Set the target of the specified reference.
++    ///
++    /// The reference must have been locked via `lock_ref`.
++    ///
++    /// If `reflog_signature` is `None`, the [`Signature`] is read from the
++    /// repository config.
++    pub fn set_target(
++        &mut self,
++        refname: &str,
++        target: Oid,
++        reflog_signature: Option<&Signature<'_>>,
++        reflog_message: &str,
++    ) -> Result<(), Error> {
++        let refname = CString::new(refname).unwrap();
++        let reflog_message = CString::new(reflog_message).unwrap();
++        unsafe {
++            try_call!(raw::git_transaction_set_target(
++                self.raw,
++                refname,
++                target.raw(),
++                reflog_signature.map(|s| s.raw()),
++                reflog_message
++            ));
++        }
++
++        Ok(())
++    }
++
++    /// Set the target of the specified symbolic reference.
++    ///
++    /// The reference must have been locked via `lock_ref`.
++    ///
++    /// If `reflog_signature` is `None`, the [`Signature`] is read from the
++    /// repository config.
++    pub fn set_symbolic_target(
++        &mut self,
++        refname: &str,
++        target: &str,
++        reflog_signature: Option<&Signature<'_>>,
++        reflog_message: &str,
++    ) -> Result<(), Error> {
++        let refname = CString::new(refname).unwrap();
++        let target = CString::new(target).unwrap();
++        let reflog_message = CString::new(reflog_message).unwrap();
++        unsafe {
++            try_call!(raw::git_transaction_set_symbolic_target(
++                self.raw,
++                refname,
++                target,
++                reflog_signature.map(|s| s.raw()),
++                reflog_message
++            ));
++        }
++
++        Ok(())
++    }
++
++    /// Add a [`Reflog`] to the transaction.
++    ///
++    /// This commit the in-memory [`Reflog`] to disk when the transaction commits.
++    /// Note that atomicty is **not* guaranteed: if the transaction fails to
++    /// modify `refname`, the reflog may still have been comitted to disk.
++    ///
++    /// If this is combined with setting the target, that update won't be
++    /// written to the log (ie. the `reflog_signature` and `reflog_message`
++    /// parameters will be ignored).
++    pub fn set_reflog(&mut self, refname: &str, reflog: Reflog) -> Result<(), Error> {
++        let refname = CString::new(refname).unwrap();
++        unsafe {
++            try_call!(raw::git_transaction_set_reflog(
++                self.raw,
++                refname,
++                reflog.raw()
++            ));
++        }
++
++        Ok(())
++    }
++
++    /// Remove a reference.
++    ///
++    /// The reference must have been locked via `lock_ref`.
++    pub fn remove(&mut self, refname: &str) -> Result<(), Error> {
++        let refname = CString::new(refname).unwrap();
++        unsafe {
++            try_call!(raw::git_transaction_remove(self.raw, refname));
++        }
++
++        Ok(())
++    }
++
++    /// Commit the changes from the transaction.
++    ///
++    /// The updates will be made one by one, and the first failure will stop the
++    /// processing.
++    pub fn commit(self) -> Result<(), Error> {
++        unsafe {
++            try_call!(raw::git_transaction_commit(self.raw));
++        }
++        Ok(())
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use crate::{Error, ErrorClass, ErrorCode, Oid, Repository};
++
++    #[test]
++    fn smoke() {
++        let (_td, repo) = crate::test::repo_init();
++
++        let mut tx = t!(repo.transaction());
++
++        t!(tx.lock_ref("refs/heads/main"));
++        t!(tx.lock_ref("refs/heads/next"));
++
++        t!(tx.set_target("refs/heads/main", Oid::zero(), None, "set main to zero"));
++        t!(tx.set_symbolic_target(
++            "refs/heads/next",
++            "refs/heads/main",
++            None,
++            "set next to main",
++        ));
++
++        t!(tx.commit());
++
++        assert_eq!(repo.refname_to_id("refs/heads/main").unwrap(), Oid::zero());
++        assert_eq!(
++            repo.find_reference("refs/heads/next")
++                .unwrap()
++                .symbolic_target()
++                .unwrap(),
++            "refs/heads/main"
++        );
++    }
++
++    #[test]
++    fn locks_same_repo_handle() {
++        let (_td, repo) = crate::test::repo_init();
++
++        let mut tx1 = t!(repo.transaction());
++        t!(tx1.lock_ref("refs/heads/seen"));
++
++        let mut tx2 = t!(repo.transaction());
++        assert!(matches!(tx2.lock_ref("refs/heads/seen"), Err(e) if e.code() == ErrorCode::Locked))
++    }
++
++    #[test]
++    fn locks_across_repo_handles() {
++        let (td, repo1) = crate::test::repo_init();
++        let repo2 = t!(Repository::open(&td));
++
++        let mut tx1 = t!(repo1.transaction());
++        t!(tx1.lock_ref("refs/heads/seen"));
++
++        let mut tx2 = t!(repo2.transaction());
++        assert!(matches!(tx2.lock_ref("refs/heads/seen"), Err(e) if e.code() == ErrorCode::Locked))
++    }
++
++    #[test]
++    fn drop_unlocks() {
++        let (_td, repo) = crate::test::repo_init();
++
++        let mut tx = t!(repo.transaction());
++        t!(tx.lock_ref("refs/heads/seen"));
++        drop(tx);
++
++        let mut tx2 = t!(repo.transaction());
++        t!(tx2.lock_ref("refs/heads/seen"))
++    }
++
++    #[test]
++    fn commit_unlocks() {
++        let (_td, repo) = crate::test::repo_init();
++
++        let mut tx = t!(repo.transaction());
++        t!(tx.lock_ref("refs/heads/seen"));
++        t!(tx.commit());
++
++        let mut tx2 = t!(repo.transaction());
++        t!(tx2.lock_ref("refs/heads/seen"));
++    }
++
++    #[test]
++    fn prevents_non_transactional_updates() {
++        let (_td, repo) = crate::test::repo_init();
++        let head = t!(repo.refname_to_id("HEAD"));
++
++        let mut tx = t!(repo.transaction());
++        t!(tx.lock_ref("refs/heads/seen"));
++
++        assert!(matches!(
++            repo.reference("refs/heads/seen", head, true, "competing with lock"),
++            Err(e) if e.code() == ErrorCode::Locked
++        ));
++    }
++
++    #[test]
++    fn remove() {
++        let (_td, repo) = crate::test::repo_init();
++        let head = t!(repo.refname_to_id("HEAD"));
++        let next = "refs/heads/next";
++
++        t!(repo.reference(
++            next,
++            head,
++            true,
++            "refs/heads/next@{0}: branch: Created from HEAD"
++        ));
++
++        {
++            let mut tx = t!(repo.transaction());
++            t!(tx.lock_ref(next));
++            t!(tx.remove(next));
++            t!(tx.commit());
++        }
++        assert!(matches!(repo.refname_to_id(next), Err(e) if e.code() == ErrorCode::NotFound))
++    }
++
++    #[test]
++    fn must_lock_ref() {
++        let (_td, repo) = crate::test::repo_init();
++
++        // 🤷
++        fn is_not_locked_err(e: &Error) -> bool {
++            e.code() == ErrorCode::NotFound
++                && e.class() == ErrorClass::Reference
++                && e.message() == "the specified reference is not locked"
++        }
++
++        let mut tx = t!(repo.transaction());
++        assert!(matches!(
++            tx.set_target("refs/heads/main", Oid::zero(), None, "set main to zero"),
++            Err(e) if is_not_locked_err(&e)
++        ))
++    }
++}
+diff -urN rustc-1.56.0-src/vendor/git2/src/transport.rs rustc-1.56.0-src-git2/vendor/git2/src/transport.rs
+--- rustc-1.56.0-src/vendor/git2/src/transport.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/transport.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -54,7 +54,7 @@
+ }
+ 
+ /// Actions that a smart transport can ask a subtransport to perform
+-#[derive(Copy, Clone)]
++#[derive(Copy, Clone, PartialEq)]
+ #[allow(missing_docs)]
+ pub enum Service {
+     UploadPackLs,
+@@ -87,6 +87,8 @@
+ #[repr(C)]
+ struct RawSmartSubtransport {
+     raw: raw::git_smart_subtransport,
++    stream: Option<*mut raw::git_smart_subtransport_stream>,
++    rpc: bool,
+     obj: Box<dyn SmartSubtransport>,
+ }
+ 
+@@ -142,6 +144,8 @@
+                 close: Some(subtransport_close),
+                 free: Some(subtransport_free),
+             },
++            stream: None,
++            rpc,
+             obj: Box::new(subtransport),
+         });
+         let mut defn = raw::git_smart_subtransport_definition {
+@@ -246,23 +250,36 @@
+             raw::GIT_SERVICE_RECEIVEPACK => Service::ReceivePack,
+             n => panic!("unknown action: {}", n),
+         };
+-        let transport = &mut *(raw_transport as *mut RawSmartSubtransport);
+-        let obj = match transport.obj.action(url, action) {
+-            Ok(s) => s,
+-            Err(e) => {
+-                set_err(&e);
+-                return e.raw_code() as c_int;
++
++        let mut transport = &mut *(raw_transport as *mut RawSmartSubtransport);
++        // Note: we only need to generate if rpc is on. Else, for receive-pack and upload-pack
++        // libgit2 reuses the stream generated for receive-pack-ls or upload-pack-ls.
++        let generate_stream =
++            transport.rpc || action == Service::UploadPackLs || action == Service::ReceivePackLs;
++        if generate_stream {
++            let obj = match transport.obj.action(url, action) {
++                Ok(s) => s,
++                Err(e) => {
++                    set_err(&e);
++                    return e.raw_code() as c_int;
++                }
++            };
++            *stream = mem::transmute(Box::new(RawSmartSubtransportStream {
++                raw: raw::git_smart_subtransport_stream {
++                    subtransport: raw_transport,
++                    read: Some(stream_read),
++                    write: Some(stream_write),
++                    free: Some(stream_free),
++                },
++                obj,
++            }));
++            transport.stream = Some(*stream);
++        } else {
++            if transport.stream.is_none() {
++                return -1;
+             }
+-        };
+-        *stream = mem::transmute(Box::new(RawSmartSubtransportStream {
+-            raw: raw::git_smart_subtransport_stream {
+-                subtransport: raw_transport,
+-                read: Some(stream_read),
+-                write: Some(stream_write),
+-                free: Some(stream_free),
+-            },
+-            obj: obj,
+-        }));
++            *stream = transport.stream.unwrap();
++        }
+         0
+     })
+     .unwrap_or(-1)
+diff -urN rustc-1.56.0-src/vendor/git2/src/treebuilder.rs rustc-1.56.0-src-git2/vendor/git2/src/treebuilder.rs
+--- rustc-1.56.0-src/vendor/git2/src/treebuilder.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/treebuilder.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -141,7 +141,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_treebuilder) -> TreeBuilder<'repo> {
+         TreeBuilder {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+diff -urN rustc-1.56.0-src/vendor/git2/src/tree.rs rustc-1.56.0-src-git2/vendor/git2/src/tree.rs
+--- rustc-1.56.0-src/vendor/git2/src/tree.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/git2/src/tree.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -225,7 +225,7 @@
+ 
+     unsafe fn from_raw(raw: *mut raw::git_tree) -> Tree<'repo> {
+         Tree {
+-            raw: raw,
++            raw,
+             _marker: marker::PhantomData,
+         }
+     }
+@@ -334,7 +334,7 @@
+     type Raw = *mut raw::git_tree_entry;
+     unsafe fn from_raw(raw: *mut raw::git_tree_entry) -> TreeEntry<'a> {
+         TreeEntry {
+-            raw: raw,
++            raw,
+             owned: true,
+             _marker: marker::PhantomData,
+         }
+diff -urN rustc-1.56.0-src/vendor/git2/src/version.rs rustc-1.56.0-src-git2/vendor/git2/src/version.rs
+--- rustc-1.56.0-src/vendor/git2/src/version.rs	1970-01-01 01:00:00.000000000 +0100
++++ rustc-1.56.0-src-git2/vendor/git2/src/version.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -0,0 +1,95 @@
++use crate::raw;
++use libc::c_int;
++use std::fmt;
++
++/// Version information about libgit2 and the capabilities it supports.
++pub struct Version {
++    major: c_int,
++    minor: c_int,
++    rev: c_int,
++    features: c_int,
++}
++
++macro_rules! flag_test {
++    ($features:expr, $flag:expr) => {
++        ($features as u32 & $flag as u32) != 0
++    };
++}
++
++impl Version {
++    /// Returns a [`Version`] which provides information about libgit2.
++    pub fn get() -> Version {
++        let mut v = Version {
++            major: 0,
++            minor: 0,
++            rev: 0,
++            features: 0,
++        };
++        unsafe {
++            raw::git_libgit2_version(&mut v.major, &mut v.minor, &mut v.rev);
++            v.features = raw::git_libgit2_features();
++        }
++        v
++    }
++
++    /// Returns the version of libgit2.
++    ///
++    /// The return value is a tuple of `(major, minor, rev)`
++    pub fn libgit2_version(&self) -> (u32, u32, u32) {
++        (self.major as u32, self.minor as u32, self.rev as u32)
++    }
++
++    /// Returns the version of the libgit2-sys crate.
++    pub fn crate_version(&self) -> &'static str {
++        env!("CARGO_PKG_VERSION")
++    }
++
++    /// Returns true if this was built with the vendored version of libgit2.
++    pub fn vendored(&self) -> bool {
++        raw::vendored()
++    }
++
++    /// Returns true if libgit2 was built thread-aware and can be safely used
++    /// from multiple threads.
++    pub fn threads(&self) -> bool {
++        flag_test!(self.features, raw::GIT_FEATURE_THREADS)
++    }
++
++    /// Returns true if libgit2 was built with and linked against a TLS implementation.
++    ///
++    /// Custom TLS streams may still be added by the user to support HTTPS
++    /// regardless of this.
++    pub fn https(&self) -> bool {
++        flag_test!(self.features, raw::GIT_FEATURE_HTTPS)
++    }
++
++    /// Returns true if libgit2 was built with and linked against libssh2.
++    ///
++    /// A custom transport may still be added by the user to support libssh2
++    /// regardless of this.
++    pub fn ssh(&self) -> bool {
++        flag_test!(self.features, raw::GIT_FEATURE_SSH)
++    }
++
++    /// Returns true if libgit2 was built with support for sub-second
++    /// resolution in file modification times.
++    pub fn nsec(&self) -> bool {
++        flag_test!(self.features, raw::GIT_FEATURE_NSEC)
++    }
++}
++
++impl fmt::Debug for Version {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
++        let mut f = f.debug_struct("Version");
++        f.field("major", &self.major)
++            .field("minor", &self.minor)
++            .field("rev", &self.rev)
++            .field("crate_version", &self.crate_version())
++            .field("vendored", &self.vendored())
++            .field("threads", &self.threads())
++            .field("https", &self.https())
++            .field("ssh", &self.ssh())
++            .field("nsec", &self.nsec());
++        f.finish()
++    }
++}
+diff -urN rustc-1.56.0-src/vendor/libgit2-sys/build.rs rustc-1.56.0-src-git2/vendor/libgit2-sys/build.rs
+--- rustc-1.56.0-src/vendor/libgit2-sys/build.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/libgit2-sys/build.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -7,10 +7,12 @@
+ fn main() {
+     let https = env::var("CARGO_FEATURE_HTTPS").is_ok();
+     let ssh = env::var("CARGO_FEATURE_SSH").is_ok();
++    let vendored = env::var("CARGO_FEATURE_VENDORED").is_ok();
+     let zlib_ng_compat = env::var("CARGO_FEATURE_ZLIB_NG_COMPAT").is_ok();
+ 
+     // To use zlib-ng in zlib-compat mode, we have to build libgit2 ourselves.
+-    if !zlib_ng_compat {
++    let try_to_use_system_libgit2 = !vendored && !zlib_ng_compat;
++    if try_to_use_system_libgit2 {
+         let mut cfg = pkg_config::Config::new();
+         if let Ok(lib) = cfg.atleast_version("1.1.0").probe("libgit2") {
+             for include in &lib.include_paths {
+@@ -20,6 +22,8 @@
+         }
+     }
+ 
++    println!("cargo:rustc-cfg=libgit2_vendored");
++
+     if !Path::new("libgit2/.git").exists() {
+         let _ = Command::new("git")
+             .args(&["submodule", "update", "--init", "libgit2"])
+@@ -107,6 +111,7 @@
+     features.push_str("#ifndef INCLUDE_features_h\n");
+     features.push_str("#define INCLUDE_features_h\n");
+     features.push_str("#define GIT_THREADS 1\n");
++    features.push_str("#define GIT_TRACE 1\n");
+ 
+     if !target.contains("android") {
+         features.push_str("#define GIT_USE_NSEC 1\n");
+diff -urN rustc-1.56.0-src/vendor/libgit2-sys/Cargo.toml rustc-1.56.0-src-git2/vendor/libgit2-sys/Cargo.toml
+--- rustc-1.56.0-src/vendor/libgit2-sys/Cargo.toml	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/libgit2-sys/Cargo.toml	2021-10-23 20:47:39.259122276 +0200
+@@ -13,7 +13,7 @@
+ [package]
+ edition = "2018"
+ name = "libgit2-sys"
+-version = "0.12.18+1.1.0"
++version = "0.12.24+1.3.0"
+ authors = ["Josh Triplett <josh@joshtriplett.org>", "Alex Crichton <alex@alexcrichton.com>"]
+ build = "build.rs"
+ links = "git2"
+diff -urN rustc-1.56.0-src/vendor/libgit2-sys/lib.rs rustc-1.56.0-src-git2/vendor/libgit2-sys/lib.rs
+--- rustc-1.56.0-src/vendor/libgit2-sys/lib.rs	2021-10-18 13:05:54.000000000 +0200
++++ rustc-1.56.0-src-git2/vendor/libgit2-sys/lib.rs	2021-10-23 20:47:39.259122276 +0200
+@@ -89,6 +89,8 @@
+ pub enum git_odb_stream {}
+ pub enum git_odb_object {}
+ pub enum git_worktree {}
++pub enum git_transaction {}
++pub enum git_mailmap {}
+ 
+ #[repr(C)]
+ pub struct git_revspec {
+@@ -351,6 +353,8 @@
+ )]
+ pub type git_transfer_progress = git_indexer_progress;
+ 
++pub type git_remote_ready_cb = Option<extern "C" fn(*mut git_remote, c_int, *mut c_void) -> c_int>;
++
+ #[repr(C)]
+ pub struct git_remote_callbacks {
+     pub version: c_uint,
+@@ -366,6 +370,7 @@
+     pub push_update_reference: git_push_update_reference_cb,
+     pub push_negotiation: git_push_negotiation,
+     pub transport: git_transport_cb,
++    pub remote_ready: git_remote_ready_cb,
+     pub payload: *mut c_void,
+     pub resolve_url: git_url_resolve_cb,
+ }
+@@ -1167,6 +1172,7 @@
+ pub const GIT_DIFF_INCLUDE_UNREADABLE: git_diff_option_t = 1 << 16;
+ pub const GIT_DIFF_INCLUDE_UNREADABLE_AS_UNTRACKED: git_diff_option_t = 1 << 17;
+ pub const GIT_DIFF_INDENT_HEURISTIC: git_diff_option_t = 1 << 18;
++pub const GIT_DIFF_IGNORE_BLANK_LINES: git_diff_option_t = 1 << 19;
+ pub const GIT_DIFF_FORCE_TEXT: git_diff_option_t = 1 << 20;
+ pub const GIT_DIFF_FORCE_BINARY: git_diff_option_t = 1 << 21;
+ pub const GIT_DIFF_IGNORE_WHITESPACE: git_diff_option_t = 1 << 22;
+@@ -1247,6 +1253,13 @@
+ pub const GIT_DIFF_FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER: u32 = 1 << 0;
+ 
+ #[repr(C)]
++pub struct git_diff_patchid_options {
++    pub version: c_uint,
++}
++
++pub const GIT_DIFF_PATCHID_OPTIONS_VERSION: c_uint = 1;
++
++#[repr(C)]
+ pub struct git_diff_binary {
+     pub contains_data: c_uint,
+     pub old_file: git_diff_binary_file,
+@@ -1477,6 +1490,8 @@
+         ) -> c_int,
+     >,
+ 
++    pub writemidx: Option<extern "C" fn(*mut git_odb_backend) -> c_int>,
++
+     pub freshen: Option<extern "C" fn(*mut git_odb_backend, *const git_oid) -> c_int>,
+ 
+     pub free: Option<extern "C" fn(*mut git_odb_backend)>,
+@@ -1736,6 +1751,20 @@
+     ) -> c_int,
+ >;
+ 
++pub type git_commit_create_cb = Option<
++    extern "C" fn(
++        *mut git_oid,
++        *const git_signature,
++        *const git_signature,
++        *const c_char,
++        *const c_char,
++        *const git_tree,
++        usize,
++        *const git_commit,
++        *mut c_void,
++    ) -> c_int,
++>;
++
+ pub const GIT_REBASE_NO_OPERATION: usize = usize::max_value();
+ 
+ #[repr(C)]
+@@ -1746,6 +1775,7 @@
+     pub rewrite_notes_ref: *const c_char,
+     pub merge_options: git_merge_options,
+     pub checkout_options: git_checkout_options,
++    pub commit_create_cb: git_commit_create_cb,
+     pub signing_cb: git_commit_signing_cb,
+     pub payload: *mut c_void,
+ }
+@@ -1880,6 +1910,63 @@
+ 
+ pub const GIT_WORKTREE_PRUNE_OPTIONS_VERSION: c_uint = 1;
+ 
++pub type git_repository_mergehead_foreach_cb =
++    Option<extern "C" fn(oid: *const git_oid, payload: *mut c_void) -> c_int>;
++
++pub type git_repository_fetchhead_foreach_cb = Option<
++    extern "C" fn(*const c_char, *const c_char, *const git_oid, c_uint, *mut c_void) -> c_int,
++>;
++
++git_enum! {
++    pub enum git_trace_level_t {
++        /* No tracing will be performed. */
++        GIT_TRACE_NONE = 0,
++
++        /* Severe errors that may impact the program's execution */
++        GIT_TRACE_FATAL = 1,
++
++        /* Errors that do not impact the program's execution */
++        GIT_TRACE_ERROR = 2,
++
++        /* Warnings that suggest abnormal data */
++        GIT_TRACE_WARN = 3,
++
++        /* Informational messages about program execution */
++        GIT_TRACE_INFO = 4,
++
++        /* Detailed data that allows for debugging */
++        GIT_TRACE_DEBUG = 5,
++
++        /* Exceptionally detailed debugging data */
++        GIT_TRACE_TRACE = 6,
++    }
++}
++
++pub type git_trace_cb = Option<extern "C" fn(level: git_trace_level_t, msg: *const c_char)>;
++
++git_enum! {
++    pub enum git_feature_t {
++        GIT_FEATURE_THREADS = 1 << 0,
++        GIT_FEATURE_HTTPS   = 1 << 1,
++        GIT_FEATURE_SSH     = 1 << 2,
++        GIT_FEATURE_NSEC    = 1 << 3,
++    }
++}
++
++#[repr(C)]
++pub struct git_message_trailer {
++    pub key: *const c_char,
++    pub value: *const c_char,
++}
++
++#[repr(C)]
++#[derive(Copy, Clone)]
++pub struct git_message_trailer_array {
++    pub trailers: *mut git_message_trailer,
++    pub count: size_t,
++    pub _trailer_block: *mut c_char,
++}
++
+ extern "C" {
+     // threads
+     pub fn git_libgit2_init() -> c_int;
+@@ -1972,6 +2059,16 @@
+         repo: *mut git_repository,
+         recurse_submodules: c_int,
+     ) -> c_int;
++    pub fn git_repository_mergehead_foreach(
++        repo: *mut git_repository,
++        callback: git_repository_mergehead_foreach_cb,
++        payload: *mut c_void,
++    ) -> c_int;
++    pub fn git_repository_fetchhead_foreach(
++        repo: *mut git_repository,
++        callback: git_repository_fetchhead_foreach_cb,
++        payload: *mut c_void,
++    ) -> c_int;
+     pub fn git_ignore_add_rule(repo: *mut git_repository, rules: *const c_char) -> c_int;
+     pub fn git_ignore_clear_internal_rules(repo: *mut git_repository) -> c_int;
+     pub fn git_ignore_path_is_ignored(
+@@ -2409,6 +2506,7 @@
+     ) -> c_int;
+     pub fn git_submodule_free(submodule: *mut git_submodule);
+     pub fn git_submodule_head_id(submodule: *mut git_submodule) -> *const git_oid;
++    pub fn git_submodule_ignore(submodule: *mut git_submodule) -> git_submodule_ignore_t;
+     pub fn git_submodule_index_id(submodule: *mut git_submodule) -> *const git_oid;
+     pub fn git_submodule_init(submodule: *mut git_submodule, overwrite: c_int) -> c_int;
+     pub fn git_submodule_location(status: *mut c_uint, submodule: *mut git_submodule) -> c_int;
+@@ -2589,7 +2687,17 @@
+ 
+     // commit
+     pub fn git_commit_author(commit: *const git_commit) -> *const git_signature;
++    pub fn git_commit_author_with_mailmap(
++        out: *mut *mut git_signature,
++        commit: *const git_commit,
++        mailmap: *const git_mailmap,
++    ) -> c_int;
+     pub fn git_commit_committer(commit: *const git_commit) -> *const git_signature;
++    pub fn git_commit_committer_with_mailmap(
++        out: *mut *mut git_signature,
++        commit: *const git_commit,
++        mailmap: *const git_mailmap,
++    ) -> c_int;
+     pub fn git_commit_free(commit: *mut git_commit);
+     pub fn git_commit_id(commit: *const git_commit) -> *const git_oid;
+     pub fn git_commit_lookup(
+@@ -2712,6 +2820,7 @@
+         force: c_int,
+     ) -> c_int;
+     pub fn git_branch_name(out: *mut *const c_char, branch: *const git_reference) -> c_int;
++    pub fn git_branch_name_is_valid(valid: *mut c_int, name: *const c_char) -> c_int;
+     pub fn git_branch_remote_name(
+         out: *mut git_buf,
+         repo: *mut git_repository,
+@@ -3434,6 +3543,16 @@
+         version: c_uint,
+     ) -> c_int;
+ 
++    pub fn git_diff_patchid(
++        out: *mut git_oid,
++        diff: *mut git_diff,
++        opts: *mut git_diff_patchid_options,
++    ) -> c_int;
++    pub fn git_diff_patchid_options_init(
++        opts: *mut git_diff_patchid_options,
++        version: c_uint,
++    ) -> c_int;
++
+     // patch
+     pub fn git_patch_from_diff(out: *mut *mut git_patch, diff: *mut git_diff, idx: size_t)
+         -> c_int;
+@@ -3573,6 +3692,13 @@
+         comment_char: c_char,
+     ) -> c_int;
+ 
++    pub fn git_message_trailers(
++        out: *mut git_message_trailer_array,
++        message: *const c_char,
++    ) -> c_int;
++
++    pub fn git_message_trailer_array_free(trailer: *mut git_message_trailer_array);
++
+     // packbuilder
+     pub fn git_packbuilder_new(out: *mut *mut git_packbuilder, repo: *mut git_repository) -> c_int;
+     pub fn git_packbuilder_set_threads(pb: *mut git_packbuilder, n: c_uint) -> c_uint;
+@@ -3853,6 +3979,9 @@
+         given_opts: *const git_revert_options,
+     ) -> c_int;
+ 
++    // Common
++    pub fn git_libgit2_version(major: *mut c_int, minor: *mut c_int, rev: *mut c_int) -> c_int;
++    pub fn git_libgit2_features() -> c_int;
+     pub fn git_libgit2_opts(option: c_int, ...) -> c_int;
+ 
+     // Worktrees
+@@ -3896,6 +4025,59 @@
+         wt: *mut git_worktree,
+         opts: *mut git_worktree_prune_options,
+     ) -> c_int;
++
++    // Ref transactions
++    pub fn git_transaction_new(out: *mut *mut git_transaction, repo: *mut git_repository) -> c_int;
++    pub fn git_transaction_lock_ref(tx: *mut git_transaction, refname: *const c_char) -> c_int;
++    pub fn git_transaction_set_target(
++        tx: *mut git_transaction,
++        refname: *const c_char,
++        target: *const git_oid,
++        sig: *const git_signature,
++        msg: *const c_char,
++    ) -> c_int;
++    pub fn git_transaction_set_symbolic_target(
++        tx: *mut git_transaction,
++        refname: *const c_char,
++        target: *const c_char,
++        sig: *const git_signature,
++        msg: *const c_char,
++    ) -> c_int;
++    pub fn git_transaction_set_reflog(
++        tx: *mut git_transaction,
++        refname: *const c_char,
++        reflog: *const git_reflog,
++    ) -> c_int;
++    pub fn git_transaction_remove(tx: *mut git_transaction, refname: *const c_char) -> c_int;
++    pub fn git_transaction_commit(tx: *mut git_transaction) -> c_int;
++    pub fn git_transaction_free(tx: *mut git_transaction);
++
++    // Mailmap
++    pub fn git_mailmap_new(out: *mut *mut git_mailmap) -> c_int;
++    pub fn git_mailmap_from_buffer(
++        out: *mut *mut git_mailmap,
++        buf: *const c_char,
++        len: size_t,
++    ) -> c_int;
++    pub fn git_mailmap_from_repository(
++        out: *mut *mut git_mailmap,
++        repo: *mut git_repository,
++    ) -> c_int;
++    pub fn git_mailmap_free(mm: *mut git_mailmap);
++    pub fn git_mailmap_resolve_signature(
++        out: *mut *mut git_signature,
++        mm: *const git_mailmap,
++        sig: *const git_signature,
++    ) -> c_int;
++    pub fn git_mailmap_add_entry(
++        mm: *mut git_mailmap,
++        real_name: *const c_char,
++        real_email: *const c_char,
++        replace_name: *const c_char,
++        replace_email: *const c_char,
++    ) -> c_int;
++
++    pub fn git_trace_set(level: git_trace_level_t, cb: git_trace_cb) -> c_int;
+ }
+ 
+ pub fn init() {
+@@ -3944,3 +4126,8 @@
+ 
+ #[cfg(not(feature = "ssh"))]
+ fn ssh_init() {}
++
++#[doc(hidden)]
++pub fn vendored() -> bool {
++    cfg!(libgit2_vendored)
++}
