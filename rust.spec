@@ -19,12 +19,12 @@
 %define		rustc_package	rustc-%{channel}-src
 %endif
 
-# To bootstrap from scratch, set the channel and date from src/stage0.txt
+# To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.55.0
-%define		bootstrap_cargo	1.55.0
-%define		bootstrap_date	2021-09-09
+%define		bootstrap_rust	1.56.1
+%define		bootstrap_cargo	1.56.1
+%define		bootstrap_date	2021-11-01
 
 %ifarch x32
 %define		with_cross	1
@@ -37,24 +37,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.56.1
+Version:	1.57.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	e797d2946bbc88f378b509fb9e5b0f8f
+# Source0-md5:	0c7d63d9c456c4ec0f95bb6bb729c13e
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	59b0a04436f96250a307086b6fc2ce34
+# Source1-md5:	9c12561dff9debea38e4b93f881ae2bb
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	693c87cf2fc1a41169f55fdbf8426a2e
+# Source2-md5:	947bd95b9c8a9943d43af1bbabf1a8e1
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	475f762804d4ad8695029a70f8b93a6d
+# Source3-md5:	64d78bc0747c975fe0451e4fd5b8ac4b
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	56a568e97e7a5c3cb80569ab84f4657b
+# Source4-md5:	a13652efd627b5e5f8bd278f378acea4
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	991a439bcdcbcf1b2bbe55ce9e90404f
-Patch0:		libgit2.patch
+# Source5-md5:	3fb69008b1b0141d464a4a48317709b3
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -62,6 +61,7 @@ BuildRequires:	curl
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
 BuildRequires:	python >= 1:2.7
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
 BuildRequires:	curl-devel
@@ -330,7 +330,6 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
