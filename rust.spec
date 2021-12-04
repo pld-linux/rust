@@ -60,7 +60,8 @@ BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
-BuildRequires:	python >= 1:2.7
+BuildRequires:	python3
+BuildRequires:	python3-modules
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
@@ -176,7 +177,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 	x_py() { \
 		local cmd="$1"; \
 		shift; \
-		%{?__jobs:CARGO_BUILD_JOBS=%__jobs }./x.py "$cmd" %{?__jobs:-j %__jobs} "$@"; \
+		%{?__jobs:CARGO_BUILD_JOBS=%__jobs }%{__python3} ./x.py "$cmd" %{?__jobs:-j %__jobs} "$@"; \
 	}; x_py }
 
 
