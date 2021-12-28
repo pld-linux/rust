@@ -1,5 +1,4 @@
 # TODO
-# - unpackaged %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
 # - consider a rust-std package containing .../rustlib/$target
 #   This might allow multilib cross-compilation to work naturally.
 # - package additional tools
@@ -476,6 +475,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md
+%attr(755,root,root) %{_bindir}/rust-demangler
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
@@ -493,6 +493,8 @@ rm -rf $RPM_BUILD_ROOT
 %files std
 %defattr(644,root,root,755)
 %dir %{rustlibdir}/%{rust_triple}
+%dir %{rustlibdir}/%{rust_triple}/bin
+%attr(755,root,root) %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
 %dir %{rustlibdir}/%{rust_triple}/lib
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
 %{rustlibdir}/%{rust_triple}/lib/*.rlib
