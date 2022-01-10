@@ -143,6 +143,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		rust_triple		armv7-unknown-linux-gnueabihf
 %define		rust_host_triple	%{rust_triple}
 %define		rust_bootstrap_triple	%{rust_triple}
+%define		rust_suppl_targets	thumbv7neon-unknown-linux-gnueabihf
 %else
 %define		rust_triple		%{_target_cpu}-unknown-linux-gnu
 %define		rust_host_triple	%{rust_triple}
