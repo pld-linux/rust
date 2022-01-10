@@ -151,6 +151,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %endif
 %endif
 
+%define		rust_targets		%rust_triple %{?rust_suppl_targets}
+
 %if %{without bootstrap}
 %define		local_rust_root	%{_prefix}
 %else
@@ -390,7 +392,7 @@ export AR="%{__ar}"
 %configure \
 	--build=%{rust_bootstrap_triple} \
 	--host=%{rust_host_triple} \
-	--target=%{rust_triple} \
+	--target="%(echo %rust_targets | tr ' ' ,)" \
 	--libdir=%{common_libdir} \
 	--disable-codegen-tests \
 	--disable-debuginfo-lines \
@@ -435,12 +437,14 @@ find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
 # The libdir libraries are identical to those under rustlib/.  It's easier on
 # library loading if we keep them in libdir, but we do need them in rustlib/
 # to support dynamic linking for compiler plugins, so we'll symlink.
-for l in libstd libtest ; do
-	liblib=$RPM_BUILD_ROOT%{_libdir}/${l}-*.so
-	libstd=$RPM_BUILD_ROOT%{rustlibdir}/%{rust_triple}/lib/${l}-*.so
-	if [ "$(basename ${liblib})" = "$(basename ${libstd})" ]; then
-		ln -vfsr ${libstd} $RPM_BUILD_ROOT%{_libdir}/
-	fi
+for rust_target in %rust_targets; do
+	for l in libstd libtest ; do
+		liblib=$RPM_BUILD_ROOT%{_libdir}/${l}-*.so
+		libstd=$RPM_BUILD_ROOT%{rustlibdir}/${rust_target}/lib/${l}-*.so
+		if [ "$(basename ${liblib})" = "$(basename ${libstd})" ]; then
+			ln -vfsr ${libstd} $RPM_BUILD_ROOT%{_libdir}/
+		fi
+	done
 done
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
@@ -491,16 +495,24 @@ rm -rf $RPM_BUILD_ROOT
 
 %files analysis
 %defattr(644,root,root,755)
-%{rustlibdir}/%{rust_triple}/analysis
+%(for rust_target in %rust_targets; do
+echo "%{rustlibdir}/$rust_target/analysis"
+done
+)
 
 %files std
 %defattr(644,root,root,755)
-%dir %{rustlibdir}/%{rust_triple}
+%(for rust_target in %rust_targets; do
+cat <<EOF
+%dir %{rustlibdir}/$rust_target
+%dir %{rustlibdir}/$rust_target/lib
+%attr(755,root,root) %{rustlibdir}/$rust_target/lib/*.so
+%{rustlibdir}/$rust_target/lib/*.rlib
+EOF
+done
+)
 %dir %{rustlibdir}/%{rust_triple}/bin
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
-%dir %{rustlibdir}/%{rust_triple}/lib
-%attr(755,root,root) %{rustlibdir}/%{rust_triple}/lib/*.so
-%{rustlibdir}/%{rust_triple}/lib/*.rlib
 
 %files debugger-common
 %defattr(644,root,root,755)
