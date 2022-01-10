@@ -384,6 +384,9 @@ find vendor -name .cargo-checksum.json \
 	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
 
 %build
+export CC="%{__cc}"
+export CXX="%{__cxx}"
+export AR="%{__ar}"
 %configure \
 	--build=%{rust_bootstrap_triple} \
 	--host=%{rust_host_triple} \
