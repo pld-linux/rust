@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.58.1
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -513,7 +513,9 @@ EOF
 done
 )
 %dir %{rustlibdir}/%{rust_triple}/bin
+%ifnarch x32
 %attr(755,root,root) %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
+%endif
 
 %files debugger-common
 %defattr(644,root,root,755)
