@@ -422,6 +422,9 @@ export RUST_BACKTRACE=full
 %install
 rm -rf $RPM_BUILD_ROOT
 
+export CC="%{__cc}"
+export CXX="%{__cxx}"
+export AR="%{__ar}"
 export DESTDIR=$RPM_BUILD_ROOT
 %x_py install
 
