@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.58.1
-Release:	3
+Release:	4
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -118,6 +118,7 @@ Requires:	gcc
 Requires:	%{name}-std%{?_isa} = %{version}-%{release}
 %ifarch x32
 Requires:	%{name}-std(x86-64) = %{version}-%{release}
+Requires:	gcc-multilib-64
 %endif
 Obsoletes:	rust-analyzer < 1.53.0
 # Only x86_64 and i686 are Tier 1 platforms at this time.
