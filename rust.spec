@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.57.0
+%define		bootstrap_rust	1.58.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2021-12-02
+%define		bootstrap_date	2022-01-13
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.58.1
-Release:	4
+Version:	1.59.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	835e82d659ea4fc19fd1f0888de01ad8
+# Source0-md5:	cfa654dd0cc79654501177cd56031845
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	0f58dba84eba1a5ab8ec51f52d95f453
+# Source1-md5:	30334d7c7c41ed09ba07baf809ae47d8
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	d75c7b995614c6ffa8df4409e64a13d6
+# Source2-md5:	1cb2f260340caac808562381f780b82e
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	7ba95696643b96b765b7ef5179cba8a4
+# Source3-md5:	20679e4d32743477c34433cfee29c65e
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	50ab0a0c6f4dc386e09616778e92a934
+# Source4-md5:	0a36e1fb135887c919f02324b1109ab7
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	d79e80ff8677da71154b326f51ea39ee
+# Source5-md5:	aa1412ed96b2ede65c8aea4fa9e0968f
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -516,10 +516,6 @@ cat <<EOF
 EOF
 done
 )
-%ifnarch x32
-%dir %{rustlibdir}/%{rust_triple}/bin
-%attr(755,root,root) %{rustlibdir}/%{rust_triple}/bin/rust-llvm-dwp
-%endif
 
 %files debugger-common
 %defattr(644,root,root,755)
