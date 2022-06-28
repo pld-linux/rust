@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.61.0
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -65,7 +65,7 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
 BuildRequires:	curl-devel
-BuildRequires:	libgit2-devel >= 1.3.0
+BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
 BuildRequires:	llvm >= 12.0
@@ -88,7 +88,7 @@ BuildRequires:	glibc-devel(x86-x32)
 # building on x86_64 host with --target x32-pld-linux
 BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
-BuildRequires:	libgit2-devel >= 1.3.0
+BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 12.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -98,8 +98,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	curl-devel(x86-64)
 BuildRequires:	curl-devel(x86-x32)
 BuildRequires:	gcc-multilib-64
-BuildRequires:	libgit2-devel(x86-64) >= 1.3.0
-BuildRequires:	libgit2-devel(x86-x32) >= 1.3.0
+BuildRequires:	libgit2-devel(x86-64) >= 1.4.0
+BuildRequires:	libgit2-devel(x86-x32) >= 1.4.0
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
 BuildRequires:	llvm-devel(x86-64) >= 12.0
