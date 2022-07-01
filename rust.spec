@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.60.0
+%define		bootstrap_rust	1.61.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2022-04-07
+%define		bootstrap_date	2022-05-19
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.61.0
-Release:	2
+Version:	1.62.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	ba939433d8926a1bc8956acaa6dedf06
+# Source0-md5:	3a4b30ad7dde630d4f69b8011bcf8c52
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	c8d7fead7bb02d9a0ff886d7f728aa73
+# Source1-md5:	6c2227cb2e8a2d86d93aeec4cd342bff
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	cfdb78b2a27fef9bc0154ef9e95af3b8
+# Source2-md5:	160592aa60ef07721dd78fc09c382c35
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	e7f442e50e4f2537c8a0f1cf3c06f432
+# Source3-md5:	ea2b0213459466161d8eec4877825e75
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	c1f4a41616406af908201ca1515110b2
+# Source4-md5:	397fb4e209cc1e53a4d8bf0587c29eed
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	e4eaace7266dddc8ecf68d9798486e1e
+# Source5-md5:	a11c7147725e51450d13ca6f29f5c944
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
