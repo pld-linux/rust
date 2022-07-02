@@ -74,6 +74,7 @@ BuildRequires:	llvm-devel >= 12.0
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
+BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
 %endif
 %if %{without bootstrap}
@@ -92,6 +93,7 @@ BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 12.0}
 BuildRequires:	openssl-devel >= 1.0.1
+BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
 %else
 # building x86_64-hosted crosscompiler on x32 host
@@ -107,6 +109,8 @@ BuildRequires:	llvm-devel(x86-x32) >= 12.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
+BuildRequires:	xz-devel(x86-64)
+BuildRequires:	xz-devel(x86-x32)
 BuildRequires:	zlib-devel(x86-64)
 BuildRequires:	zlib-devel(x86-x32)
 %endif
