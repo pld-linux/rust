@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.63.0
+%define		bootstrap_rust	1.64.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2022-08-11
+%define		bootstrap_date	2022-09-22
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.64.0
-Release:	3
+Version:	1.65.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	e77ac3a786d013604061b17f99dd9b27
+# Source0-md5:	e8588b74b238f0f2f2701217cfd449e1
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	fccd4c3722193f8753d2918260f8c770
+# Source1-md5:	2c4c8116a0121d260591c4f4e9a9e1a8
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	6802c415076b992b3122073e258aba80
+# Source2-md5:	810702367f20ea89a62096df07d8e88d
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	a38786367b5950df6e0da112df405aef
+# Source3-md5:	c335b36395834b5e532a8d3247cc3cd4
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	6bcdb6c0c6378ada390180dbc0530995
+# Source4-md5:	1e2a697052328304af093875255f2591
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	4877c64e55ae70eb4d0f93b262b37a1e
+# Source5-md5:	25b5bb6f3b2db5b876bd379bf3d79867
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -68,8 +68,8 @@ BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
-BuildRequires:	llvm >= 12.0
-BuildRequires:	llvm-devel >= 12.0
+BuildRequires:	llvm >= 13.0
+BuildRequires:	llvm-devel >= 13.0
 %endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
@@ -91,7 +91,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 12.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 13.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -104,8 +104,8 @@ BuildRequires:	libgit2-devel(x86-64) >= 1.4.0
 BuildRequires:	libgit2-devel(x86-x32) >= 1.4.0
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
-BuildRequires:	llvm-devel(x86-64) >= 12.0
-BuildRequires:	llvm-devel(x86-x32) >= 12.0
+BuildRequires:	llvm-devel(x86-64) >= 13.0
+BuildRequires:	llvm-devel(x86-x32) >= 13.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
@@ -224,10 +224,11 @@ Standard library for Rust.
 Standardowa biblioteka Rusta.
 
 %package analyzer
-Summary:    Implementation of Language Server Protocol for Rust
-Summary(pl.UTF-8):    Implementacja Language Server Protocol dla Rusta
-Group:        Development/Tools
-Requires:    %{name} = %{version}-%{release}
+Summary:	Implementation of Language Server Protocol for Rust
+Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	rust-rls < 1.65.0
 
 %description analyzer
 Implementation of Language Server Protocol for Rust.
@@ -279,19 +280,6 @@ debugging of Rust programs.
 %description lldb -l pl.UTF-8
 Ten pakiet zawiera skrypt rust-lldb, pozwalający na łatwiejsze
 odpluskwianie programów w języku Rust.
-
-%package rls
-Summary:	Rust Language Server for IDE integration
-Summary(pl.UTF-8):	Rust Language Server do integracji z IDE
-Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
-Requires:	%{name}-analysis = %{version}-%{release}
-
-%description rls
-Rust Language Server for IDE integration.
-
-%description rls -l pl.UTF-8
-Rust Language Server do integracji z IDE.
 
 %package doc
 Summary:	Documentation for Rust
@@ -555,10 +543,6 @@ done
 %attr(755,root,root) %{_bindir}/rust-gdb
 %attr(755,root,root) %{_bindir}/rust-gdbgui
 %{_datadir}/%{name}/etc/gdb_*.py*
-
-%files rls
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rls
 
 %files doc
 %defattr(644,root,root,755)
