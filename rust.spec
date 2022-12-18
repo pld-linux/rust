@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.64.0
+%define		bootstrap_rust	1.65.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2022-09-22
+%define		bootstrap_date	2022-11-03
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,24 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.65.0
+Version:	1.66.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	e8588b74b238f0f2f2701217cfd449e1
+# Source0-md5:	b519b711f36f1d2b4e23cd5c28bb16d1
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	2c4c8116a0121d260591c4f4e9a9e1a8
+# Source1-md5:	74858f078f2e16ccf2a0b5ce2cb08557
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	810702367f20ea89a62096df07d8e88d
+# Source2-md5:	d5819e8f1fed42b8c4e7e996da7fba4f
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	c335b36395834b5e532a8d3247cc3cd4
+# Source3-md5:	81f3f09ab36e7b800775024d277e27fd
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	1e2a697052328304af093875255f2591
+# Source4-md5:	7bf66e055741fddaf3f82efe6eeb83b7
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	25b5bb6f3b2db5b876bd379bf3d79867
+# Source5-md5:	a4bbebeed5c0d2f79f362dd7d3619769
+Patch0:		no-install-miri.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -337,6 +338,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
