@@ -58,6 +58,9 @@ URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
 BuildRequires:	curl
+%ifarch %{arm} %{mips32} %{ppc}
+BuildRequires:	libatomic-devel
+%endif
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
 BuildRequires:	python3
