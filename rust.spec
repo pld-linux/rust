@@ -318,6 +318,7 @@ Summary(pl.UTF-8):	Bashowe dopełnianie parametrów polecenia cargo
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
 Requires:	bash-completion
+BuildArch:	noarch
 
 %description -n bash-completion-cargo
 Bash completion for cargo command.
