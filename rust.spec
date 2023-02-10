@@ -53,7 +53,6 @@ Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source4-md5:	3ad4208d29ca809073b43f96767e8b32
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
 # Source5-md5:	f091919a1e13f71db429b3af957bf361
-Patch0:		no-install-miri.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -341,7 +340,6 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
