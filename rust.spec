@@ -333,6 +333,7 @@ Summary(pl.UTF-8):	Dopełnianie parametrów polecenia cargo w powłoce Zsh
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
 Requires:	zsh
+BuildArch:	noarch
 
 %description -n zsh-completion-cargo
 Zsh completion for cargo command.
