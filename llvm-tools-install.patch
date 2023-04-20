@@ -1,39 +1,31 @@
-From 23a34c18f7b2ce8b20fed717ef48e2be1776246b Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Martin=20Kr=C3=B6ning?= <mkroening@posteo.net>
-Date: Sun, 11 Dec 2022 12:19:17 +0100
-Subject: [PATCH] bootstrap: Allow installing llvm-tools
+From 97740a648f57e24c45f641f2827598b26a2bf661 Mon Sep 17 00:00:00 2001
+From: NagaChaitanya Vellanki <pnagato@protonmail.com>
+Date: Fri, 17 Mar 2023 02:33:31 -0700
+Subject: [PATCH] Check for llvm-tools before install
 
 ---
- src/bootstrap/builder.rs | 1 +
- src/bootstrap/install.rs | 6 ++++++
- 2 files changed, 7 insertions(+)
+ src/bootstrap/install.rs | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/src/bootstrap/builder.rs b/src/bootstrap/builder.rs
-index 8ee6d49da8f0e..3f551dc119b5d 100644
---- a/src/bootstrap/builder.rs
-+++ b/src/bootstrap/builder.rs
-@@ -744,6 +744,7 @@ impl<'a> Builder<'a> {
-                 install::RustDemangler,
-                 install::Clippy,
-                 install::Miri,
-+                install::LlvmTools,
-                 install::Analysis,
-                 install::Src,
-                 install::Rustc
 diff --git a/src/bootstrap/install.rs b/src/bootstrap/install.rs
-index 7672b7c913594..c53d0d7e4cb7c 100644
+index ac3843c3344eb..42d895a3413fb 100644
 --- a/src/bootstrap/install.rs
 +++ b/src/bootstrap/install.rs
-@@ -205,6 +205,12 @@ install!((self, builder, _config),
-             );
+@@ -210,10 +210,13 @@ install!((self, builder, _config),
          }
      };
-+    LlvmTools, alias = "llvm-tools", Self::should_build(_config), only_hosts: true, {
-+        let tarball = builder
-+            .ensure(dist::LlvmTools { target: self.target })
-+            .expect("missing llvm-tools");
-+        install_sh(builder, "llvm-tools", self.compiler.stage, Some(self.target), &tarball);
-+    };
+     LlvmTools, alias = "llvm-tools", Self::should_build(_config), only_hosts: true, {
+-        let tarball = builder
+-            .ensure(dist::LlvmTools { target: self.target })
+-            .expect("missing llvm-tools");
+-        install_sh(builder, "llvm-tools", self.compiler.stage, Some(self.target), &tarball);
++        if let Some(tarball) = builder.ensure(dist::LlvmTools { target: self.target }) {
++            install_sh(builder, "llvm-tools", self.compiler.stage, Some(self.target), &tarball);
++        } else {
++            builder.info(
++                &format!("skipping llvm-tools stage{} ({}): external LLVM", self.compiler.stage, self.target),
++            );
++        }
+     };
      Rustfmt, alias = "rustfmt", Self::should_build(_config), only_hosts: true, {
          if let Some(tarball) = builder.ensure(dist::Rustfmt {
-             compiler: self.compiler,

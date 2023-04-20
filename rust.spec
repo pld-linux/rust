@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.67.1
+%define		bootstrap_rust	1.68.2
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2023-02-09
+%define		bootstrap_date	2023-03-28
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.68.2
+Version:	1.69.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	df91d58551c09e6bf5d32e9bf3c0d802
+# Source0-md5:	2fac6c46422e743f5f05287e89e72f22
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	800e693e0ac317755f8f0e19269540db
+# Source1-md5:	b82ae74e630a849d6675b93ddf0ed6ca
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	65d86e2c17b1a09df55860a1d8dec9d4
+# Source2-md5:	a2affbb1e831228c71f972a270717ce3
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	127fdf3e824e23808a1fa6a8e92bcf56
+# Source3-md5:	489073dd8a8380c28a570bf70c9fbd6e
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	70acb1412ca21e288105d86a7d5b975b
+# Source4-md5:	bb43d3fca2893f2de0b892e0f4a8fdb3
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	1d917abdc484fd34c1471a931349a2c5
+# Source5-md5:	5691b194302d66b40c3e4eee0eeb1813
 Patch0:		llvm-tools-install.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -72,8 +72,8 @@ BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
-BuildRequires:	llvm >= 13.0
-BuildRequires:	llvm-devel >= 13.0
+BuildRequires:	llvm >= 14.0
+BuildRequires:	llvm-devel >= 14.0
 %endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
@@ -95,7 +95,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel >= 1.4.0
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 13.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 14.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -108,8 +108,8 @@ BuildRequires:	libgit2-devel(x86-64) >= 1.4.0
 BuildRequires:	libgit2-devel(x86-x32) >= 1.4.0
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
-BuildRequires:	llvm-devel(x86-64) >= 13.0
-BuildRequires:	llvm-devel(x86-x32) >= 13.0
+BuildRequires:	llvm-devel(x86-64) >= 14.0
+BuildRequires:	llvm-devel(x86-x32) >= 14.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
@@ -128,6 +128,7 @@ Requires:	%{name}-std%{?_isa} = %{version}-%{release}
 Requires:	%{name}-std(x86-64) = %{version}-%{release}
 Requires:	gcc-multilib-64
 %endif
+Obsoletes:	rust-analysis < 1.69.0
 # Only x86_64 and i686 are Tier 1 platforms at this time.
 # x32 is Tier 2, only rust-std is available (no rustc or cargo).
 # https://doc.rust-lang.org/nightly/rustc/platform-support.html
@@ -202,18 +203,6 @@ documentation generator.
 Rust to systemowy język programowania działający bardzo szybko,
 zapobiegający naruszeniom ochrony pamięci i gwarantujący
 bezpieczną wielowątkowość.
-
-%package analysis
-Summary:	Metadata about the standard library
-Summary(pl.UTF-8):	Metadane o standardowej bibliotece
-Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
-
-%description analysis
-Metadata about the standard library.
-
-%description analysis -l pl.UTF-8
-Metadane o standardowej bibliotece.
 
 %package std
 Summary:	Standard library for Rust
@@ -343,7 +332,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1 -R
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -508,13 +497,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
-
-%files analysis
-%defattr(644,root,root,755)
-%(for rust_target in %rust_targets; do
-echo "%{rustlibdir}/$rust_target/analysis"
-done
-)
 
 %files std
 %defattr(644,root,root,755)
