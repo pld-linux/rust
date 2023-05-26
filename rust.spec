@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.69.0
-Release:	2
+Release:	3
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -54,6 +54,7 @@ Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
 # Source5-md5:	5691b194302d66b40c3e4eee0eeb1813
 Patch0:		llvm-tools-install.patch
+Patch1:		111167.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -333,6 +334,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 %prep
 %setup -q -n %{rustc_package}
 %patch0 -p1
+%patch1 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
