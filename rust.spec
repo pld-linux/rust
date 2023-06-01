@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.68.2
+%define		bootstrap_rust	1.69.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2023-03-28
+%define		bootstrap_date	2023-04-20
 
 %ifarch x32
 %define		with_cross	1
@@ -36,25 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.69.0
-Release:	3
+Version:	1.70.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	2fac6c46422e743f5f05287e89e72f22
+# Source0-md5:	165792a4266021589b2d6061f208755f
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	b82ae74e630a849d6675b93ddf0ed6ca
+# Source1-md5:	f64b22de708c5a4e6ca2a0b549b9c438
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	a2affbb1e831228c71f972a270717ce3
+# Source2-md5:	0abd3a7776a84e4a631df506ba6b7b8a
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	489073dd8a8380c28a570bf70c9fbd6e
+# Source3-md5:	75bcdcf347a5195d1c20aa176734fb05
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	bb43d3fca2893f2de0b892e0f4a8fdb3
+# Source4-md5:	58660f3595f67f0da91abaf209298588
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	5691b194302d66b40c3e4eee0eeb1813
-Patch0:		llvm-tools-install.patch
-Patch1:		111167.patch
+# Source5-md5:	bf50136eba1bbaae5002f728efa637aa
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -333,8 +331,6 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
-%patch1 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
