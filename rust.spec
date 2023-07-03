@@ -374,7 +374,7 @@ sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 suffix="%(echo "%{_libexecdir}" | %{__sed} -e 's,^%{_prefix}/,,')"
 %{__sed} -i -e 's,"libexec","'${suffix}'",' \
 	src/bootstrap/dist.rs \
-	src/tools/cargo/src/cargo/ops/registry/auth.rs
+	src/tools/cargo/src/cargo/util/auth.rs
 %{__sed} -i -e 's,libexec/,'${suffix}'/,' src/tools/cargo/tests/testsuite/credential_process.rs
 %endif
 
