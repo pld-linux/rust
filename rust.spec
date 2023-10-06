@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.71.0
+%define		bootstrap_rust	1.72.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2023-07-13
+%define		bootstrap_date	2023-08-24
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.72.1
+Version:	1.73.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	f83250908047be24860d40dd5f6ddd05
+# Source0-md5:	2b5fd1623a6591c3e31eaec674ccc81c
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	eea044524488923b1bd30ab130c50821
+# Source1-md5:	9607a21044d111c5c40b0febdcefec19
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	10b3fd5d34692087e30c42b61afb6359
+# Source2-md5:	7f37eec4326ada8325eae7abfc16d6a9
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	d73a389253563fdb9605077a6cb69267
+# Source3-md5:	a0ff7728be371c1a4bed093c5b8641ac
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	a0c5131a76e4373fe62b39381069c828
+# Source4-md5:	c767b0183d5d1d78c7ccc41484e64c99
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	3dfaf6c55a6dbdc9c7e753b464e79c81
+# Source5-md5:	bd6f0fa4eb95c9fef39db034e2817c27
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -71,8 +71,8 @@ BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.6.4
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
-BuildRequires:	llvm >= 14.0
-BuildRequires:	llvm-devel >= 14.0
+BuildRequires:	llvm >= 15.0
+BuildRequires:	llvm-devel >= 15.0
 %endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
@@ -94,7 +94,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel >= 1.6.4
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 14.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 15.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -107,8 +107,8 @@ BuildRequires:	libgit2-devel(x86-64) >= 1.6.4
 BuildRequires:	libgit2-devel(x86-x32) >= 1.6.4
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
-BuildRequires:	llvm-devel(x86-64) >= 14.0
-BuildRequires:	llvm-devel(x86-x32) >= 14.0
+BuildRequires:	llvm-devel(x86-64) >= 15.0
+BuildRequires:	llvm-devel(x86-x32) >= 15.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
@@ -542,7 +542,6 @@ done
 %attr(755,root,root) %{_bindir}/cargo-clippy
 %attr(755,root,root) %{_bindir}/cargo-fmt
 %attr(755,root,root) %{_bindir}/clippy-driver
-%attr(755,root,root) %{_libexecdir}/cargo-credential-1password
 %{_mandir}/man1/cargo*.1*
 %dir %{_datadir}/cargo
 %dir %{_datadir}/cargo/registry
