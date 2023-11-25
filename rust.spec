@@ -373,9 +373,7 @@ sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 %if "%{_libexecdir}" != "%{_prefix}/libexec"
 suffix="%(echo "%{_libexecdir}" | %{__sed} -e 's,^%{_prefix}/,,')"
 %{__sed} -i -e 's,"libexec","'${suffix}'",' \
-	src/bootstrap/dist.rs \
-	src/tools/cargo/src/cargo/util/auth.rs
-%{__sed} -i -e 's,libexec/,'${suffix}'/,' src/tools/cargo/tests/testsuite/credential_process.rs
+	src/bootstrap/dist.rs
 %endif
 
 # The configure macro will modify some autoconf-related files, which upsets
