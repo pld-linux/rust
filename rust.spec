@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.75.0
+%define		bootstrap_rust	1.76.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2023-12-28
+%define		bootstrap_date	2024-02-08
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.76.0
+Version:	1.77.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	14a8ac688b461a3127090cad513aee05
+# Source0-md5:	7df442945fb2e32cbccd45a7faa3a5e1
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	4757872b8ecc24a47a2d85ec0221cbda
+# Source1-md5:	5f9b4a89f2123e044cc46c7659dfc4fb
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	6fad7d48f9de8b6961d9986a91727677
+# Source2-md5:	fe76aea1be1894a9b48e1bea614038c6
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	32ee98d9dd4315923a703008a035938b
+# Source3-md5:	b4741f9574bd432e2370c91d56d17ae0
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	cc02f41ef88527ae09066f6487e0bafd
+# Source4-md5:	de71c41731df9187d4cca2f61359be28
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	93cb191560039e61b8a007e3d77158cb
+# Source5-md5:	80c933da93013752d852f6f1280d7e12
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -68,7 +68,7 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
 BuildRequires:	curl-devel
-BuildRequires:	libgit2-devel >= 1.7.1
+BuildRequires:	libgit2-devel >= 1.7.2
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
 BuildRequires:	llvm >= 16.0
@@ -92,7 +92,7 @@ BuildRequires:	glibc-devel(x86-x32)
 # building on x86_64 host with --target x32-pld-linux
 BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
-BuildRequires:	libgit2-devel >= 1.7.1
+BuildRequires:	libgit2-devel >= 1.7.2
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 16.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -103,8 +103,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	curl-devel(x86-64)
 BuildRequires:	curl-devel(x86-x32)
 BuildRequires:	gcc-multilib-64
-BuildRequires:	libgit2-devel(x86-64) >= 1.7.1
-BuildRequires:	libgit2-devel(x86-x32) >= 1.7.1
+BuildRequires:	libgit2-devel(x86-64) >= 1.7.2
+BuildRequires:	libgit2-devel(x86-x32) >= 1.7.2
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
 BuildRequires:	llvm-devel(x86-64) >= 16.0
@@ -409,7 +409,8 @@ export AR="%{__ar}"
 	--local-rust-root=%{local_rust_root} \
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel} \
-	--set=llvm.static-libstdcpp=false
+	--set=llvm.static-libstdcpp=false \
+	--set=build.optimized-compiler-builtins=false
 
 export RUST_BACKTRACE=full
 %x_py dist --verbose
