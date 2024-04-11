@@ -373,7 +373,10 @@ sed -i -e 's#DIRECTORY=".*"#DIRECTORY="%{_datadir}/%{name}/etc"#' \
 %if "%{_libexecdir}" != "%{_prefix}/libexec"
 suffix="%(echo "%{_libexecdir}" | %{__sed} -e 's,^%{_prefix}/,,')"
 %{__sed} -i -e 's,"libexec","'${suffix}'",' \
-	src/bootstrap/dist.rs
+	src/bootstrap/src/core/download.rs \
+	src/bootstrap/src/core/build_steps/dist.rs \
+	src/bootstrap/src/core/build_steps/tool.rs
+%{__sed} -i -e "s,/libexec/,/${suffix}/," src/bootstrap/bootstrap.py
 %endif
 
 # The configure macro will modify some autoconf-related files, which upsets
