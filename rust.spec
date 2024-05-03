@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.76.0
+%define		bootstrap_rust	1.77.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-02-08
+%define		bootstrap_date	2024-03-21
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.77.0
+Version:	1.78.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	7df442945fb2e32cbccd45a7faa3a5e1
+# Source0-md5:	ce1c084daec811aac07951cc954e7809
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	5f9b4a89f2123e044cc46c7659dfc4fb
+# Source1-md5:	f43ac158610b581a3eb1df90a0f2325c
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	fe76aea1be1894a9b48e1bea614038c6
+# Source2-md5:	9c6f2bdbd69660494db2f0dd6c1bc4bc
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	b4741f9574bd432e2370c91d56d17ae0
+# Source3-md5:	850f45e4f4b295612c5ffa754a9947d2
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	de71c41731df9187d4cca2f61359be28
+# Source4-md5:	4cdd14f0e197badb9cec70c2f2bc2f88
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	80c933da93013752d852f6f1280d7e12
+# Source5-md5:	e3d5e2e169cfeea09fc00685b7c88705
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -459,12 +459,14 @@ find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
 # -- should we find a way to preserve debuginfo?
 
 # Remove unwanted documentation files (we already package them)
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/README.md
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/COPYRIGHT
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-APACHE
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/%{name}/LICENSE-MIT
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/README.md
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/COPYRIGHT
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/LICENSE-APACHE
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/LICENSE-MIT
 
 # Sanitize the HTML documentation
+install -d $RPM_BUILD_ROOT%{_docdir}/%{name}
+%{__mv} $RPM_BUILD_ROOT%{_docdir}/{docs,%{name}}/html
 find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -empty -delete
 find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 
