@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0.json
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.77.0
+%define		bootstrap_rust	1.78.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-03-21
+%define		bootstrap_date	2024-05-02
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.78.0
-Release:	2
+Version:	1.79.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	ce1c084daec811aac07951cc954e7809
+# Source0-md5:	1a00ff85d5fdb48ddbe534dcf1f6183f
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	f43ac158610b581a3eb1df90a0f2325c
+# Source1-md5:	8e965af558c5433662eb8f130e7a32c8
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	9c6f2bdbd69660494db2f0dd6c1bc4bc
+# Source2-md5:	de9d3ca6d6ea17f3d27876e30f154edb
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	850f45e4f4b295612c5ffa754a9947d2
+# Source3-md5:	f715b5459daf5ef0309949efa4248932
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	4cdd14f0e197badb9cec70c2f2bc2f88
+# Source4-md5:	a6e361ffdc193b6e7067de8075743a37
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	e3d5e2e169cfeea09fc00685b7c88705
+# Source5-md5:	d05a5be7e5218093dbc8002d36af172b
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -71,8 +71,8 @@ BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.7.2
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
-BuildRequires:	llvm >= 16.0
-BuildRequires:	llvm-devel >= 16.0
+BuildRequires:	llvm >= 17.0
+BuildRequires:	llvm-devel >= 17.0
 %endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
@@ -94,7 +94,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel >= 1.7.2
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 16.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 17.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -107,8 +107,8 @@ BuildRequires:	libgit2-devel(x86-64) >= 1.7.2
 BuildRequires:	libgit2-devel(x86-x32) >= 1.7.2
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
-BuildRequires:	llvm-devel(x86-64) >= 16.0
-BuildRequires:	llvm-devel(x86-x32) >= 16.0
+BuildRequires:	llvm-devel(x86-64) >= 17.0
+BuildRequires:	llvm-devel(x86-x32) >= 17.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
