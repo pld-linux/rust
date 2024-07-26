@@ -18,12 +18,12 @@
 %define		rustc_package	rustc-%{channel}-src
 %endif
 
-# To bootstrap from scratch, set the channel and date from src/stage0.json
+# To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.78.0
+%define		bootstrap_rust	1.79.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-05-02
+%define		bootstrap_date	2024-06-13
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.79.0
+Version:	1.80.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	1a00ff85d5fdb48ddbe534dcf1f6183f
+# Source0-md5:	cf4c803b7d25d74ad1604848a179f35c
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	8e965af558c5433662eb8f130e7a32c8
+# Source1-md5:	8cada8e8ab0c319651cca015dc991a04
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	de9d3ca6d6ea17f3d27876e30f154edb
+# Source2-md5:	c6b30151093174241ccef35493568d6c
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	f715b5459daf5ef0309949efa4248932
+# Source3-md5:	9c111bb3192c5f337eda068926fcc973
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	a6e361ffdc193b6e7067de8075743a37
+# Source4-md5:	3492990256d53c9cb81d7824b0df96a7
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	d05a5be7e5218093dbc8002d36af172b
+# Source5-md5:	96847eed7c03526d459213391cd8ea24
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
