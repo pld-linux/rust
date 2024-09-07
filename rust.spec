@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.79.0
+%define		bootstrap_rust	1.80.1
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-06-13
+%define		bootstrap_date	2024-08-08
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.80.1
+Version:	1.81.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	0b00381728b6c005e95194f7e44cff33
+# Source0-md5:	4f202568150660f369de3afbfb410970
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	8cada8e8ab0c319651cca015dc991a04
+# Source1-md5:	8eb5bba2b8b9a10d81f44040c3971f3d
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	c6b30151093174241ccef35493568d6c
+# Source2-md5:	1a0ed99307d2d6804fb0ba077667b896
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	9c111bb3192c5f337eda068926fcc973
+# Source3-md5:	8119069a8ac71d1661fff3df5584d978
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	3492990256d53c9cb81d7824b0df96a7
+# Source4-md5:	cef3379a5232e29c54ccc07dc9fb8f5d
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	96847eed7c03526d459213391cd8ea24
+# Source5-md5:	3b3e9945f3ffdf50226f14a818faf84d
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -60,6 +60,7 @@ BuildRequires:	curl
 %ifarch %{arm} %{mips32} %{ppc}
 BuildRequires:	libatomic-devel
 %endif
+BuildRequires:	lld
 # make check needs "ps" for src/test/run-pass/wait-forked-but-failed-child.rs
 BuildRequires:	procps
 BuildRequires:	python3
@@ -489,7 +490,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md
-%attr(755,root,root) %{_bindir}/rust-demangler
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
@@ -499,6 +499,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
+%dir %{rustlibdir}/%rust_triple/bin
+%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/rust-lld
+%dir %{rustlibdir}/%rust_triple/bin/gcc-ld
+%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/ld.lld
+%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/ld64.lld
+%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/lld-link
+%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/wasm-ld
 
 %files std
 %defattr(644,root,root,755)
