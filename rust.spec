@@ -502,13 +502,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
-%dir %{rustlibdir}/%rust_triple/bin
-%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/rust-lld
-%dir %{rustlibdir}/%rust_triple/bin/gcc-ld
-%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/ld.lld
-%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/ld64.lld
-%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/lld-link
-%attr(755,root,root) %{rustlibdir}/%rust_triple/bin/gcc-ld/wasm-ld
+%if "%rust_triple" != "%rust_host_triple"
+%dir %{rustlibdir}/%rust_host_triple
+%endif
+%dir %{rustlibdir}/%rust_host_triple/bin
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-lld
+%dir %{rustlibdir}/%rust_host_triple/bin/gcc-ld
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld.lld
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld64.lld
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/lld-link
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/wasm-ld
 
 %files std
 %defattr(644,root,root,755)
