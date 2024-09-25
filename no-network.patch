@@ -68,3 +68,25 @@ index 79c2f73161e48..555a6a7f8bdeb 100644
  
          if let Some(r) = rustfmt {
 
+From 9778f25ea56cca85918835a7e72bc42121a42888 Mon Sep 17 00:00:00 2001
+From: onur-ozkan <work@onurozkan.dev>
+Date: Sun, 8 Sep 2024 20:16:25 +0300
+Subject: [PATCH 2/3] document `dist.vendor` in `config.example.toml`
+
+Signed-off-by: onur-ozkan <work@onurozkan.dev>
+---
+ config.example.toml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/config.example.toml b/config.example.toml
+index 2b5e9ae117db7..c66d65e639aa0 100644
+--- a/config.example.toml
++++ b/config.example.toml
+@@ -942,3 +942,6 @@
+ # Copy the linker, DLLs, and various libraries from MinGW into the Rust toolchain.
+ # Only applies when the host or target is pc-windows-gnu.
+ #include-mingw-linker = true
++
++# Whether to vendor dependencies for the dist tarball.
++#vendor = if "is a tarball source" || "is a git repository" { true } else { false }
+

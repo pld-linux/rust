@@ -417,7 +417,7 @@ export AR="%{__ar}"
 	--release-channel=%{channel} \
 	--set=llvm.static-libstdcpp=false \
 	--set=build.optimized-compiler-builtins=false \
-	--set dist.vendor=false
+	--set=dist.vendor=false
 
 export RUST_BACKTRACE=full
 %x_py dist --verbose
