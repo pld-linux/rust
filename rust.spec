@@ -53,6 +53,7 @@ Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 # Source4-md5:	cef3379a5232e29c54ccc07dc9fb8f5d
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
 # Source5-md5:	3b3e9945f3ffdf50226f14a818faf84d
+Patch0:		no-network.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -332,6 +333,7 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
+%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -414,7 +416,8 @@ export AR="%{__ar}"
 	--llvm-root=%{_prefix} \
 	--release-channel=%{channel} \
 	--set=llvm.static-libstdcpp=false \
-	--set=build.optimized-compiler-builtins=false
+	--set=build.optimized-compiler-builtins=false \
+	--set dist.vendor=false
 
 export RUST_BACKTRACE=full
 %x_py dist --verbose
