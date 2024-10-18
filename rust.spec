@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.80.1
+%define		bootstrap_rust	1.81.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-08-08
+%define		bootstrap_date	2024-09-05
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.81.0
+Version:	1.82.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	4f202568150660f369de3afbfb410970
+# Source0-md5:	8d6a14f1c8d0ab03dffbc81f7a839aa7
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	8eb5bba2b8b9a10d81f44040c3971f3d
+# Source1-md5:	68fccfcbb2652b963159470cbfadac6d
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	1a0ed99307d2d6804fb0ba077667b896
+# Source2-md5:	0b22eebbf33a257dd23a4eec57ead419
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	8119069a8ac71d1661fff3df5584d978
+# Source3-md5:	71784fa98a2c408668a365f9299b9489
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	cef3379a5232e29c54ccc07dc9fb8f5d
+# Source4-md5:	bac5075d71a696c088f8e8cc340c3490
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	3b3e9945f3ffdf50226f14a818faf84d
+# Source5-md5:	36bfc2d30ed4f8bae1d08ca6ad9ccb5c
 Patch0:		no-network.patch
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
@@ -70,7 +70,7 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{without cross}
 BuildRequires:	curl-devel
-BuildRequires:	libgit2-devel >= 1.7.2
+BuildRequires:	libgit2-devel >= 1.8.1
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
 BuildRequires:	llvm >= 17.0
@@ -94,7 +94,7 @@ BuildRequires:	glibc-devel(x86-x32)
 # building on x86_64 host with --target x32-pld-linux
 BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
-BuildRequires:	libgit2-devel >= 1.7.2
+BuildRequires:	libgit2-devel >= 1.8.1
 BuildRequires:	libstdc++-devel
 %{?with_system_llvm:BuildRequires:	llvm-devel >= 17.0}
 BuildRequires:	openssl-devel >= 1.0.1
@@ -105,8 +105,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	curl-devel(x86-64)
 BuildRequires:	curl-devel(x86-x32)
 BuildRequires:	gcc-multilib-64
-BuildRequires:	libgit2-devel(x86-64) >= 1.7.2
-BuildRequires:	libgit2-devel(x86-x32) >= 1.7.2
+BuildRequires:	libgit2-devel(x86-64) >= 1.8.1
+BuildRequires:	libgit2-devel(x86-x32) >= 1.8.1
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
 BuildRequires:	llvm-devel(x86-64) >= 17.0
@@ -507,6 +507,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %dir %{rustlibdir}/%rust_host_triple/bin
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-lld
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/wasm-component-ld
 %dir %{rustlibdir}/%rust_host_triple/bin/gcc-ld
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld.lld
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld64.lld

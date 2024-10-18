@@ -23,9 +23,9 @@ index b0bd18792beb2..294a56b3e976a 100644
 -            || builder.rust_info().is_from_tarball()
 -        {
 +        if builder.config.dist_vendor {
-             // FIXME: This code looks _very_ similar to what we have in `src/core/build_steps/vendor.rs`
-             // perhaps it should be removed in favor of making `dist` perform the `vendor` step?
+             builder.require_and_update_all_submodules();
  
+             // Vendor all Cargo dependencies
 diff --git a/src/bootstrap/src/core/config/config.rs b/src/bootstrap/src/core/config/config.rs
 index 79c2f73161e48..555a6a7f8bdeb 100644
 --- a/src/bootstrap/src/core/config/config.rs
