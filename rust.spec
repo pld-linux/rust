@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.82.0
-Release:	1
+Release:	2
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -222,6 +222,7 @@ Summary:	Implementation of Language Server Protocol for Rust
 Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
 Group:		Development/Tools
 Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-src = %{version}-%{release}
 Obsoletes:	rust-rls < 1.65.0
 
 %description analyzer
@@ -288,6 +289,18 @@ language and its standard library.
 %description doc -l pl.UTF-8
 Ten pakiet zawiera dokumentację w formacie HTML do języka
 programowania Rust i jego biblioteki standardowej.
+
+%package src
+Summary:	Rust source code
+Summary(pl.UTF-8):	Pliki źródłowe Rusta
+Group:		Development/Tools
+BuildArch:	noarch
+
+%description src
+Rust source code.
+
+%description src -l pl.UTF-8
+Pliki źródłowe Rusta.
 
 %package -n cargo
 Summary:	Rust's package manager and build tool
@@ -478,8 +491,7 @@ find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 %{__mv} $RPM_BUILD_ROOT%{rustlibdir}/etc $RPM_BUILD_ROOT%{_datadir}/%{name}
 
-# We don't need stdlib source
-%{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src
+%{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src/rust/library/{backtrace/ci,core/src/unicode/printable.py,stdarch/ci}
 
 # Create the path for crate-devel packages
 install -d $RPM_BUILD_ROOT%{_datadir}/cargo/registry
@@ -553,6 +565,10 @@ done
 %defattr(644,root,root,755)
 %dir %{_docdir}/%{name}
 %doc %{_docdir}/%{name}/html
+
+%files src
+%defattr(644,root,root,755)
+%{rustlibdir}/src
 
 %files -n cargo
 %defattr(644,root,root,755)
