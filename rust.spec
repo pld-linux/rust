@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.81.0
+%define		bootstrap_rust	1.82.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-09-05
+%define		bootstrap_date	2024-10-17
 
 %ifarch x32
 %define		with_cross	1
@@ -36,24 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.82.0
-Release:	2
+Version:	1.83.0
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	8d6a14f1c8d0ab03dffbc81f7a839aa7
+# Source0-md5:	cd5e72ac6b19f17788bb864aa0926761
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	68fccfcbb2652b963159470cbfadac6d
+# Source1-md5:	a3307813972cc573f2ff0e387a229239
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	0b22eebbf33a257dd23a4eec57ead419
+# Source2-md5:	fb65e88e9352c0a13ceaf5538261e3de
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	71784fa98a2c408668a365f9299b9489
+# Source3-md5:	b9ab417d7241e4af89b1b435c9d73af4
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	bac5075d71a696c088f8e8cc340c3490
+# Source4-md5:	76326f93a8bdf382091056ab10ed925c
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	36bfc2d30ed4f8bae1d08ca6ad9ccb5c
-Patch0:		no-network.patch
+# Source5-md5:	7c19afc014c75ef208fe8cd329130712
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -346,7 +345,6 @@ Dopełnianie parametrów polecenia cargo w powłoce Zsh.
 
 %prep
 %setup -q -n %{rustc_package}
-%patch0 -p1
 
 %if %{with bootstrap}
 %ifarch %{x8664} x32
@@ -454,20 +452,7 @@ find $RPM_BUILD_ROOT%{common_libdir} -maxdepth 1 -type f -name '*.so' \
 %endif
 
 # The shared libraries should be executable for debuginfo extraction.
-find $RPM_BUILD_ROOT%{_libdir}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
-
-# The libdir libraries are identical to those under rustlib/.  It's easier on
-# library loading if we keep them in libdir, but we do need them in rustlib/
-# to support dynamic linking for compiler plugins, so we'll symlink.
-for rust_target in %rust_targets; do
-	for l in libstd libtest ; do
-		liblib=$RPM_BUILD_ROOT%{_libdir}/${l}-*.so
-		libstd=$RPM_BUILD_ROOT%{rustlibdir}/${rust_target}/lib/${l}-*.so
-		if [ "$(basename ${liblib})" = "$(basename ${libstd})" ]; then
-			ln -vfsr ${libstd} $RPM_BUILD_ROOT%{_libdir}/
-		fi
-	done
-done
+find $RPM_BUILD_ROOT%{_prefix}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
 find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
@@ -509,8 +494,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
 %attr(755,root,root) %{_libdir}/librustc_driver-*.so
-%attr(755,root,root) %{_libdir}/libstd-*.so
-%attr(755,root,root) %{_libdir}/libtest-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
