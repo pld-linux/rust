@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.82.0
+%define		bootstrap_rust	1.83.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2024-10-17
+%define		bootstrap_date	2024-11-28
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.83.0
+Version:	1.84.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	cd5e72ac6b19f17788bb864aa0926761
+# Source0-md5:	87392eab542788d8054eb1f77159283a
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	a3307813972cc573f2ff0e387a229239
+# Source1-md5:	1d4a194c059b085ac66dcc3be1a3634a
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	fb65e88e9352c0a13ceaf5538261e3de
+# Source2-md5:	7d6a39210131ec9bebe409ac350d8770
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	b9ab417d7241e4af89b1b435c9d73af4
+# Source3-md5:	f391d139e952a027eb7cad6d11740568
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	76326f93a8bdf382091056ab10ed925c
+# Source4-md5:	202670fe6f46262e0beae112d61cdce6
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	7c19afc014c75ef208fe8cd329130712
+# Source5-md5:	36f2fb43dc85a049c3518d8c31c1403a
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -502,6 +502,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %dir %{rustlibdir}/%rust_host_triple/bin
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-lld
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-objcopy
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/wasm-component-ld
 %dir %{rustlibdir}/%rust_host_triple/bin/gcc-ld
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld.lld
