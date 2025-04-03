@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.84.0
+%define		bootstrap_rust	1.85.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2025-01-09
+%define		bootstrap_date	2025-02-20
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.85.1
-Release:	1
+Version:	1.86.0
+Release:	0.1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	65f03e9d2da6b480c43ee1fe390d28ed
+# Source0-md5:	ffe55dfd0e035e6bfc88060506cddf32
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	853d01f11bd4a18f9416f90f1bfdbdc9
+# Source1-md5:	bacbb4ea122b48ceb7dfbdf714d782e6
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	67cc018793e9d1a9d7d52359cfd2f9d4
+# Source2-md5:	6f5f9139460324f5d4b9e34ceb8bcd4e
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	8b977dd8ef628c13c31575cf60ed6e49
+# Source3-md5:	c0a48b9459af424e584d1175ff6bb710
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	0c4c98c2e210bb717fdadf60366fbb06
+# Source4-md5:	3e433adbf8735677eda9b0059f5616c9
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	39b6c6a2c48c3ab0d43dba39e2185ed3
+# Source5-md5:	e71e4fd5f92c6fd1cb1506a7f58812fa
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -462,9 +462,8 @@ find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
 
 # Remove unwanted documentation files (we already package them)
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/README.md
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/COPYRIGHT
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/LICENSE-APACHE
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/LICENSE-MIT
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/rustc/COPYRIGHT*
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/rustc/licenses
 
 # Sanitize the HTML documentation
 install -d $RPM_BUILD_ROOT%{_docdir}/%{name}
