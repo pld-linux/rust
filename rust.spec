@@ -56,6 +56,9 @@ Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_ru
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
+%ifarch i686
+%{?with_bootstrap:BuildRequires:	cpuinfo(sse2)}
+%endif
 BuildRequires:	curl
 %ifarch %{arm} %{mips32} %{ppc}
 BuildRequires:	libatomic-devel
