@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.86.0
+%define		bootstrap_rust	1.87.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2025-04-03
+%define		bootstrap_date	2025-05-15
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.87.0
+Version:	1.88.0
 Release:	0.1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	dace019fa53452f321b93d34a37f995d
+# Source0-md5:	9591d6806ab23c04b862ce934b1e86eb
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	7be8d04f0b957bb5bb223a2e45b1c0eb
+# Source1-md5:	398374d1d0ec4f2dbe016c4bddc0f774
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	1f1623a3002a6914e780f215b853c50e
+# Source2-md5:	c2a280514454d4dd4d65439f72f0f89c
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	5a83b8192bd0355f6255af2c467740e5
+# Source3-md5:	760914ec2e8bbff35db4860c33787020
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	dfa8738ecefe7342a30dd158eb36cc9d
+# Source4-md5:	5ea8cf630f2018218f871236a8bbe909
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	09505e992e0587883f2630bad7e86c56
+# Source5-md5:	6dc9e1da275f2f5567915a0837be016a
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -75,8 +75,8 @@ BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.8.1
 BuildRequires:	libstdc++-devel
 %if %{with system_llvm}
-BuildRequires:	llvm >= 17.0
-BuildRequires:	llvm-devel >= 17.0
+BuildRequires:	llvm >= 19.0
+BuildRequires:	llvm-devel >= 19.0
 %endif
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	tar >= 1:1.22
@@ -98,7 +98,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gcc-multilib-x32
 BuildRequires:	libgit2-devel >= 1.8.1
 BuildRequires:	libstdc++-devel
-%{?with_system_llvm:BuildRequires:	llvm-devel >= 17.0}
+%{?with_system_llvm:BuildRequires:	llvm-devel >= 19.0}
 BuildRequires:	openssl-devel >= 1.0.1
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -111,8 +111,8 @@ BuildRequires:	libgit2-devel(x86-64) >= 1.8.1
 BuildRequires:	libgit2-devel(x86-x32) >= 1.8.1
 BuildRequires:	libstdc++-multilib-64-devel
 %if %{with system_llvm}
-BuildRequires:	llvm-devel(x86-64) >= 17.0
-BuildRequires:	llvm-devel(x86-x32) >= 17.0
+BuildRequires:	llvm-devel(x86-64) >= 19.0
+BuildRequires:	llvm-devel(x86-x32) >= 19.0
 %endif
 BuildRequires:	openssl-devel(x86-64)
 BuildRequires:	openssl-devel(x86-x32)
@@ -431,7 +431,8 @@ export AR="%{__ar}"
 	--release-channel=%{channel} \
 	--set=llvm.static-libstdcpp=false \
 	--set=build.optimized-compiler-builtins=false \
-	--set=dist.vendor=false
+	--set=dist.vendor=false \
+	--set=rust.lld=false
 
 export RUST_BACKTRACE=full
 %x_py dist --verbose
@@ -503,14 +504,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}/%rust_host_triple
 %endif
 %dir %{rustlibdir}/%rust_host_triple/bin
-%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-lld
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-objcopy
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/wasm-component-ld
-%dir %{rustlibdir}/%rust_host_triple/bin/gcc-ld
-%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld.lld
-%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/ld64.lld
-%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/lld-link
-%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/gcc-ld/wasm-ld
 
 %files std
 %defattr(644,root,root,755)
