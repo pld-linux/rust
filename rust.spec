@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.88.0
+%define		bootstrap_rust	1.89.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2025-06-26
+%define		bootstrap_date	2025-08-07
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.89.0
+Version:	1.90.0
 Release:	0.1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	982f087479302e6d91432efc81852b00
+# Source0-md5:	a6e15778947c83cb6cf7b2fcf58a2cd0
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	2bfc85b7c76fe3430e28954b768ba982
+# Source1-md5:	3c94a25ab4b9e36240431e36cead5b03
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	0d07a65e0241fc8c709741c5d766edfa
+# Source2-md5:	ddcb19b0696b5803741a5eea8dc8ed65
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	c755b106929abf0ea507574e47e1d7f4
+# Source3-md5:	ad6905476e134e773cec8f24e79722ff
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	b4d282a7d74a1861eff91ea535bc0efd
+# Source4-md5:	1fd414066191378ea134445e6c0cba49
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	8d8bff36e82643f73271a2c28a6fe1f7
+# Source5-md5:	080ebf9734e82a442c68141487f04b4f
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -431,8 +431,7 @@ export AR="%{__ar}"
 	--release-channel=%{channel} \
 	--set=llvm.static-libstdcpp=false \
 	--set=build.optimized-compiler-builtins=false \
-	--set=dist.vendor=false \
-	--set=rust.lld=false
+	--set=dist.vendor=false
 
 export RUST_BACKTRACE=full
 %x_py dist --verbose
