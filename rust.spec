@@ -37,7 +37,7 @@ Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
 Version:	1.90.0
-Release:	0.1
+Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
@@ -69,7 +69,7 @@ BuildRequires:	procps
 BuildRequires:	python3
 BuildRequires:	python3-modules
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.752
+BuildRequires:	rpmbuild(macros) >= 2.050
 %if %{without cross}
 BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.8.1
@@ -122,6 +122,7 @@ BuildRequires:	zlib-devel(x86-64)
 BuildRequires:	zlib-devel(x86-x32)
 %endif
 %endif
+%{?rust_req}
 # The C compiler is needed at runtime just for linking.  Someday rustc might
 # invoke the linker directly, and then we'll only need binutils.
 # https://github.com/rust-lang/rust/issues/11937
@@ -137,6 +138,8 @@ Obsoletes:	rust-analysis < 1.69.0
 # https://doc.rust-lang.org/nightly/rustc/platform-support.html
 ExclusiveArch:	%{x8664} %{ix86} x32 aarch64 armv6hl armv7hl armv7hnl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		rust_version		%{version}
 
 %ifarch x32
 %define		rust_triple		x86_64-unknown-linux-gnux32
@@ -225,6 +228,7 @@ Summary(pl.UTF-8):	Implementacja Language Server Protocol dla Rusta
 Group:		Development/Tools
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-src = %{version}-%{release}
+%{?rust_req}
 Obsoletes:	rust-rls < 1.65.0
 
 %description analyzer
@@ -309,6 +313,7 @@ Summary:	Rust's package manager and build tool
 Summary(pl.UTF-8):	Zarządca pakietów i narzędzie do budowania
 Group:		Development/Tools
 Requires:	%{name}%{?_isa}
+%{?rust_req}
 
 %description -n cargo
 Cargo is a tool that allows Rust projects to declare their various
