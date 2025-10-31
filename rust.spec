@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.89.0
+%define		bootstrap_rust	1.90.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2025-08-07
+%define		bootstrap_date	2025-09-18
 
 %ifarch x32
 %define		with_cross	1
@@ -36,23 +36,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.90.0
+Version:	1.91.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	a6e15778947c83cb6cf7b2fcf58a2cd0
+# Source0-md5:	a97da33b52e5f879f4cabcf2ca727f5b
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	3c94a25ab4b9e36240431e36cead5b03
+# Source1-md5:	2969aa82a27167406c48fbe81e2289a1
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	ddcb19b0696b5803741a5eea8dc8ed65
+# Source2-md5:	44df1abefe881d8ad3a457757d329c2a
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	ad6905476e134e773cec8f24e79722ff
+# Source3-md5:	08de3a311ce252c2458cacce08980a02
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	1fd414066191378ea134445e6c0cba49
+# Source4-md5:	d20a6afc0670df975debfde1f8ea099c
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	080ebf9734e82a442c68141487f04b4f
+# Source5-md5:	ebdc1e9bcc29e1a63b1ee1880a3922c8
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
