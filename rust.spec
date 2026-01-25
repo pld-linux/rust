@@ -510,6 +510,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}/%rust_host_triple/bin
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/rust-objcopy
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/wasm-component-ld
+%dir %{rustlibdir}/%rust_host_triple/bin/self-contained
+%attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/self-contained/llvm-bitcode-linker
 
 %files std
 %defattr(644,root,root,755)
