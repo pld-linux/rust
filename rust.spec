@@ -33,6 +33,12 @@
 %define		_enable_debug_packages	0
 %endif
 
+%if %{with bootstrap}
+%define		rust_lld_flags	-C linker-features=-lld
+%endif
+
+%define		specrustflags	%{?rust_lld_flags}
+
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
@@ -69,7 +75,7 @@ BuildRequires:	procps
 BuildRequires:	python3
 BuildRequires:	python3-modules
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 2.050
+BuildRequires:	rpmbuild(macros) >= 2.052
 %if %{without cross}
 BuildRequires:	curl-devel
 BuildRequires:	libgit2-devel >= 1.9.0
@@ -411,9 +417,6 @@ find vendor -name .cargo-checksum.json \
 export CC="%{__cc}"
 export CXX="%{__cxx}"
 export AR="%{__ar}"
-%if %{with bootstrap}
-export RUSTFLAGS="%{rpmrustflags} -C linker-features=-lld"
-%endif
 %configure \
 	--build=%{rust_bootstrap_triple} \
 	--host=%{rust_host_triple} \
