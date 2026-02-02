@@ -455,6 +455,7 @@ rm -rf $RPM_BUILD_ROOT
 export CC="%{__cc}"
 export CXX="%{__cxx}"
 export AR="%{__ar}"
+export RUSTFLAGS="%{rpmrustflags}"
 export DESTDIR=$RPM_BUILD_ROOT
 %x_py install
 
