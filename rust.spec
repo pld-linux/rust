@@ -411,6 +411,9 @@ find vendor -name .cargo-checksum.json \
 export CC="%{__cc}"
 export CXX="%{__cxx}"
 export AR="%{__ar}"
+%if %{with bootstrap}
+export RUSTFLAGS="%{rpmrustflags} -C linker-features=-lld"
+%endif
 %configure \
 	--build=%{rust_bootstrap_triple} \
 	--host=%{rust_host_triple} \
