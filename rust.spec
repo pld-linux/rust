@@ -34,7 +34,9 @@
 %endif
 
 %if %{with bootstrap}
+%ifarch %{x8664} x32
 %define		rust_lld_flags	-C linker-features=-lld
+%endif
 %endif
 
 %define		specrustflags	%{?rust_lld_flags}
