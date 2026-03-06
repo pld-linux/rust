@@ -21,9 +21,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.92.0
+%define		bootstrap_rust	1.93.0
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2025-12-11
+%define		bootstrap_date	2026-01-22
 
 %ifarch x32
 %define		with_cross	1
@@ -44,23 +44,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.93.1
+Version:	1.94.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	65de3c1b0a9304b16ff27433a0dafb95
+# Source0-md5:	cd01d7a97f98940567663652ac9747a0
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	651eec2289f01ac23e44bc558bac0638
+# Source1-md5:	87e3af91775e4ab7a1931ab1e6b9fef2
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	7ed8a10729d696d41b1b193b4e99b228
+# Source2-md5:	033453755453ff4d1348668177a6f248
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	d20af61cbc4e1a5ff80245703fcdca8e
+# Source3-md5:	87234396b419af5cc85bf7104924aa90
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	134322f851d0c09d4ca269e79701f59f
+# Source4-md5:	e196bab0289c59480bcff9f6b30441ff
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	cd511dc24e5d2c41ac0e334339bcfdf4
+# Source5-md5:	32170644ab3ff9d5f23bcb8ca2a04994
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -305,16 +305,28 @@ Ten pakiet zawiera dokumentację w formacie HTML do języka
 programowania Rust i jego biblioteki standardowej.
 
 %package src
-Summary:	Rust source code
-Summary(pl.UTF-8):	Pliki źródłowe Rusta
+Summary:	Rust standard library source code
+Summary(pl.UTF-8):	Pliki źródłowe biblioteki standardowej Rusta
 Group:		Development/Tools
 BuildArch:	noarch
 
 %description src
-Rust source code.
+Rust standard library source code.
 
 %description src -l pl.UTF-8
-Pliki źródłowe Rusta.
+Pliki źródłowe biblioteki standardowej Rusta.
+
+%package compiler-src
+Summary:	Rust compiler source code
+Summary(pl.UTF-8):	Pliki źródłowe kompilatora Rusta
+Group:		Development/Tools
+BuildArch:	noarch
+
+%description compiler-src
+Rust compiler source code.
+
+%description compiler-src -l pl.UTF-8
+Pliki źródłowe kompilatora Rusta.
 
 %package -n cargo
 Summary:	Rust's package manager and build tool
@@ -414,6 +426,11 @@ suffix="%(echo "%{_libexecdir}" | %{__sed} -e 's,^%{_prefix}/,,')"
 # that file list, cargo won't have anything to complain about.
 find vendor -name .cargo-checksum.json \
 	-exec sed -i.uncheck -e 's/"files":{[^}]*}/"files":{ }/' '{}' '+'
+
+grep -lr '#!.*env bash' \
+	compiler/rustc_codegen_gcc/y.sh \
+	compiler/rustc_codegen_cranelift/scripts \
+	| xargs %{__sed} -i -e '1 s,#!.*env bash.*,#!/bin/bash,'
 
 %build
 export CC="%{__cc}"
@@ -530,6 +547,7 @@ cat <<EOF
 %dir %{rustlibdir}/$rust_target/lib
 %attr(755,root,root) %{rustlibdir}/$rust_target/lib/*.so
 %{rustlibdir}/$rust_target/lib/*.rlib
+%{rustlibdir}/$rust_target/lib/*.rmeta
 EOF
 done
 )
@@ -565,6 +583,10 @@ done
 %files src
 %defattr(644,root,root,755)
 %{rustlibdir}/src
+
+%files compiler-src
+%defattr(644,root,root,755)
+%{rustlibdir}/rustc-src
 
 %files -n cargo
 %defattr(644,root,root,755)
