@@ -195,8 +195,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		skip_post_check_so	'librustc.*llvm.*\.so.*'
 
 # ALL Rust libraries are private, because they don't keep an ABI.
-%define		_noautoreqfiles		lib.*-[[:xdigit:]]{8}[.]so.*
-%define		_noautoprovfiles	lib.*-[[:xdigit:]]{8}[.]so.*
+%define		_noautoreq		lib.*-[[:xdigit:]]{16}[.]so.*
+%define		_noautoprovfiles	.*/lib.*-[[:xdigit:]]{16}[.]so.*
 
 %define		x_py { \
 	x_py() { \
