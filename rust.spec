@@ -488,9 +488,6 @@ find $RPM_BUILD_ROOT%{common_libdir} -maxdepth 1 -type f -name '*.so' \
 # The shared libraries should be executable for debuginfo extraction.
 find $RPM_BUILD_ROOT%{_prefix}/ -type f -name '*.so' -exec chmod -v +x '{}' '+'
 
-# Remove installer artifacts (manifests, uninstall scripts, etc.)
-find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
-
 # FIXME: __os_install_post will strip the rlibs
 # -- should we find a way to preserve debuginfo?
 
@@ -514,19 +511,35 @@ install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 # Create the path for crate-devel packages
 install -d $RPM_BUILD_ROOT%{_datadir}/cargo/registry
 
+process_manifest() {
+	local manifest=$1 output=$2
+	grep '\.\(so\|rlib\|rmeta\)$' "$manifest" | sed -e "s;file:$RPM_BUILD_ROOT;;" \
+		-e 's;^%{common_libdir}/\([^/]*\.so\)$;%{_libdir}/\1;' >> "$output"
+}
+
+: > rust-std.libs
+for target in %{rust_targets}; do
+	process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rust-std-$target rust-std.libs
+done
+
+: > rust.libs
+process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rustc rust.libs
+
+# Remove installer artifacts (manifests, uninstall scripts, etc.)
+find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files
+%files -f rust.libs
 %defattr(644,root,root,755)
 %doc COPYRIGHT LICENSE-APACHE LICENSE-MIT README.md
 %attr(755,root,root) %{_bindir}/rustc
 %attr(755,root,root) %{_bindir}/rustdoc
 %attr(755,root,root) %{_bindir}/rustfmt
-%attr(755,root,root) %{_libdir}/librustc_driver-*.so
 %{_mandir}/man1/rustc.1*
 %{_mandir}/man1/rustdoc.1*
 %dir %{rustlibdir}
@@ -539,15 +552,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{rustlibdir}/%rust_host_triple/bin/self-contained
 %attr(755,root,root) %{rustlibdir}/%rust_host_triple/bin/self-contained/llvm-bitcode-linker
 
-%files std
+%files std -f rust-std.libs
 %defattr(644,root,root,755)
 %(for rust_target in %rust_targets; do
 cat <<EOF
 %dir %{rustlibdir}/$rust_target
 %dir %{rustlibdir}/$rust_target/lib
-%attr(755,root,root) %{rustlibdir}/$rust_target/lib/*.so
-%{rustlibdir}/$rust_target/lib/*.rlib
-%{rustlibdir}/$rust_target/lib/*.rmeta
 EOF
 done
 )
