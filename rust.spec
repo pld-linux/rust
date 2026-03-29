@@ -316,6 +316,18 @@ Rust standard library source code.
 %description src -l pl.UTF-8
 Pliki źródłowe biblioteki standardowej Rusta.
 
+%package compiler-devel
+Summary:	Rust compiler development files
+Summary(pl.UTF-8):	Pliki deweloperskie kompilatora Rusta
+Group:		Development/Tools
+
+%description compiler-devel
+Development files used for embedding Rust compiler in other tools.
+
+%description compiler-devel -l pl.UTF-8
+Pliki deweloperskie używane do zagnieżdżania kompilatora Rusta w
+innych narzędziach.
+
 %package compiler-src
 Summary:	Rust compiler source code
 Summary(pl.UTF-8):	Pliki źródłowe kompilatora Rusta
@@ -525,6 +537,9 @@ done
 : > rust.libs
 process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rustc rust.libs
 
+: > rust-compiler-devel.libs
+process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rustc-dev rust-compiler-devel.libs
+
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
 find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
 
@@ -593,6 +608,9 @@ done
 %files src
 %defattr(644,root,root,755)
 %{rustlibdir}/src
+
+%files compiler-devel -f rust-compiler-devel.libs
+%defattr(644,root,root,755)
 
 %files compiler-src
 %defattr(644,root,root,755)
