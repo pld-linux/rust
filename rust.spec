@@ -8,6 +8,7 @@
 %bcond_with	full_debuginfo	# full debuginfo vs only std debuginfo (full takes gigabytes of memory to build)
 %bcond_without	system_llvm	# system LLVM
 %bcond_with	tests		# build without tests
+%bcond_without	rustc_dev	# build rustc-dev
 
 # The channel can be stable, beta, or nightly
 %define		channel		stable
@@ -466,6 +467,7 @@ export AR="%{__ar}"
 	--disable-option-checking \
 	--disable-rpath \
 	--enable-extended \
+	--tools=cargo,clippy,llvm-bitcode-linker,rust-analyzer,%{?with_rustc_dev:rustc-dev,}rustdoc,rustfmt,src,wasm-component-ld \
 	--enable-llvm-link-shared \
 	--enable-vendor \
 	--local-rust-root=%{local_rust_root} \
@@ -537,8 +539,10 @@ done
 : > rust.libs
 process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rustc rust.libs
 
+%if %{with rustc_dev}
 : > rust-compiler-devel.libs
 process_manifest $RPM_BUILD_ROOT%{rustlibdir}/manifest-rustc-dev rust-compiler-devel.libs
+%endif
 
 # Remove installer artifacts (manifests, uninstall scripts, etc.)
 find $RPM_BUILD_ROOT%{rustlibdir}/ -maxdepth 1 -type f -exec rm -v '{}' '+'
@@ -609,12 +613,14 @@ done
 %defattr(644,root,root,755)
 %{rustlibdir}/src
 
+%if %{with rustc_dev}
 %files compiler-devel -f rust-compiler-devel.libs
 %defattr(644,root,root,755)
 
 %files compiler-src
 %defattr(644,root,root,755)
 %{rustlibdir}/rustc-src
+%endif
 
 %files -n cargo
 %defattr(644,root,root,755)
