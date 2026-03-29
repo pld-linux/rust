@@ -97,6 +97,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	%{name} >= %{bootstrap_rust}
 BuildRequires:	cargo >= %{bootstrap_cargo}
 BuildConflicts:	%{name} > %{version}
+# https://github.com/rust-lang/rust/issues/154558
+BuildConflicts:	%{name}-compiler-devel
 %endif
 %ifarch x32
 BuildRequires:	glibc-devel(x86-64)
