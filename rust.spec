@@ -22,9 +22,9 @@
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.10.0 wants rustc: 1.9.0-2016-05-24
 # or nightly wants some beta-YYYY-MM-DD
-%define		bootstrap_rust	1.96.0
+%define		bootstrap_rust	1.97.1
 %define		bootstrap_cargo	%{bootstrap_rust}
-%define		bootstrap_date	2026-05-28
+%define		bootstrap_date	2026-07-16
 
 %ifarch x32
 %define		with_cross	1
@@ -45,23 +45,23 @@
 Summary:	The Rust Programming Language
 Summary(pl.UTF-8):	Język programowania Rust
 Name:		rust
-Version:	1.97.0
+Version:	1.98.0
 Release:	1
 # Licenses: (rust itself) and (bundled libraries)
 License:	(Apache v2.0 or MIT) and (BSD and ISC and MIT)
 Group:		Development/Languages
 Source0:	https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
-# Source0-md5:	0262547aa414fcc1cff1800d2a789a47
+# Source0-md5:	d24c6a84d3a4669f2171e9641c75417c
 Source1:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-x86_64-unknown-linux-gnu.tar.xz
-# Source1-md5:	cb8ddc4853b3f819b8f74f1ca27fcde6
+# Source1-md5:	1289417237023f07a73a892247723b0a
 Source2:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-i686-unknown-linux-gnu.tar.xz
-# Source2-md5:	bbcdbed857245b5e0cbcb3d06ac0b962
+# Source2-md5:	155c9af1740dd8e9c24c44da5711545f
 Source3:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-aarch64-unknown-linux-gnu.tar.xz
-# Source3-md5:	463c9368eb2117ce89f15a0d43cb93a5
+# Source3-md5:	9ac04afd91f4bd9dade60fe9547c7a2d
 Source4:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-arm-unknown-linux-gnueabihf.tar.xz
-# Source4-md5:	5b8a6084fbac9389c6db4cd2446783aa
+# Source4-md5:	f6bdc4f0dfb53798b472a14fbf60eb80
 Source5:	https://static.rust-lang.org/dist/%{bootstrap_date}/rust-%{bootstrap_rust}-armv7-unknown-linux-gnueabihf.tar.xz
-# Source5-md5:	645573ba4d403bc34f3b1c52b57279aa
+# Source5-md5:	1ac8f50f460e6b510a93a8f1596a250a
 URL:		https://www.rust-lang.org/
 # for src/compiler-rt
 BuildRequires:	cmake >= 3.4.3
@@ -522,7 +522,7 @@ find $RPM_BUILD_ROOT%{_docdir}/%{name}/html -type f -exec chmod -x '{}' '+'
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 %{__mv} $RPM_BUILD_ROOT%{rustlibdir}/etc $RPM_BUILD_ROOT%{_datadir}/%{name}
 
-%{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src/rust/library/{backtrace/ci,compiler-builtins/{ci,etc/update-api-list.py},core/src/unicode/printable.py,stdarch/ci}
+%{__rm} -r $RPM_BUILD_ROOT%{rustlibdir}/src/rust/library/{backtrace/ci,compiler-builtins/{ci,etc/update-api-list.py},stdarch/ci}
 
 # Create the path for crate-devel packages
 install -d $RPM_BUILD_ROOT%{_datadir}/cargo/registry
@@ -592,7 +592,6 @@ done
 %defattr(644,root,root,755)
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/etc
-%{_datadir}/%{name}/etc/lldb_commands
 %{_datadir}/%{name}/etc/rust_types.py
 
 %files lldb
