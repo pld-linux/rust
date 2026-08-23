@@ -362,7 +362,7 @@ zależności i zapewniające powtarzalność procesu budowania.
 Summary:	Bash completion for cargo command
 Summary(pl.UTF-8):	Bashowe dopełnianie parametrów polecenia cargo
 Group:		Applications/Shells
-Requires:	%{name} = %{version}-%{release}
+Requires:	cargo = %{version}-%{release}
 Requires:	bash-completion
 BuildArch:	noarch
 
@@ -376,7 +376,7 @@ Bashowe dopełnianie parametrów polecenia cargo.
 Summary:	Zsh completion for cargo command
 Summary(pl.UTF-8):	Dopełnianie parametrów polecenia cargo w powłoce Zsh
 Group:		Applications/Shells
-Requires:	%{name} = %{version}-%{release}
+Requires:	cargo = %{version}-%{release}
 Requires:	zsh
 BuildArch:	noarch
 
