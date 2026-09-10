@@ -451,6 +451,9 @@ grep -lr '#!.*env bash' \
 export CC="%{__cc}"
 export CXX="%{__cxx}"
 export AR="%{__ar}"
+%ifarch x32
+export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig
+%endif
 %configure \
 	--build=%{rust_bootstrap_triple} \
 	--host=%{rust_host_triple} \
