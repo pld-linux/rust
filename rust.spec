@@ -494,6 +494,9 @@ export CC="%{__cc}"
 export CXX="%{__cxx}"
 export AR="%{__ar}"
 export RUSTFLAGS="%{rpmrustflags}"
+%ifarch x32
+export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig
+%endif
 export DESTDIR=$RPM_BUILD_ROOT
 %x_py install
 
